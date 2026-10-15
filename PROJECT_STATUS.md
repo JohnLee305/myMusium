@@ -219,3 +219,13 @@ GitHub에는 소스·설정·문서·전시 모델/설명을 저장합니다. Un
 ![100가지 조합 외형](docs/assets/visitor-diversity.png)
 
 최종 Windows 빌드: unity-Build-20261015-224439.log.100종 최종검사 visitor-diversity-tests-20261015-224543. 이후 관람객4사례와 설정2프로세스 회귀 통과, 관리API30/전체101저장/브라우저 페이지 간 저장 검사 통과. 초기 실행클립 누락 및 위치/배율 문제는 수정 후 다시 검증했습니다. 구체적인 실행 로그는 WORKLOG.md에 기록합니다.
+
+
+## 2026-10-16 하이브리드 에셋·장기 보존 방향 및 TODO 동기화
+
+- **제품 결정:** Quest 3/VRChat/향후 기기는 Archive 원본이 아닌 Viewer/Export Target. 로컬 콘텐츠 오프라인 관람 + 연결 시 필요 자산 갱신이 가능한 **하이브리드 확장 방향**을 승인.
+- **초기 유지:** 기존 JSON/Filesystem 및 로컬 Node 관리 서버는 유지. 새 원격 에셋 서버/DB/NAS/클라우드 구축은 **불필요**. DB/백엔드 필요 여부는 실제 수요가 생길 때 재판단.
+- **데이터 원칙:** 원본 Archive·PC/MOBILE 배포용 파생본·디스크 다운로드 캐시·룸 실행 메모리 분리. 로컬 DataSource와 미래 HTTP 공급자 사이 교체 가능한 경계 검토. VRChat은 공개 검증 후 별도 Export/빌드.
+- **새 TODO:** [TASKS.md](TASKS.md)의 HYB-001~007은 모두 **미구현**, 현행 ARCH/ASSET/ROOM 작업과 연계. 세부 설명은 [docs/HYBRID_ASSET_STRATEGY.md](docs/HYBRID_ASSET_STRATEGY.md).
+- **협업 규칙 재확인:** TODO 합의 → GitHub 작업 브랜치 문서 갱신/PR → 통합 상태와 커밋 보고. 작업 에이전트는 시작 시 원격 최신 SHA 및 다른 작업 여부 확인. 이 업데이트는 문서 변경만으로 Unity/Node/Quest 검증을 수행한 것이 아님.
+- **안전:** 현재 GitHub 저장소가 Public이므로 개인 자료·가족 사진·권리 미확인 GLB는 이번 변경에 포함하지 않음. 기존 공개 자료 감사 SEC-001은 계속 미완료.
