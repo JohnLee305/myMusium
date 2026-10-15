@@ -588,3 +588,13 @@
 - PROJECT_STATUS/TASKS/사용안내/외형확장/출처 갱신 및 VISITOR-DIVERSITY 추가. 다음: 사용자 PC관람피드백, 취향/만족도 TYC-004 또는 운영시점 TYC-005. 코드·MD·라이선스·에셋·사진을 실험브랜치에 업로드 후SHA확인 예정.
 
 - TYC-001C 기능99d7886 GitHub 업로드/원격SHA 일치 확인. 최종 관리 캡처를101종·기존4명 설정이 보이는 화면으로 갱신. 기준 복원태그 유지, 사용자 visitors.json만 미추적 상태로 보존. 다음은 PC관람 피드백/TYC-004·005, Quest는 후속.
+
+## 2026-10-16 / 다중 에이전트 GitHub 개발 운영 규칙 확정 (문서 변경)
+
+- 사용자 결정: 향후 Work, Codex 등 여러 구현 에이전트가 공용 GitHub 저장소를 활용. **매 작업 시작/재개마다 원격 최신 상태 확인·안전한 동기화 후 TODO/진행상황·기존 진행 브랜치/PR을 확인**하도록 지시.
+- 신규 `docs/GIT_MULTI_AGENT_WORKFLOW.md`: `git status`·브랜치/HEAD·`git fetch --prune origin`·안전한 `pull --ff-only`·최신 `AGENTS/PROJECT_STATUS/TASKS/STATUS/WORKLOG` 검토 Gate, 에이전트별 Clone/Worktree 및 기능 브랜치/PR, 충돌 시 중단/자료 보존, 종료/다음 담당자 인계.
+- 기존 `AGENTS.md`, `docs/WORK_HANDOFF.md`, `README.md`에 이 규칙을 최우선 진입점으로 반영. 기존 단일 실험 브랜치에 직접 push 지침은 병렬 작업 시 PR 통합 원칙으로 보정.
+- `TASKS.md`에 `OPS-001` (운영 정책 문서화 완료), `OPS-002` (자동 preflight 미구현), `OPS-003` (PR/CI 및 보호 미구현), `OPS-004` (작업 중복 감지 미구현) 추가. `PROJECT_STATUS.md`와 `STATUS.md` 갱신.
+- 작업 종류: **기획/운영 문서 변경만 수행**. Unity·Node 소스 변경, 로컬 Windows Git pull, CI 설치, 새로운 PC 빌드/Quest 실기기 시험 **없음**. Work가 새 세션을 시작할 때 실제 로컬 HEAD·미커밋 변경·원격을 재확인하도록 인계.
+- 기존 `codex/museum-baseline`과 `museum-baseline-20261015`은 수정하지 않음. Public 저장소의 민감 자료·재배포 라이선스 점검 `SEC-001`은 별도 미완료 유지.
+- 다음: Work가 최신 원격과 로컬 상태 대조 → 작업 ID 선택 → 전용 브랜치/작업 환경에서 구현. 필요하면 `OPS-002`로 동기화 진입 검사를 스크립트화.
