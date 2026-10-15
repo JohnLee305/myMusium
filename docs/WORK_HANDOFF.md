@@ -19,8 +19,10 @@
 1. **코드/실제 빌드·검증 기록**이 기능 구현 사실의 기준이다. 기획서만으로 완료라고 판단하지 않는다.
 2. **실제 개발 브랜치의** `PROJECT_STATUS.md`에 현황, `TASKS.md`에 작업 ID, `STATUS.md`에 작업 재개 상태, `WORKLOG.md`에 검증 이력을 유지한다.
 3. 결정된 요구를 `docs/REACTION_SYSTEM_DESIGN.md` 등 feature spec에 저장하고, Work가 관련 ID를 골라 구현한다.
-4. Work 세션/로컬 파일이 GitHub보다 앞서 있을 수 있다. Work는 `git status` → `git branch --show-current` → `git fetch` → 로컬/원격 HEAD·커밋 비교를 먼저 실시한다. 미커밋 작업, 다른 Work 세션의 변경을 덮어쓰지 않는다. `git pull`은 충돌·미반영 변경을 확인한 뒤 실시한다.
-5. Work의 실제 코드 수정은 현재 작업 공간의 승인·권한 범위 내에서만 한다. 요구가 문서에 추가됐다는 사실은 백그라운드 작업이 이미 시작됐다는 뜻이 아니다.
+4. **매 작업 시작·재개 때 먼저 [GIT_MULTI_AGENT_WORKFLOW.md](GIT_MULTI_AGENT_WORKFLOW.md)의 필수 시작 Gate를 수행한다.** `git status`/브랜치·원격/HEAD → `git fetch --prune origin` → 안전할 때만 `git pull --ff-only origin codex/museum-tycoon` → 로컬·원격 차이 확인의 순서다. 문제 발생 시 덮어쓰지 않고 중단·보고하며, 최신 원격 상태를 확보하지 못한 상태에서 구현을 진행하지 않는다.
+5. **Git 최신화 뒤** 최신 `AGENTS.md` → `PROJECT_STATUS.md` → `TASKS.md` → `STATUS.md` → `WORKLOG.md` → 관련 설계/ADR을 읽는다. 같은 TODO ID의 진행 브랜치/PR과 충돌 위험을 확인하고 작업 ID·시작 SHA·담당자를 남긴다.
+6. 여러 에이전트가 개발하므로 **별도 Clone/Worktree와 작업 전용 브랜치**를 쓰고, 원칙적으로 PR을 통해 실험 브랜치에 통합한다. 매번 PR 병합 전에도 최신 원격과 회귀 영향도를 확인한다.
+7. Work의 실제 코드 수정은 현재 작업 공간의 승인·권한 범위 내에서만 한다. 요구가 문서에 추가됐다는 사실은 백그라운드 작업이 이미 시작됐다는 뜻이 아니다.
 
 ## 3. 아이디어가 개발 완료가 되기까지
 
@@ -28,22 +30,22 @@
 아이디어 회의
  → 제안 문서 + 명확한 TODO ID
  → 사용자 우선순위/핵심 계약 확정
- → Work가 현행 코드·브랜치 확인
- → 작업 단위 구현 + 회귀 검사
+ → Work가 Git 최신 fetch/안전한 pull + 최신 TODO·현황·중복 PR 점검
+ → 에이전트 전용 Worktree/브랜치에서 작업 단위 구현 + 회귀 검사
  → 실제 검증 수준과 남은 위험 기록
- → 같은 기능 단위로 GitHub push
- → 다음 아이디어 회의에서 상태 재점검
+ → 기능 브랜치 push·PR 작성·최신 베이스 충돌 확인 후 통합
+ → 통합 SHA·TODO·상태 문서 확인 → 다음 아이디어 회의에서 상태 재점검
 ```
 
 `TASKS.md`의 `ARCH-`는 데이터 계약/모듈 경계, `ASSET-`은 3D 변환, `REACT-`는 의미 기반 NPC 반응, `TYC-`는 관람객 운영/타이쿤 확장이다. `REACT-`는 컬렉션 감상 경험을 우선하며, `TYC-006` 경제 시스템은 선행 필수가 아니다.
 
 ## 4. 새 Work 대화에 전달할 시작 지시문
 
-다음 문장을 Work에 전달한다.
+다음 문장을 Work에 전달한다. **다른 에이전트도 동일한 동기화 절차를 따른다.**
 
-> `JohnLee305/myMusium`의 `codex/museum-tycoon` 브랜치에서 작업해 줘. 먼저 `AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `docs/WORK_HANDOFF.md`, `docs/REACTION_SYSTEM_DESIGN.md`를 읽고, 로컬 작업 폴더와 원격 브랜치의 커밋/미커밋 차이를 확인해 줘. 기존 `codex/museum-baseline`은 건드리지 마. 최신 소스에 맞춰 `REACT-001`의 설계 계약부터 진행하고, 승인되지 않은 데이터 모델이나 LLM 서비스는 확정하지 마. 변경 전후 테스트와 미검증 사항을 기록한 뒤 `TASKS.md`, `PROJECT_STATUS.md`, `STATUS.md`, `WORKLOG.md`를 갱신하고 해당 브랜치에 커밋/push해 줘. 이미 로컬에서 진행 중인 변경이 있으면 덮어쓰지 말고 차이를 먼저 보고해 줘.
+> `JohnLee305/myMusium`의 `codex/museum-tycoon`에서 진행해 줘. **코드를 수정하기 전에** `docs/GIT_MULTI_AGENT_WORKFLOW.md`의 Git 사전 Gate를 반드시 수행해: `git status`/작업 폴더/브랜치/HEAD 확인 → `git fetch --prune origin` → 안전한 경우 `git pull --ff-only origin codex/museum-tycoon`으로 최신화. 미커밋 변경/분기/충돌이 있으면 자료를 보존하고 보고해 줘. **그다음 최신** `AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `STATUS.md`, `WORKLOG.md`, `docs/WORK_HANDOFF.md`, `docs/REACTION_SYSTEM_DESIGN.md`를 읽고 작업 상태 및 다른 에이전트의 같은 TODO ID/PR을 확인해 줘. `REACT-001`부터 시작하되, 각 에이전트는 독립 Clone/Worktree·작업 브랜치로 충돌을 방지하고 테스트+상태문서 갱신 후 PR로 통합해 줘. `codex/museum-baseline`/복원 태그는 보존해 줘. 승인이 필요한 설계·개인 데이터 공개·파괴적 작업은 임의로 진행하지 마.
 
-추후 다른 작업이면 `REACT-001` 부분만 해당 ID로 바꾼다. 첫 작업에서는 상세 스키마 결정·기존 동작 보존·테스트 범위를 확인하는 것이 우선이다.
+다른 기능 작업은 `REACT-001`만 해당 TODO ID로 바꾼다. Git 최신화와 TODO·현황 읽기는 **사용자가 별도로 반복 지시하지 않아도 필수**다.
 
 ## 5. 상태 갱신 템플릿
 
@@ -57,7 +59,16 @@
 - 커밋 SHA 및 push 상태:
 - 다음 작업:
 
-## 6. 이번 기획 결정 (컬렉션 중심)
+## 6. 다중 에이전트 충돌 방지 요약
+
+- 통합 브랜치는 `codex/museum-tycoon`, 개별 작업은 `work/<TASK-ID>-<agent>-<unique>` 등 별도 브랜치. GitHub 기본 브랜치는 현재 기준판이므로 무심코 기본 브랜치에서 작업하지 않는다.
+- **같은 작업 폴더·Unity Library·빌드 출력·테스트 서버 포트를 복수 에이전트가 동시에 공유하지 않는다.**
+- 작업 전/병합 전 최신 `fetch`; 다른 에이전트의 같은 TODO/PR 조회; 파일/스키마 충돌은 직렬화 또는 작업 분리.
+- `TASKS.md`/`PROJECT_STATUS.md`의 최종 진행상태는 병합된 소스와 실제 검증 수준을 기준으로 정한다. PR을 열었다고 구현 완료가 아니다.
+- 인증 실패·로컬 수정·분기·충돌 시 `reset --hard`/`clean -fd`/무단 `force push`로 덮어쓰지 않고 상태를 보고한다.
+- 필요시 Git 동기화 사전 점검 스크립트와 CI/브랜치 보호를 별도 작업(`OPS-002/003`)으로 구현·검증한다. 아직 자동 강제하는 시스템은 없다.
+
+## 7. 이번 기획 결정 (컬렉션 중심)
 
 - 최상위 목표: 소장품/이야기의 보존과 감상을 중심으로 한 **살아 있는 개인 컬렉션 박물관**.
 - NPC는 단순 장식이 아니라 전시품 설명에 맞춰 **각자 다른 관심사/반응을 보이는 감상자**.
