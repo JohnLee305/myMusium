@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>전시품 관리 · 가족 박물관</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/visitor-style.css"><script src="/app.js" type="module"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>전시품 관리 · 가족 박물관</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/visitor-style.css"><script src="/app.js" type="module"></script><link rel="stylesheet" href="/reaction-style.css"><script type="module" src="/reaction-editor.js"></script></head>
 <body>
 <header><a class="brand" href="/">FAMILY ARCHIVE <span>타이쿤 실험 관리</span></a><span class="local"><i></i> 최신 PC 관람과 연결</span></header>
 <main>
-  <section class="intro"><p class="eyebrow">COLLECTION STUDIO</p><h1>기억에 자리를 만들어 주세요.</h1><p>소중한 물건의 모형과 이야기를 더하면, 우리 가족의 전시가 됩니다.</p><a class="theme-jump secondary" href="#layout-heading">전시품 배치·수정 ↓</a> <a class="theme-jump secondary" href="#theme-heading">전시실 색상·테마 조정 ↓</a> <a class="theme-jump secondary" href="#visitors-heading">관람객 관리 ↓</a></section>
+  <section class="intro"><p class="eyebrow">COLLECTION STUDIO</p><h1>기억에 자리를 만들어 주세요.</h1><p>소중한 물건의 모형과 이야기를 더하면, 우리 가족의 전시가 됩니다.</p><a class="theme-jump secondary" href="#layout-heading">전시품 배치·수정 ↓</a> <a class="theme-jump secondary" href="#theme-heading">전시실 색상·테마 조정 ↓</a> <a class="theme-jump secondary" href="#visitors-heading">관람객 관리 ↓</a> <a class="theme-jump secondary" href="#reactions-heading">감상 반응 만들기 ↓</a></section>
   <p class="edition-note">이 페이지는 <strong>PC 관람 / 타이쿤 실험</strong> 앱의 전시품과 관람객을 관리합니다. 기존 버전 보관용 자료는 별도입니다. 전시품·배치 변경은 앱 재실행 후, 관람객 설정은 저장 후 자동 반영됩니다.</p>
   <section class="panel visitor-panel" aria-labelledby="visitors-heading">
     <div class="section-heading"><span class="section-number">운영</span><div><h2 id="visitors-heading">관람객 관리</h2><p>손님 수와 이동 속도를 정하고, 등장할 캐릭터를 골라 주세요.</p></div></div>
@@ -107,6 +107,25 @@
       <p id="theme-status" role="status" aria-live="polite">전시실 목록을 불러오는 중입니다.</p>
       <p class="hint">저장 후 관람 앱을 종료했다가 다시 열면 방별 색상이 반영됩니다.</p>
     </form>
+  </section>
+
+  <section class="panel reaction-panel" aria-labelledby="reactions-heading">
+    <div class="section-heading"><span class="section-number">감상</span><div><h2 id="reactions-heading">전시품을 감상하는 손님들</h2><p>이야기에 맞는 반응을 만들고, 직접 검토한 문구를 관람객에게 들려주세요.</p></div></div>
+    <label for="reaction-artifact">반응을 만들 전시품</label><select id="reaction-artifact"></select>
+    <button id="reaction-reload" type="button" class="secondary">목록·저장된 반응 다시 불러오기</button>
+    <fieldset id="reaction-controls" disabled>
+      <h3>전시품 원문</h3><pre id="reaction-source"></pre>
+      <p id="reaction-warning" class="reaction-warning"></p>
+      <label><input id="reaction-enabled" type="checkbox"> 이 전시품의 승인된 반응 표시</label>
+      <div class="reaction-actions"><button id="reaction-generate" type="button">설명에서 반응 후보 만들기</button></div>
+      <p class="hint">PC 안에서 원문을 인용한 후보를 만듭니다. 외부 AI로 전송하지 않습니다. 문구를 수정하면 검토 중으로 돌아갑니다.</p>
+      <div id="reaction-rows"></div>
+      <label for="reaction-persona">직접 추가할 반응의 관심 성향</label><select id="reaction-persona"><option value="general">일반</option><option value="detail">디테일</option><option value="story">이야기</option><option value="collector">수집가</option></select>
+      <div class="reaction-actions"><button id="reaction-add" class="secondary" type="button">문구 직접 추가</button><button id="reaction-save" type="button">검토·승인 결과 저장</button></div>
+      <details><summary>이전 저장 복원</summary><label for="reaction-history">최근 저장 기록 (최대 20개)</label><select id="reaction-history"></select><button id="reaction-restore" type="button" class="secondary">선택한 저장으로 복원</button><p class="hint">원문이 달라진 과거 문구는 복원해도 관람에 표시하지 않습니다.</p></details>
+    </fieldset>
+    <p id="reaction-status" role="status" aria-live="polite">반응 목록을 불러오는 중입니다.</p>
+    <p class="hint">저장 후 관람 앱을 다시 열어 주세요. 가까운 관람객이 실제로 감상할 때 승인 문구가 나타납니다. PC 관람객 패널에서 반응 표시를 끌 수 있습니다.</p>
   </section>
 
 </main><footer>작은 물건에 담긴, 오래 남을 이야기.</footer>

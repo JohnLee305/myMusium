@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactId",
+    "enabled",
+    "source",
+    "points",
+    "reactions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "artifactId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "description",
+        "sha256"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[^<>\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]*\\S[^<>\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]*$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400,
+          "pattern": "^[^<>\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]*\\S[^<>\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]*$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "points": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400,
+            "pattern": "^[^<>\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]*\\S[^<>\\u0000-\\u0008\\u000b\\u000c\\u000e-\\u001f\\u007f]*$"
+          }
+        }
+      }
+    },
+    "reactions": {
+      "type": "array",
+      "maxItems": 48,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "persona",
+          "tier",
+          "text",
+          "evidencePointIds",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          },
+          "persona": {
+            "enum": [
+              "general",
+              "detail",
+              "story",
+              "collector"
+            ]
+          },
+          "tier": {
+            "enum": [
+              "short",
+              "normal",
+              "rare"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 72,
+            "pattern": "^[^<>\\u0000-\\u001f\\u007f]*\\S[^<>\\u0000-\\u001f\\u007f]*$"
+          },
+          "evidencePointIds": {
+            "type": "array",
+            "maxItems": 16,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+            }
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "approved",
+              "rejected"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Node and Unity additionally check UTF-16 string limits, unique IDs, artifact binding, evidence substrings and references, exact UTF-8 source SHA-256, source freshness and the 64KiB file cap."
+}

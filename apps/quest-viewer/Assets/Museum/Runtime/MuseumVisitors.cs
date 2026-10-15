@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace FamilyMuseum
 {
-    public sealed class MuseumVisitors : MonoBehaviour
+    public sealed partial class MuseumVisitors : MonoBehaviour
     {
         public VisitorPaths Paths { get; private set; }
         public int ActiveCount=>guests.Count;
@@ -30,10 +30,20 @@ namespace FamilyMuseum
         string settingsFingerprint,settingsError;
         float settingsPoll;
         public float SpeedMultiplier=>preferences.speed;
+        public ReactionCatalog Reactions {get;private set;}
+        public bool ShowReactions {get;set;}=true;
+        public string NextPersona()=>ReactionCatalog.Personas[random.Next(ReactionCatalog.Personas.Length)];
+        public bool CanShowThought(MuseumGuest guest)
+        {
+            if(Camera.main==null)return false;
+            var camera=Camera.main;var point=guest.transform.position+Vector3.up*1.9f;
+            if(Vector3.Distance(camera.transform.position,point)>7f || Vector3.Dot(camera.transform.forward,point-camera.transform.position)<=0)return false;
+            return guests.Where(g=>g!=null&&g.State==GuestState.Viewing&&!string.IsNullOrEmpty(g.ReactionText)&&Vector3.Distance(camera.transform.position,g.transform.position+Vector3.up*1.9f)<=7f&&Vector3.Dot(camera.transform.forward,g.transform.position+Vector3.up*1.9f-camera.transform.position)>0).OrderBy(g=>(g.transform.position-camera.transform.position).sqrMagnitude).Take(2).Contains(guest);
+        }
         public bool BlocksPointer(Vector2 screenPoint)
         {
             if(session==null || !session.desktopRig.activeInHierarchy) return false;
-            return new Rect(Mathf.Max(20,Screen.width-280),120,260,155).Contains(new Vector2(screenPoint.x,Screen.height-screenPoint.y));
+            return new Rect(Mathf.Max(20,Screen.width-280),120,260,185).Contains(new Vector2(screenPoint.x,Screen.height-screenPoint.y));
         }
         void Awake()
         {
@@ -42,6 +52,7 @@ namespace FamilyMuseum
             font=Font.CreateDynamicFontFromOSFont(new[]{"Malgun Gothic","Arial"},48);
             font.material.shader=Resources.Load<Shader>("WorldText");
             preferencesFile=new VisitorPreferencesFile(LocalArchive.FindRoot());
+            Reactions=new ReactionCatalog(LocalArchive.FindRoot());
             ReloadPreferences();
         }
         void Update()
@@ -145,7 +156,7 @@ namespace FamilyMuseum
         }
         public void ClearRoom()
         {
-            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); Paths=null; room=-1; spawnWait=0;
+            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
         }
         void OnGUI()
         {
@@ -153,13 +164,14 @@ namespace FamilyMuseum
             var style=new GUIStyle(GUI.skin.label){font=font,fontSize=15,alignment=TextAnchor.MiddleCenter};
             var button=new GUIStyle(GUI.skin.button){font=font,fontSize=15};
             float x=Mathf.Max(20,Screen.width-280);
-            GUI.Box(new Rect(x,120,260,155),"");
+            GUI.Box(new Rect(x,120,260,185),"");
             GUI.Label(new Rect(x+5,124,250,25),"관람객 · 타이쿤 실험",style);
             if(GUI.Button(new Rect(x+15,157,42,30),"−",button)) SetCount(TargetCount-1);
             GUI.Label(new Rect(x+60,157,135,30),$"{ActiveCount}명 / 목표 {TargetCount}명",style);
             if(GUI.Button(new Rect(x+203,157,42,30),"+",button)) SetCount(TargetCount+1);
             if(GUI.Button(new Rect(x+15,201,90,28),TargetCount==0?"켜기":"모두 끄기",button)) SetCount(TargetCount==0?1:0);
             GUI.Label(new Rect(x+110,200,140,30),$"관람 {Views} · 퇴장 {Exited}",style);
+            ShowReactions=GUI.Toggle(new Rect(x+15,271,230,25),ShowReactions,"감상 반응 표시",button);
             GUI.Label(new Rect(x+5,237,250,28),"앱 버튼은 임시 · 저장은 관리페이지",new GUIStyle(style){fontSize=12});
         }
         void OnDestroy() { ClearRoom(); if(font!=null) { Destroy(font.material); Destroy(font); } }

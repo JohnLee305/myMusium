@@ -151,3 +151,7 @@ LLM은 **문구 생성용 선택적 어댑터**다. MVP는 수동 입력 + 규�
 4. `TASKS.md`, `PROJECT_STATUS.md`, `STATUS.md`, `WORKLOG.md`를 갱신한다. 기준 브랜치 `codex/museum-baseline`은 사용자가 요청하지 않는 한 수정하지 않는다.
 
 프로젝트의 아이디어 회의/사양 합의는 ChatGPT 대화에서 진행할 수 있고, 구현은 ChatGPT Work에 위 문서를 인계해 수행한다. Work는 이 대화 내용을 자동으로 완전히 아는 것으로 가정하지 않는다.
+
+
+## 2026-10-16 구현 진행
+위 예시는 당시 제안이다. 이번 PC 첫 버전의 실제 계약은 [ADR-0006](decisions/0006-approved-reactions.md), 사용법은 [REACTIONS.md](REACTIONS.md)를 따른다. 선택적 사이드카·원문지문·인용근거·4성향·승인 흐름 구현, 최종 실행 검증 진행 중. categories/themes 자동 분류·심층 해석·LLM·성향 가중치 저장은 이번 MVP 범위가 아니다.
