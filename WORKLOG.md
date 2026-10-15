@@ -484,3 +484,17 @@
 - 최신 전체 현황: 실험 브랜치 PROJECT_STATUS.md. 기준 브랜치 README에서도 최신 링크 접근 가능. 모든 기능 작업에서 MD 갱신·커밋·push·원격 일치 확인을 상시 수행.
 - 다음: C:\Dev\vr-museum-tycoon에서 TYC-001부터 구현. 관람객/운영 아직 미구현, 실제 Quest 검사는 사용자 일정에 맞춰 후속. 이번 작업 완료.
 
+
+## 2026-10-15 / 관람객 에셋 조사 시작
+- 사용자 요청: 관람객 구현의 첫 단계로 적합한 에셋 탐색. 공식 Quaternius/Kenney 캐릭터 팩을 외형·애니메이션·가벼움·이용조건 기준으로 비교.
+- Quaternius 팩별 CC0 표기와 2026-08-28 공통 QAL 안내 상이 확인, 자동으로 CC0라고 단정하지 않음. 실제 파일 이용조건 확인 전 프로젝트 편입 미실행. Kenney 공식 CC0 후보 다운로드·내용 검사 예정.
+- TYC-001 상태: 에셋 조사 진행 중, 행동 코드 미구현. 실험 브랜치만 변경.
+
+
+## 2026-10-15 / 관람객 에셋 조사·첫 후보 확보 완료
+- 첫 후보 Quaternius Ultimate Modular Men/Women 일상복. 제작자 배포 폴더의 License.txt에서 CC0 1.0 명시 확인, 해당 남성 샘플2종과 원문·출처·SHA256 보관. 다른 팩은 현재 QAL과 별개로 조건 확인 필요.
+- Blender 형상: 5776삼각형/4mesh. 일반FBX 24action(Walk/Idle_Neutral/Interact/Wave 포함), Humanoid62bone/action없음. Humanoid T-pose 미리보기 렌더 확인. 일반FBX 대기 렌더에서 표시되지 않아 정상 애니메이션 재생 판정 안 함.
+- Kenney 대안 공식ZIP CC0 확인했으나 idle/run/jump만 있고 Walk별도없음. 프로젝트 편입 안 함. Universal Base는 추가조합 필요해 후순위.
+- docs/VISITOR-ASSETS.md와 PROJECT_STATUS/TASKS 갱신, TYC-001A만 완료. 샘플은 third_party에 보관, Unity Assets 편입/게임 코드/새 빌드/행동 아직 없음.
+- 다음: 실험 Unity Generic import로 Walk/Idle_Neutral 실제 변형/방향/크기 검사 → 적합리그 결정 → TYC-001 1명입장/관람/퇴장. 이번 변경 관련 자료·MD만 GitHub 실험 브랜치에 올리고 SHA 확인.
+
