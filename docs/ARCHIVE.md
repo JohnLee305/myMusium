@@ -83,3 +83,7 @@ Page Up/Down, 상단 이전·다음 버튼, 입구 좌우 표지 근처에서 �
 rooms[].cells는 artifacts와 길이가 같은 정수 배열이다. 각 값은 0~29이며 방 안에서 중복될 수 없다. 0~5는 입구 쪽 첫 행, 24~29는 안쪽 다섯째 행이다. X=(cell%6-2.5)*2.4, Z=floor(cell/6)*2.8. 생략한 기존 방은 artifacts 순서대로 0부터 배정하며 읽기만으로 원본 파일을 변경하지 않는다.
 휴지통은 manifest.trash 배열에 {entry,roomId,cell,deletedAt}를 보관한다. active artifacts 및 방 배정에서는 제거하되 실제 파일은 남는다. 복원은 빈 칸에 다시 배정한다. 전체 전시품0개도 유효하며 방은 최소1개를 유지한다. 삭제된 ID는 파일이 남아 있어 신규 등록에 재사용할 수 없다.
 배치 변경과 휴지통은 manifest 원자적 교체·백업, 설명 수정은 해당 artifact JSON 원자적 교체·백업을 사용한다. API revision과 itemRevision으로 오래된 화면의 덮어쓰기를 방지한다. 영구삭제 UI는 제공하지 않는다.
+
+
+## 선택적 전시품 반응 사이드카
+`artifacts/{id}/reactions.json` 1.0은 기존 artifact/manifest v1과 독립적이다. 누락은 정상, 손상/원문 지문 불일치/미승인은 기본 문구로 폴백한다. 실제 계약·제한·저장 경계는 [ADR-0006](decisions/0006-approved-reactions.md), JSON Schema는 `schemas/reactions.schema.json`이다. 원문·모델·배치·진행 세이브와 분리하며 개인정보 공개 정책은 동일하게 적용한다.

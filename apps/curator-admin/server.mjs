@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { createReactionService } from './reaction-service.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -194,14 +195,18 @@ function send(res, status, data, type = 'application/json; charset=utf-8') {
     });
     res.end(typeof data === 'object' && !Buffer.isBuffer(data) ? JSON.stringify(data) : data);
 }
+const reactions=createReactionService({safe,json,manifest,fail});
 const assets = { '/preview.js':['preview.js','text/javascript; charset=utf-8'], '/preview-checks.mjs':['preview-checks.mjs','text/javascript; charset=utf-8'], ...Object.fromEntries(['three.module.js','three.core.js','GLTFLoader.js','OrbitControls.js','BufferGeometryUtils.js'].map(file=>['/vendor/'+file,['vendor/'+file,'text/javascript; charset=utf-8']])), '/layout-editor.js':['layout-editor.js','text/javascript; charset=utf-8'], '/themes.mjs':['themes.mjs','text/javascript; charset=utf-8'], '/theme-editor.js':['theme-editor.js','text/javascript; charset=utf-8'], '/': ['index.html', 'text/html; charset=utf-8'], '/style.css': ['style.css', 'text/css; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'] };
 assets['/visitor-editor.js']=['visitor-editor.js','text/javascript; charset=utf-8'];
 assets['/visitor-style.css']=['visitor-style.css','text/css; charset=utf-8'];
+assets['/reaction-editor.js']=['reaction-editor.js','text/javascript; charset=utf-8'];
+assets['/reaction-style.css']=['reaction-style.css','text/css; charset=utf-8'];
 const server = http.createServer(async (req, res) => {
     try {
         const host = `127.0.0.1:${server.address().port}`;
         if (req.headers.host !== host || (req.headers.origin && req.headers.origin !== `http://${host}`)) fail('이 PC의 관리 화면에서만 요청할 수 있습니다.', 403);
         const url = new URL(req.url, `http://${host}`);
+        if(req.method==='GET' && url.pathname==='/api/reactions')return send(res,200,reactions.get(url.searchParams.get('artifactId')));
         if (req.method === 'GET' && url.pathname === '/api/health') return send(res, 200, { service: 'vr-museum-curator', archive: root, edition:'tycoon' });
         if (req.method === 'GET' && url.pathname === '/api/visitors') return send(res,200,visitorState());
         if (req.method === 'GET' && url.pathname === '/api/session') return send(res, 200, { token });
@@ -220,8 +225,21 @@ const server = http.createServer(async (req, res) => {
             const [file, type] = assets[url.pathname];
             return send(res, 200, fs.readFileSync(path.join(here, file)), type);
         }
-        if (req.method !== 'POST' || !['/api/visitors','/api/artifacts','/api/rooms','/api/move','/api/room-theme','/api/shutdown','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname)) return send(res, 404, { error: '페이지를 찾을 수 없습니다.' });
+        if (req.method !== 'POST' || !['/api/reactions','/api/visitors','/api/artifacts','/api/rooms','/api/move','/api/room-theme','/api/shutdown','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname)) return send(res, 404, { error: '페이지를 찾을 수 없습니다.' });
         if (req.headers['x-museum-token'] !== token) fail('관리 화면을 새로고침한 후 다시 등록해 주세요.', 403);
+        if(url.pathname==='/api/reactions'){
+            if(req.headers['content-type']!=='application/json')fail('반응은 JSON 형식으로 저장해 주세요.',415);
+            if(Number(req.headers['content-length'])>65536)fail('반응 요청은 64KiB 이하여야 합니다.',413);
+            if(saving)fail('저장 중입니다. 잠시 후 다시 시도해 주세요.',409);
+            saving=true;
+            try{
+                const chunks=[];let size=0;
+                for await(const chunk of req){size+=chunk.length;if(size>65536)fail('반응 요청이 너무 큽니다.',413);chunks.push(chunk);}
+                let value;try{value=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{fail('반응 요청을 읽을 수 없습니다.');}
+                if(!value || typeof value!=='object' || Array.isArray(value))fail('반응 요청 형식이 잘못되었습니다.');
+                return send(res,200,reactions.post(value));
+            }finally{saving=false;}
+        }
         if(url.pathname==='/api/visitors'){
             if(req.headers['content-type']!=='application/json') fail('잘못된 설정 형식입니다.',415);
             if(Number(req.headers['content-length'])>64*1024) fail('관람객 설정이 너무 큽니다.',413);

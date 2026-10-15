@@ -114,6 +114,7 @@ namespace FamilyMuseum
                     if (display == null || !display.IsFinished) detailsPassed = false;
                     else { yield return vrInteraction.RunSmoke(); detailsPassed &= vrInteraction.SmokePassed; }
                 }
+                if(Array.IndexOf(args,"-museum-reaction-smoke")>=0){if(display==null||!display.IsFinished)detailsPassed=false;else{yield return visitors.RunReactionSmoke();detailsPassed &= visitors.SmokePassed;}}
                 if (Array.IndexOf(args, "-museum-visitor-smoke") >= 0)
                 {
                     if (display == null || !display.IsFinished) detailsPassed = false;

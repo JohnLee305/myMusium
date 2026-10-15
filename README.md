@@ -50,3 +50,7 @@ Unity 프로젝트: apps/quest-viewer
 이 브랜치의 개발 폴더는 C:\Dev\vr-museum-tycoon입니다. 바탕화면 VR 박물관 (타이쿤 실험)으로 실행하고 오른쪽 패널에서 관람객을 0~6명 조절합니다. 기존 관람 버전은 별도 폴더·바로가기로 유지합니다.
 
 새 사람 에셋 추가·교체는 [관람객 외형 확장](docs/VISITOR-EXTENSION.md), 현재 현황은 [PROJECT_STATUS.md](PROJECT_STATUS.md)를 참고합니다.
+
+
+## 전시품에 반응하는 관람객
+전시품 원문에서 반응 후보를 만들고 직접 승인한 문구를 NPC의 실제 감상 순간에 표시하는 PC 첫 버전을 구현하고 검증했습니다. [사용법과 제약](docs/REACTIONS.md), [확정 계약](docs/decisions/0006-approved-reactions.md). 외부 AI 없이 오프라인으로 동작하며 실제 Quest 검증은 별도입니다.
