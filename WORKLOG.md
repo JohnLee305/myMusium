@@ -498,3 +498,32 @@
 - docs/VISITOR-ASSETS.md와 PROJECT_STATUS/TASKS 갱신, TYC-001A만 완료. 샘플은 third_party에 보관, Unity Assets 편입/게임 코드/새 빌드/행동 아직 없음.
 - 다음: 실험 Unity Generic import로 Walk/Idle_Neutral 실제 변형/방향/크기 검사 → 적합리그 결정 → TYC-001 1명입장/관람/퇴장. 이번 변경 관련 자료·MD만 GitHub 실험 브랜치에 올리고 SHA 확인.
 
+
+## 2026-10-15 / 확장 가능한 관람객 구현 시작
+- 사용자 결정: Quaternius 일상복 채택. 나중에 다른 제작자 사람 에셋도 추가 가능해야 함.
+- 설계: 캐릭터 프리팹/리그·걷기/대기 클립·크기·보행속도를 외형 프로필/카탈로그로 분리. 관람객 행동은 공통 코드. 새 프로필 추가로 외형 확장, 소스/이용조건 별도 보관.
+- 다음: Unity 실제 재생·변형 검증 → 관람객1명 입장/전시품관람/퇴장 → 회귀·실험실행본 검증. 기준 브랜치 변경 없음.
+
+
+## 2026-10-15 / 관람객 확장 구조·첫 실행검증 통과
+- VisitorAppearance/VisitorCatalog 자산으로 외형프리팹·자체리그/idle/walk·크기/앞방향·속도·가중치/활성·출처/라이선스 분리. 공통 Guest/Visual/Paths 코드에 제작자별 뼈이름·애니메이션상태 하드코딩 없음.
+- Unity Generic FBX Walk/Idle_Neutral 실제 skin변형(최대vertex차0.137273), 크기 약0.69×1.73×0.57m 확인. Blender 미리보기 문제와 달리 Unity 재생검사 통과.
+- 첫 빌드 unity-Build-20261015-205636.log exit0. visitor-tests-20261015-205827 normal/empty/dense30/missing4사례 통과. 입퇴장·관람·장애물·플레이어거리·0~6명/0명정리·방전환·프로필추가/중복/비활성/불완전 제외 검사.
+- 스크린샷에서 관람객이 화면 밖에 있어 캡처 전용 위치를 조정, 프로필 수치/단일Animator 검증 보완 후 최종 재빌드·화면 및 기존 기능 회귀 예정. 관리페이지 인원설정은 이번 구현에 없음, PC관람 창에서만 조절.
+
+
+## 2026-10-15 / 종료 정리 검사에서 오류 발견·보완
+- 최종검사 visitor-tests-20261015-210411 normal: 동작·화면·MUSEUM_SMOKE는 통과했으나 종료 중 guest가 먼저 파괴되는 경우 MuseumVisitors.ClearRoom → MuseumGuest.Close에서 NullReferenceException 및 종료 지연 발생. 이 실행은 최종통과로 판정하지 않음.
+- Unity destroyed-object null 검사로 중복정리 보완. 해당 시험인수/경로 확인 후 멈춘 시험 앱만 종료. 시험스크립트는 종료 후 예외도 실패로 판정하고 타임아웃 시 본인이 생성한 앱 정리하도록 보완. 재빌드 후 전체검사 재실행 예정.
+
+
+## 2026-10-15 / 확장 가능한 관람객 첫 버전 구현·검증 완료
+- 최종 Windows 빌드: unity-Build-20261015-211756.log exit0. 실제 Unity Generic skin 변형과 화면 확인, 단일Animator/자체Idle·Walk 프로필로 다른 리그 확장 가능. 현재 등록 외형은 Quaternius 일상복1종.
+- 관람객 첫 행동: 입장→최대3정상전시품 관람→퇴장, 경로/전시대 회피·사용자거리·막힘/체류제한·빈방/실패모델대응·방전환정리. PC관람창0~6명목표/켜끄기/현재세션관람·퇴장집계. 관리페이지설정/저장·취향/만족도·경제는 후속.
+- 최종 광범위16사례 통과: visitor-tests-20261015-210826(4), inspection-tests-20261015-210920(4), details-tests-20261015-211012(4), vr-interaction-tests-20261015-211104(4). 종료 후 Null/MissingReference 예외 없음 확인.
+- 이후 PC관람객패널 클릭영역이 전시품선택으로 전달되지 않도록 guard 추가, 최종빌드 및 details-tests-20261015-211916 추가4사례 통과. 기존16개에서 입력영역guard 외 기능코드 변경 없음. 총20사례 실행, Quest 실기기 검증 아님.
+- 과거 최종시도 normal 종료정리 오류는 기록대로 nullguard 보완 후 재검사통과. 최종 관람객 스크린샷에서 전체 캐릭터·패널 정상표시 확인. docs/assets/visitor-in-gallery.png 및 작업공간 관람객-실험-구현.png.
+- 프로필 확장 검사는 동일모델의 두번째 런타임프로필로 실시. 다른 제작자/실제다른리그는 추가시 자체 애니메이션·재질·표시·성능 검증 필요. 캐릭터 추가는 Unity 프로필/카탈로그 등록·재빌드 방식, 전시품 GLB 관리등록과 구분.
+- 바탕화면 VR 박물관 (타이쿤 실험).lnk 생성/대상/아카이브/로그 확인. 기존 PC/Quest/관리 바로가기·자료·기준브랜치·태그7a49bfb 유지 확인.
+- PROJECT_STATUS/TASKS/QUICKSTART/VISITOR-ASSETS 갱신 및 VISITOR-EXTENSION 추가. 다음: 사용자 실험바로가기 관람→속도/동선/거리 피드백, 관리페이지설정저장 ADMIN-005, 취향/만족도 TYC-004·운영시점 TYC-005 검토. 새에셋은 출처·조건확인 후 프로필로 확장.
+- 기능·MD GitHub 실험브랜치 업로드 준비. 기존 기준브랜치에 기능 병합하지 않음.

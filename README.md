@@ -43,3 +43,8 @@ Unity 프로젝트: apps/quest-viewer
 
 ## HTML 전시품 추가
 기준 버전의 Open-Curator.cmd 또는 관리 바로가기를 열면 서버 제어창이 열린다. 서버 켜기 → 관리페이지 열기 순으로 사용한다. 실험 관리 서버는 별도 포트를 사용한다. 샘플 또는 GLB 파일로 전시품을 등록하고 관람 앱을 재실행한다. 사용법: docs/CURATOR.md.
+
+## 타이쿤 실험 관람객
+이 브랜치의 개발 폴더는 C:\Dev\vr-museum-tycoon입니다. 바탕화면 VR 박물관 (타이쿤 실험)으로 실행하고 오른쪽 패널에서 관람객을 0~6명 조절합니다. 기존 관람 버전은 별도 폴더·바로가기로 유지합니다.
+
+새 사람 에셋 추가·교체는 [관람객 외형 확장](docs/VISITOR-EXTENSION.md), 현재 현황은 [PROJECT_STATUS.md](PROJECT_STATUS.md)를 참고합니다.

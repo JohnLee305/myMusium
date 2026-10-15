@@ -30,6 +30,7 @@ namespace FamilyMuseum
             xrRig.SetActive(false);
             desktopRig.SetActive(true);
             var vrInteraction = gameObject.AddComponent<VRExhibitInteraction>();
+            var visitors = gameObject.AddComponent<MuseumVisitors>();
             if (vrRequested)
             {
                 manager = XRGeneralSettings.Instance != null ? XRGeneralSettings.Instance.Manager : null;
@@ -111,6 +112,11 @@ namespace FamilyMuseum
                 {
                     if (display == null || !display.IsFinished) detailsPassed = false;
                     else { yield return vrInteraction.RunSmoke(); detailsPassed &= vrInteraction.SmokePassed; }
+                }
+                if (Array.IndexOf(args, "-museum-visitor-smoke") >= 0)
+                {
+                    if (display == null || !display.IsFinished) detailsPassed = false;
+                    else { yield return visitors.RunSmoke(); detailsPassed &= visitors.SmokePassed; }
                 }
                 if (Array.IndexOf(args, "-museum-sign-preview") >= 0 && display != null && display.IsFinished) display.PreviewWayfinding();
                 yield return new WaitForSecondsRealtime(2f);

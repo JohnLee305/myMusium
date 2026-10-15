@@ -60,6 +60,7 @@ namespace FamilyMuseum
             if (IsLoading || index < 0 || index >= rooms.Length || index == CurrentRoom) return;
             GetComponent<ArtifactDetailsPanel>()?.Close();
             GetComponent<VRExhibitInteraction>()?.Cancel();
+            GetComponent<MuseumVisitors>()?.ClearRoom();
             IsLoading = true; IsFinished = false;
             var navigator = GetComponent<MuseumSession>().desktopRig.GetComponent<DesktopNavigator>();
             navigator.enabled = false;

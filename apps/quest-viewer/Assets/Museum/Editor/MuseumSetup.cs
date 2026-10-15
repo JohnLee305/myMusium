@@ -269,6 +269,7 @@ namespace FamilyMuseum.Editor
 
         public static void BuildDesktop()
         {
+            VisitorAssetSetup.Prepare();
             Verify();
             string root = Path.GetFullPath(Path.Combine(Application.dataPath, "../../.."));
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions {

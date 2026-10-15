@@ -48,6 +48,7 @@ namespace FamilyMuseum
             Vector2 point = mouse.position.ReadValue();
             // Existing gallery and help overlays own these screen areas.
             if (point.y > Screen.height - 110 || point.y < 130) return;
+            if (GetComponent<MuseumVisitors>()?.BlocksPointer(point) ?? false) return;
             SelectRay(Camera.main.ScreenPointToRay(point));
         }
         public bool SelectRay(Ray ray)
