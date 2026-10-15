@@ -1,5 +1,14 @@
 # VR 박물관 개발 상태
 
+## 2026-10-16 / 모든 개발 에이전트의 Git 선행 점검 규칙 (문서만 적용)
+
+- 최신 협업 지침: [docs/GIT_MULTI_AGENT_WORKFLOW.md](docs/GIT_MULTI_AGENT_WORKFLOW.md), [docs/WORK_HANDOFF.md](docs/WORK_HANDOFF.md), 루트 [AGENTS.md](AGENTS.md).
+- **작업 시작/재개 전에 반드시** 현재 Clone/Worktree·브랜치·HEAD·미커밋 자료 확인 → `git fetch --prune origin` → 안전한 실험 브랜치의 최신화(`git pull --ff-only origin codex/museum-tycoon`) → 최신 `TASKS.md`, `PROJECT_STATUS.md`, `STATUS.md`, `WORKLOG.md`, 관련 설계/ADR 읽기.
+- Work, Codex 등 여러 에이전트는 서로 다른 Clone/Worktree와 작업 브랜치를 사용하고 같은 TODO ID의 브랜치/PR을 확인한다. 완료 뒤 최신 베이스/회귀를 확인하고 PR로 실험 브랜치에 통합한다. 로컬 수정·분기·충돌은 강제 덮어쓰기 없이 중단/보고.
+- 본 규칙 문서는 GitHub 실험 브랜치에 반영했지만 **개발 PC에서 실제 `git pull`을 수행한 것은 아님**. 다음 Work 세션에서 원격/로컬 HEAD를 확인하고 안전하게 동기화해야 한다.
+- 작업 계획 기준: 컬렉션 중심 REACT-001~009, 기존 ARCH/ASSET/SEC, 운영 OPS-001~004. 현재 운영 규칙 문서화만 완료(OPS-001); 스크립트/CI/자동 동시작업 감시는 미구현.
+- **이 아래 기존 STATUS 본문은 과거 시점의 재개 메모도 포함한다.** 최신 기능 상태는 원격 `PROJECT_STATUS.md`, `TASKS.md` 및 실제 소스·환경을 교차 검증한다. 과거 프로세스 PID·실행 중 상태를 믿지 않는다.
+
 갱신: 2026-10-13 (Asia/Seoul)
 
 ## 현재 완료점 / 재개 위치
