@@ -450,3 +450,10 @@
 - 실행본·전시자료 파일 313개 복사 및 SHA-256 일치 확인. 로컬 백업: C:\Dev\vr-museum-snapshots\museum-baseline-20261015.
 - 기준 소스·자료를 Git 태그 museum-baseline-20261015로 보존하며, 관람객 구현은 codex/museum-tycoon에서 진행. 실기기 미검증 상태는 그대로 기록.
 
+
+## 2026-10-15 / 버전 분리 완료
+- 기준 커밋: 7a49bfbcd80251f8022e6c9e39f74b626b6cc943 / 태그 museum-baseline-20261015 / 브랜치 codex/museum-baseline.
+- 독립 실험 작업폴더: C:\Dev\vr-museum-tycoon (codex/museum-tycoon). 소스·전시자료 분리, 최초 실행본은 기준 버전과 동일하며 SHA-256 확인.
+- 기존 폴더·PC/VR/관리 바로가기 유지. 관람객 기능 아직 미구현. 다음 개발은 반드시 실험 작업폴더에서 관람객 입장/구경/감상/퇴장부터 진행.
+- 사용자가 기존 관람 앱을 원하면 기존 바로가기로 실행. 기준 실행본·자료는 C:\Dev\vr-museum-snapshots\museum-baseline-20261015 에 보관, tools/open-baseline.ps1로 정확한 백업자료 관람 가능. 외부 업로드 없음.
+
