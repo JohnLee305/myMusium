@@ -53,4 +53,4 @@ Unity 프로젝트: apps/quest-viewer
 
 
 ## 전시품에 반응하는 관람객
-전시품 원문에서 반응 후보를 만들고 직접 승인한 문구를 NPC의 실제 감상 순간에 표시하는 PC 첫 버전을 개발 중입니다. [사용법과 제약](docs/REACTIONS.md), [확정 계약](docs/decisions/0006-approved-reactions.md). 외부 AI 없이 오프라인으로 동작하며 실제 Quest 검증은 별도입니다.
+전시품 원문에서 반응 후보를 만들고 직접 승인한 문구를 NPC의 실제 감상 순간에 표시하는 PC 첫 버전을 구현하고 검증했습니다. [사용법과 제약](docs/REACTIONS.md), [확정 계약](docs/decisions/0006-approved-reactions.md). 외부 AI 없이 오프라인으로 동작하며 실제 Quest 검증은 별도입니다.

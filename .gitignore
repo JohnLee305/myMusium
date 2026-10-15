@@ -29,3 +29,6 @@ logs/
 Thumbs.db
 # Mutable local admin backup history (the current archive is versioned).
 museum-archive/.admin-backups/
+
+# Reaction snapshots and approvals may contain private collection stories.
+museum-archive/artifacts/*/reactions.json

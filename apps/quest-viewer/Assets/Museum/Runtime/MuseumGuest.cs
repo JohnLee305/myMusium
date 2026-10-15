@@ -31,12 +31,25 @@ namespace FamilyMuseum
             for(int i=0;i<value.Length;i++){result.Append(value[i]);if(char.IsHighSurrogate(value[i])&&i+1<value.Length)result.Append(value[++i]);if(++column>=18&&i+1<value.Length){result.Append('\n');column=0;}}
             return result.ToString();
         }
+        internal void SetReactionText(string value)
+        {
+            ReactionText=value;thought.text=Wrap(value);thoughtTime=4.5f;
+        }
         public void UpdateThoughtVisibility()
         {
             if(bubble==null)return;
             bool visible=museum.ShowReactions && State==GuestState.Viewing && thoughtTime>0 && !string.IsNullOrEmpty(ReactionText) && Camera.main!=null && museum.CanShowThought(this);
             bubble.SetActive(visible);
-            if(visible)bubble.transform.rotation=Quaternion.LookRotation(bubble.transform.position-Camera.main.transform.position);
+            if(visible)
+            {
+                bubble.transform.rotation=Quaternion.LookRotation(bubble.transform.position-Camera.main.transform.position);
+                var bounds=thought.GetComponent<Renderer>().localBounds;
+                if(bounds.size.x>.001f)
+                {
+                    float scale=Mathf.Min(1,1.62f/bounds.size.x);thought.transform.localScale=Vector3.one*scale;
+                    bubble.transform.Find("Reaction background").localScale=new Vector3(1.8f,Mathf.Max(.32f,bounds.size.y*scale+.14f),1);
+                }
+            }
         }
         public bool Initialize(MuseumVisitors owner,VisitorAppearance appearance,ArtifactDisplay[] exhibits,Font font,int sequence)
         {
@@ -114,8 +127,7 @@ namespace FamilyMuseum
                 else if(State==GuestState.Walking)
                 {
                     State=GuestState.Viewing; wait=4.5f; Viewed++; museum.RecordView();
-                    ReactionText=museum.Reactions.Select(target?.Data,Persona,reactionHistory);thought.text=Wrap(ReactionText);thoughtTime=4.5f;
-                    var background=bubble.transform.Find("Reaction background");if(background!=null)background.localScale=new Vector3(1.8f,Mathf.Max(.32f,(thought.text.Split('\n').Length)*.14f+.12f),1);
+                    SetReactionText(museum.Reactions.Select(target?.Data,Persona,reactionHistory));
                 }
                 else if(State==GuestState.Leaving) State=GuestState.Finished;
             }

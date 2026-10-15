@@ -26,3 +26,14 @@
 소스·빌드: `C:\Dev\vr-museum-sync-20261016`. 기존 `C:\Dev\vr-museum-tycoon`의 미커밋 전시 자료는 보존했다. 기존 바탕화면 바로가기가 새 실행본을 가리킨다고 가정하지 않는다. 관리 서버를 실행할 때 같은 Archive 경로를 명시하고 기준4177/기존 실험4181과 다른 포트를 사용한다.
 
 `tools/start-admin.ps1 -ArchivePath <Archive> -Port <port>`로 새 관리 서버, `Builds/Windows/VRMuseum.exe -museum-archive <같은 Archive>`로 새 관람 앱을 실행한다. 새 worktree에는 Windows 실행파일이 Git으로 전달되지 않으므로 빌드가 필요하다. 실제 Quest 검증은 미실행이다.
+
+
+## PC 검증 결과와 실행도구
+계약/API77, 기존 관리API83, Player회귀18 및 최종 반응검사/화면 확인을 마쳤다. Quest 실기기 미검증. 실제 기록은 STATUS/WORKLOG 참조.
+
+사용자 작업공간의 **관람객 반응 - 관리페이지.cmd**는 새 코드/4186포트와 기존 개인 Archive를 연결한다. **관람객 반응 - PC 관람.cmd**는 같은 Archive를 새 실행본으로 연다. **관람객 반응 - 관리서버 종료.cmd**는 해당 서버만 정상종료한다. 이 PC 전용 실행도구는 GitHub 배포물에 포함하지 않으며 기존 바탕화면 바로가기를 교체하지 않는다.
+
+최대72자 한글도 글자 경계에 맞춰 배율/배경 높이를 조정한다. 최종084314 빌드에서 반응 전체 및 상세창4사례 재검증 완료.
+
+- 개인 원문/승인문 보호: 새 reactions.json을 공개 소스의 기본 ignore에 추가. 기존 개인 Archive/이전 폴더 추적 상태는 변경하지 않음.
+
