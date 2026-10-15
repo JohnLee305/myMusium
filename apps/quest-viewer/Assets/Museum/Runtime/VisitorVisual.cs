@@ -29,9 +29,6 @@ namespace FamilyMuseum
                 if(renderer is SkinnedMeshRenderer skin) skin.updateWhenOffscreen=true;
             }
             if(!any || bounds.size.y<.01f) { Destroy(model); return false; }
-            float scale=appearance.height/bounds.size.y;
-            alignment.localScale=Vector3.one*scale;
-            alignment.localPosition-=new Vector3(bounds.center.x-transform.position.x,bounds.min.y-transform.position.y,bounds.center.z-transform.position.z)*scale;
             alignment.localRotation=Quaternion.Euler(0,appearance.forwardYaw,0);
             foreach(var collider in model.GetComponentsInChildren<Collider>(true)) collider.enabled=false;
             var animator=model.GetComponentInChildren<Animator>(true);
@@ -48,7 +45,28 @@ namespace FamilyMuseum
             mixer.SetInputWeight(0,1); mixer.SetInputWeight(1,0);
             AnimationPlayableOutput.Create(graph,"Appearance",animator).SetSourcePlayable(mixer);
             graph.Play(); graph.Evaluate(0);
+            // Imported master rigs can start at an authored offset. Align the evaluated pose, rather than the import bind pose.
+            bounds=PoseBounds;
+            if(bounds.size.y<.01f){Close();Destroy(model);return false;}
+            float scale=appearance.height/bounds.size.y;
+            alignment.localScale=Vector3.one*scale;
+            alignment.localPosition+=transform.InverseTransformVector(new Vector3(transform.position.x-bounds.center.x,transform.position.y-bounds.min.y,transform.position.z-bounds.center.z))*scale;
             return true;
+        }
+        public Bounds PoseBounds
+        {
+            get
+            {
+                Bounds bounds=default;bool first=true;
+                foreach(var renderer in Renderers)
+                {
+                    if(!(renderer is SkinnedMeshRenderer skin))continue;
+                    var mesh=new Mesh();skin.BakeMesh(mesh,true);
+                    foreach(var vertex in mesh.vertices){var point=skin.transform.TransformPoint(vertex);if(first){bounds=new Bounds(point,Vector3.zero);first=false;}else bounds.Encapsulate(point);}
+                    Destroy(mesh);
+                }
+                return bounds;
+            }
         }
         public void Tick(bool moving,float dt,float movementSpeed=1)
         {

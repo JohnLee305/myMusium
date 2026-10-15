@@ -17,3 +17,6 @@
 .visitor-panel #visitor-save{background:var(--teal);color:#fff;border:0;border-radius:7px;padding:12px 20px;font-size:13px;font-weight:600}
 .visitor-panel .theme-actions{margin:20px 0 12px}
 #visitors-heading{scroll-margin-top:36px}
+.visitor-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.visitor-tools input[type=search]{width:260px;max-width:100%}
+.visitor-pages{display:flex;align-items:center;justify-content:center;gap:16px;font-size:12px;margin:20px 0}

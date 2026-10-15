@@ -12,10 +12,13 @@
       <fieldset id="visitor-controls" disabled>
         <label class="visitor-toggle"><input type="checkbox" id="visitor-enabled"> 관람객 받기</label>
         <div class="visitor-options"><div><label for="visitor-count">목표 인원</label><input id="visitor-count" type="number" min="0" max="6" step="1" required><p class="hint">0~6명 · 입장·퇴장 중에는 실제 인원이 적을 수 있습니다.</p></div><div><label for="visitor-speed">이동 속도 <output id="visitor-speed-value">1.0배</output></label><input id="visitor-speed" type="range" min="0.5" max="1.5" step="0.1" value="1"><p class="hint">0.5배 느긋하게 · 1배 기본 · 1.5배 빠르게</p></div></div>
-        <h3>등장할 캐릭터</h3><div id="visitor-appearances"></div>
+        <h3>등장할 캐릭터</h3><p id="visitor-summary" class="hint"></p>
+        <div class="visitor-tools"><label for="visitor-search">캐릭터 검색</label><input id="visitor-search" type="search" placeholder="남성, 여성, 이름으로 찾기"><button id="visitor-all-on" type="button" class="secondary">모두 사용</button><button id="visitor-all-off" type="button" class="secondary">모두 끄기</button></div>
+        <div id="visitor-appearances"></div>
+        <div class="visitor-pages"><button id="visitor-previous" type="button" class="secondary">이전 외형</button><span id="visitor-page"></span><button id="visitor-next" type="button" class="secondary">다음 외형</button></div>
         <p class="hint" id="visitor-empty-note" hidden>사용할 외형이 없거나 등장 비중이 모두 0이면 관람객이 생성되지 않습니다.</p>
         <p class="hint" id="visitor-removed-note" hidden>현재 앱에 없는 예전 외형 설정은 적용되지 않으며, 이번 저장에서 정리됩니다.</p>
-        <p class="hint">비중 1:3이면 대략 25%:75%로 새 손님을 선택합니다. 외형을 끄면 해당 손님은 정리되고, 비중 변경은 다음 입장부터 반영됩니다. 새 캐릭터는 앱에 등록·빌드한 뒤 이 목록에 나타납니다.</p>
+        <p class="hint">비중 1:3이면 대략 25%:75%로 새 손님을 선택합니다. 같은 방에는 가능한 서로 다른 외형을 먼저 선택합니다. 외형을 끄면 해당 손님은 정리되고, 비중 변경은 다음 입장부터 반영됩니다. 새 캐릭터는 앱에 등록·빌드한 뒤 이 목록에 나타납니다.</p>
         <div class="theme-actions"><button id="visitor-save" type="submit">관람객 설정 저장</button></div>
       </fieldset>
       <button id="visitor-reload" type="button" class="secondary">저장된 설정 다시 불러오기</button>

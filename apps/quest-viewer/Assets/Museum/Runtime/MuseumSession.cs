@@ -13,6 +13,7 @@ namespace FamilyMuseum
         public bool startInVr;
         XRManagerSettings manager;
         bool xrStarted;
+        bool diversityPreview;
         string status = "Desktop preview";
         int errors;
 
@@ -123,6 +124,12 @@ namespace FamilyMuseum
                     if (display == null || !display.IsFinished) detailsPassed = false;
                     else { yield return visitors.RunPreferencesSmoke(); detailsPassed &= visitors.SmokePassed; }
                 }
+                if (Array.IndexOf(args, "-museum-visitor-diversity-smoke") >= 0)
+                {
+                    diversityPreview=true;
+                    if(display==null || !display.IsFinished) detailsPassed=false;
+                    else {yield return visitors.RunDiversitySmoke();detailsPassed &= visitors.SmokePassed;}
+                }
                 if (Array.IndexOf(args, "-museum-sign-preview") >= 0 && display != null && display.IsFinished) display.PreviewWayfinding();
                 yield return new WaitForSecondsRealtime(2f);
                 yield return new WaitForEndOfFrame();
@@ -143,6 +150,7 @@ namespace FamilyMuseum
 
         void OnGUI()
         {
+            if(diversityPreview)return;
             if (xrStarted || (GetComponent<ArtifactDetailsPanel>()?.IsOpen ?? false)) return;
             GUI.Box(new Rect(20, Screen.height - 120, 530, 100), "");
             GUI.Label(new Rect(34, Screen.height - 112, 500, 25), "WASD  Move    |    Q / E  Turn left / right    |    Arrow keys  Look");

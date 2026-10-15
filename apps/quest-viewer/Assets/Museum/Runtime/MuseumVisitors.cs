@@ -103,12 +103,14 @@ namespace FamilyMuseum
             var value=preferences.Find(appearance.id);
             return value==null ? appearance.weight>0 : value.enabled && value.weight>0;
         }
-        VisitorAppearance PickAppearance()
+        VisitorAppearance PickAppearance(System.Random choiceRandom=null)
         {
             if(catalog==null) return null;
             var options=catalog.GetAvailable().Where(AppearanceEnabled).ToArray();
+            var fresh=options.Where(p=>guests.All(g=>g.Visual.Appearance.id!=p.id)).ToArray();
+            if(fresh.Length>0) options=fresh;
             double total=0; foreach(var entry in options) total+=preferences.Find(entry.id)?.weight??entry.weight;
-            double pick=random.NextDouble()*total;
+            double pick=(choiceRandom??random).NextDouble()*total;
             foreach(var entry in options) { pick-=preferences.Find(entry.id)?.weight??entry.weight; if(pick<=0) return entry; }
             return options.LastOrDefault();
         }
@@ -162,6 +164,55 @@ namespace FamilyMuseum
         }
         void OnDestroy() { ClearRoom(); if(font!=null) { Destroy(font.material); Destroy(font); } }
 
+        public IEnumerator RunDiversitySmoke()
+        {
+            simulation=true; gallery=GetComponent<GalleryDisplay>();PrepareRoom();ClearRoom();
+            var saved=preferences;preferences=VisitorPreferences.Default();
+            var entries=catalog.GetAvailable();var generated=entries.Where(p=>p.id.StartsWith("quaternius-men-") || p.id.StartsWith("quaternius-women-")).ToArray();
+            foreach(var p in catalog.appearances.Where(p=>p!=null && !p.IsUsable).Take(2)) Debug.Log($"VISITOR_CATALOG_DIAG: {p.id} prefab={p.prefab} animators={(p.prefab==null?-1:p.prefab.GetComponentsInChildren<Animator>(true).Length)} idle={p.idle} walk={p.walk} idleLength={(p.idle==null?-1:p.idle.length)} walkLength={(p.walk==null?-1:p.walk.length)} height={p.height} available={p.available} weight={p.weight}");
+            SmokePassed=generated.Length==100 && generated.Select(p=>p.id).Distinct().Count()==100;
+            var counts=entries.ToDictionary(p=>p.id,p=>0);var seeded=new System.Random(10492);
+            for(int i=0;i<12000;i++) {var chosen=PickAppearance(seeded);if(chosen==null){SmokePassed=false;break;}counts[chosen.id]++;}
+            SmokePassed &= counts.Values.All(n=>n>0);
+            Debug.Log($"VISITOR_RANDOM_CHECK: draws=12000 selected={counts.Values.Count(n=>n>0)} available={entries.Count} min={counts.Values.Min()} max={counts.Values.Max()}");
+            PrepareRoom();SetCount(0);
+            for(int i=0;i<6;i++) Spawn(new Vector3(-3+i,0,0));
+            SmokePassed &= guests.Count==6 && guests.Select(g=>g.Visual.Appearance.id).Distinct().Count()==6;
+            ClearRoom();
+            var ordered=generated.Where(p=>p.id.StartsWith("quaternius-men-")).OrderBy(p=>p.id).Zip(generated.Where(p=>p.id.StartsWith("quaternius-women-")).OrderBy(p=>p.id),(a,b)=>new[]{a,b}).SelectMany(pair=>pair).ToArray();
+            int animated=0;
+            for(int i=0;i<ordered.Length;i++)
+            {
+                var root=new GameObject("Diversity preview "+ordered[i].id);root.transform.position=new Vector3(i%10*1.6f,-(i/10)*2.3f,0);
+                var visual=root.AddComponent<VisitorVisual>();bool valid=visual.Initialize(ordered[i]);
+                root.transform.rotation=Quaternion.Euler(0,180,0);
+                if(valid)
+                {
+                    var skins=root.GetComponentsInChildren<SkinnedMeshRenderer>();
+                    var before=skins.Select(s=>{var mesh=new Mesh();s.BakeMesh(mesh);var vertices=mesh.vertices;Destroy(mesh);return vertices;}).ToArray();
+                    visual.Tick(true,.3f);float delta=0;
+                    for(int s=0;s<skins.Length;s++){var mesh=new Mesh();skins[s].BakeMesh(mesh);var vertices=mesh.vertices;for(int v=0;v<vertices.Length;v++)delta=Mathf.Max(delta,Vector3.Distance(vertices[v],before[s][v]));Destroy(mesh);}
+                    var posed=visual.PoseBounds;var offset=posed.center-root.transform.position;
+                    bool check=skins.Length==4 && delta>.0001f && posed.size.y>.5f && posed.size.y<3 && new Vector2(offset.x,offset.z).magnitude<.3f && Mathf.Abs(posed.min.y-root.transform.position.y)<.15f && visual.Renderers.All(r=>r.sharedMaterials.All(m=>m!=null && m.shader!=null && m.shader.isSupported));
+                    if(check)animated++;SmokePassed &= check;
+                    Debug.Log($"VISITOR_VARIANT_CHECK: {ordered[i].id} animated={delta} size={posed.size} offset={offset} passed={check}");
+                    visual.Tick(false,1f);
+                }
+                else SmokePassed=false;
+                var label=new GameObject("Label");label.transform.SetParent(root.transform,false);label.transform.localPosition=new Vector3(0,-.12f,0);label.transform.localRotation=Quaternion.Euler(0,180,0);
+                var text=label.AddComponent<TextMesh>();text.font=font;text.fontSize=48;text.characterSize=.003f;text.anchor=TextAnchor.MiddleCenter;text.color=new Color(.2f,.25f,.23f);text.text=ordered[i].displayName;label.GetComponent<Renderer>().sharedMaterial=font.material;
+                foreach(var child in root.GetComponentsInChildren<Transform>(true))child.gameObject.layer=30;
+                if(i%5==0)yield return null;
+            }
+            foreach(var camera in Camera.allCameras)camera.enabled=false;
+            var previewCamera=new GameObject("Diversity contact sheet camera").AddComponent<Camera>();previewCamera.transform.position=new Vector3(7.2f,-9.45f,-30);previewCamera.transform.rotation=Quaternion.identity;
+            previewCamera.orthographic=true;previewCamera.orthographicSize=12;previewCamera.cullingMask=1<<30;previewCamera.clearFlags=CameraClearFlags.SolidColor;previewCamera.backgroundColor=new Color(.94f,.94f,.9f);previewCamera.farClipPlane=80;
+            preferences=saved;
+            session.desktopRig.SetActive(false);gallery.enabled=false;enabled=false;
+            Debug.Log($"VISITOR_DIVERSITY_CHECK: tested={generated.Length} animated={animated}");
+            Debug.Log(SmokePassed?"VISITOR_DIVERSITY_SMOKE_PASS":"VISITOR_DIVERSITY_SMOKE_FAIL");
+        }
+
         public IEnumerator RunPreferencesSmoke()
         {
             simulation=true; gallery=GetComponent<GalleryDisplay>(); PrepareRoom();
@@ -176,7 +227,7 @@ namespace FamilyMuseum
             {
                 var appearance=catalog.GetAvailable()[0];
                 var next=VisitorPreferences.Default(); next.count=3; next.speed=.7f;
-                next.appearances=new[]{new VisitorAppearancePreference{id=appearance.id,enabled=true,weight=2}};
+                next.appearances=catalog.GetAvailable().Select(p=>new VisitorAppearancePreference{id=p.id,enabled=p.id==appearance.id,weight=2}).ToArray();
                 void Save(VisitorPreferences value){System.IO.File.WriteAllText(file,JsonUtility.ToJson(value));ReloadPreferences();}
                 Save(next); SmokePassed &= TargetCount==3 && Mathf.Abs(SpeedMultiplier-.7f)<.001f;
                 Tick(.1f); SmokePassed &= ActiveCount==1;

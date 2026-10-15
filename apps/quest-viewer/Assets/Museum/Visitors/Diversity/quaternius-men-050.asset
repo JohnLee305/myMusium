@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c935c40cb06f3e247bdbd2aa280cdc89, type: 3}
+  m_Name: quaternius-men-050
+  m_EditorClassIdentifier: Assembly-CSharp::FamilyMuseum.VisitorAppearance
+  id: quaternius-men-050
+  displayName: "\uB0A8\uC131 \uAD00\uB78C\uAC1D 50"
+  prefab: {fileID: 4240212089116460429, guid: 7f2b93350c9e3324c93a6b634a47291b, type: 3}
+  idle: {fileID: 5568892555482406616, guid: c617d55c3e7e6504eb431e2b3ddedbc6, type: 3}
+  walk: {fileID: -5599002979973759676, guid: c617d55c3e7e6504eb431e2b3ddedbc6, type: 3}
+  height: 1.8199999
+  forwardYaw: 0
+  walkSpeed: 0.9
+  animationSpeed: 1
+  weight: 1
+  available: 1
+  creator: Quaternius
+  sourceUrl: https://quaternius.com/packs/ultimatemodularcharacters.html
+  license: CC0 1.0 (included pack License.txt)

@@ -2,6 +2,8 @@
 
 확인일: 2026-10-15 · 작업 브랜치: `codex/museum-tycoon`
 
+최신 확장: 남녀 공식 master FBX와 각 폴더의 CC0 원문을 확보해100개 부위 조합·색상 팔레트를 추가했습니다. 현재 총101외형이며, 아래 첫 후보 조사는 확장 전 기록입니다. [100외형 구성·검증·출처](VISITOR-DIVERSITY.md).
+
 후속: 일상복 캐릭터를 채택하여 Unity Generic 리그·Walk/Idle_Neutral·실제 skin 변형/화면을 확인하고 관람객에 연결했습니다. [새 외형 추가 방법](VISITOR-EXTENSION.md). 아래 Blender 내용은 최초 조사 기록입니다.
 
 ## 첫 후보
