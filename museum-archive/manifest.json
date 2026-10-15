@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0",
+  "artifacts": [
+    "artifacts/sample-vase/artifact.json",
+    "artifacts/sample-books/artifact.json",
+    "artifacts/sample-sculpture/artifact.json",
+    "artifacts/exhibit-mv6sl5rz-49a731/artifact.json",
+    "artifacts/exhibit-mv6sllm7-45d745/artifact.json"
+  ],
+  "rooms": [
+    {
+      "id": "room-1",
+      "title": "1번 전시실",
+      "artifacts": [
+        "artifacts/sample-books/artifact.json",
+        "artifacts/sample-sculpture/artifact.json",
+        "artifacts/exhibit-mv6sl5rz-49a731/artifact.json"
+      ],
+      "theme": {
+        "backWall": "#E8E8E4",
+        "frontWall": "#E8E8E4",
+        "leftWall": "#E8E8E4",
+        "rightWall": "#E8E8E4",
+        "floor": "#B1B7B5",
+        "background": "#CFD6DA",
+        "plinth": "#E0E1DD",
+        "cap": "#555F61",
+        "accent": "#555F61",
+        "plaqueBackground": "#F5F4ED",
+        "plaqueBorder": "#64706E",
+        "plaqueText": "#203430",
+        "plaqueHint": "#40564E",
+        "signBackground": "#F5F4ED",
+        "signBorder": "#64706E",
+        "signText": "#203430",
+        "signAccent": "#40564E",
+        "signMount": "#090B0A",
+        "detailBackground": "#F5F4ED",
+        "detailText": "#203430",
+        "detailAccent": "#64706E",
+        "light": "#FFFFFF",
+        "ambient": "#AAB2BA"
+      },
+      "cells": [
+        24,
+        26,
+        29
+      ]
+    },
+    {
+      "id": "room-268ea153-0a27-4a08-9f0d-aca55ef8197e",
+      "title": "추억의 방 · 화면 시험",
+      "artifacts": [
+        "artifacts/sample-vase/artifact.json"
+      ],
+      "theme": {
+        "backWall": "#B99C7B",
+        "frontWall": "#B99C7B",
+        "leftWall": "#C7AF90",
+        "rightWall": "#C7AF90",
+        "floor": "#51413B",
+        "background": "#372C29",
+        "plinth": "#937B64",
+        "cap": "#52362B",
+        "accent": "#735036",
+        "plaqueBackground": "#36261F",
+        "plaqueBorder": "#B68F57",
+        "plaqueText": "#F8EACF",
+        "plaqueHint": "#E2C68F",
+        "signBackground": "#36261F",
+        "signBorder": "#B68F57",
+        "signText": "#F8EACF",
+        "signAccent": "#E2C68F",
+        "signMount": "#090B0A",
+        "detailBackground": "#36261F",
+        "detailText": "#F8EACF",
+        "detailAccent": "#B68F57",
+        "light": "#FFE6C5",
+        "ambient": "#A39788"
+      },
+      "cells": [
+        0
+      ]
+    },
+    {
+      "id": "room-fbcd9ba2-1bdb-47cd-a871-835ea2041bd7",
+      "title": "새로운방",
+      "artifacts": [
+        "artifacts/exhibit-mv6sllm7-45d745/artifact.json"
+      ],
+      "theme": {
+        "backWall": "#202D40",
+        "frontWall": "#202D40",
+        "leftWall": "#293548",
+        "rightWall": "#293548",
+        "floor": "#131C2A",
+        "background": "#0F1725",
+        "plinth": "#384352",
+        "cap": "#9B8252",
+        "accent": "#9B8252",
+        "plaqueBackground": "#152033",
+        "plaqueBorder": "#9B8252",
+        "plaqueText": "#F1EAD7",
+        "plaqueHint": "#D7B97C",
+        "signBackground": "#152033",
+        "signBorder": "#9B8252",
+        "signText": "#F1EAD7",
+        "signAccent": "#D7B97C",
+        "signMount": "#090B0A",
+        "detailBackground": "#152033",
+        "detailText": "#F1EAD7",
+        "detailAccent": "#9B8252",
+        "light": "#E7EEFF",
+        "ambient": "#858B9B"
+      },
+      "cells": [
+        0
+      ]
+    }
+  ]
+}
