@@ -1,5 +1,6 @@
 import { initLayoutEditor, syncLayoutEditor, selectLayoutItem } from './layout-editor.js';
 import { initThemeEditor, syncThemeEditor } from './theme-editor.js';
+import './visitor-editor.js';
 const $ = id => document.getElementById(id);
 let token = '', saving = false, cached = null;
 function message(text, error = false) {

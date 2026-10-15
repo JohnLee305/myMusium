@@ -50,11 +50,12 @@ namespace FamilyMuseum
             graph.Play(); graph.Evaluate(0);
             return true;
         }
-        public void Tick(bool moving,float dt)
+        public void Tick(bool moving,float dt,float movementSpeed=1)
         {
             if(!graph.IsValid()) return;
             blend=Mathf.MoveTowards(blend,moving?1:0,dt*6);
             mixer.SetInputWeight(0,1-blend); mixer.SetInputWeight(1,blend);
+            mixer.GetInput(1).SetSpeed(Appearance.animationSpeed*movementSpeed);
             graph.Evaluate(dt);
         }
         public Bounds Bounds

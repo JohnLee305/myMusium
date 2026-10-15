@@ -277,6 +277,7 @@ namespace FamilyMuseum.Editor
                 target = BuildTarget.StandaloneWindows64, options = BuildOptions.Development
             });
             if (report.summary.result != BuildResult.Succeeded) throw new Exception("Windows build failed: " + report.summary.result);
+            VisitorAssetSetup.ExportCatalog(root);
             Debug.Log("MUSEUM_BUILD_PASS: " + report.summary.outputPath);
         }
 

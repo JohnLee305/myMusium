@@ -15,7 +15,7 @@ namespace FamilyMuseum
         public float forwardYaw;
         [Range(.2f,2f)] public float walkSpeed=.9f;
         [Range(.2f,2f)] public float animationSpeed=1f;
-        [Min(0)] public float weight=1;
+        [Range(0,100)] public float weight=1;
         public bool available=true;
         public string creator;
         public string sourceUrl;
@@ -26,6 +26,6 @@ namespace FamilyMuseum
             !float.IsNaN(walkSpeed) && !float.IsInfinity(walkSpeed) && animationSpeed>0 &&
             !float.IsNaN(animationSpeed) && !float.IsInfinity(animationSpeed) &&
             !float.IsNaN(forwardYaw) && !float.IsInfinity(forwardYaw) &&
-            !float.IsNaN(weight) && !float.IsInfinity(weight) && weight>0;
+            !float.IsNaN(weight) && !float.IsInfinity(weight) && weight>0 && weight<=100;
     }
 }

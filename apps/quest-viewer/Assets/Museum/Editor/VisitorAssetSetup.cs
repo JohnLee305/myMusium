@@ -12,6 +12,27 @@ namespace FamilyMuseum.Editor
         const string PrefabPath="Assets/Museum/Visitors/Casual2.prefab";
         const string ProfilePath="Assets/Museum/Visitors/Casual2.asset";
         const string CatalogPath="Assets/Museum/Resources/VisitorCatalog.asset";
+        [Serializable] sealed class CatalogExport {public string schemaVersion="1.0";public AppearanceExport[] appearances;}
+        [Serializable] sealed class AppearanceExport
+        {
+            public string id,displayName,creator,license;
+            public bool available;
+            public float weight;
+        }
+        public static void ExportCatalog(string root)
+        {
+            var catalog=AssetDatabase.LoadAssetAtPath<VisitorCatalog>(CatalogPath);
+            if(catalog==null) throw new Exception("Visitor catalog missing");
+            var entries=catalog.appearances.Where(p=>p!=null && p.id!=null && System.Text.RegularExpressions.Regex.IsMatch(p.id,@"^[a-z0-9][a-z0-9-]{0,63}$")).GroupBy(p=>p.id).Select(group=>group.First()).Take(256).Select(p=>new AppearanceExport {
+                id=p.id,displayName=string.IsNullOrWhiteSpace(p.displayName)?p.id:p.displayName.Substring(0,Math.Min(80,p.displayName.Length)),
+                creator=p.creator,license=p.license,available=p.IsUsable && p.weight<=100,
+                weight=float.IsNaN(p.weight) || float.IsInfinity(p.weight)?0:Mathf.Clamp(p.weight,0,100)
+            }).ToArray();
+            var json=JsonUtility.ToJson(new CatalogExport{appearances=entries},true)+"\n";
+            File.WriteAllText(Path.Combine(root,"apps/curator-admin/visitor-catalog.json"),json);
+            File.WriteAllText(Path.Combine(root,"Builds/Windows/visitor-catalog.json"),json);
+            Debug.Log("VISITOR_ADMIN_CATALOG_EXPORTED: "+entries.Length);
+        }
         [MenuItem("Museum/Visitors/Prepare initial appearance")]
         public static void Prepare()
         {

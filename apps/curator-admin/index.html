@@ -1,10 +1,28 @@
 <!doctype html>
 <html lang="ko">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>전시품 관리 · 가족 박물관</title><link rel="stylesheet" href="/style.css"><script src="/app.js" type="module"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>전시품 관리 · 가족 박물관</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/visitor-style.css"><script src="/app.js" type="module"></script></head>
 <body>
-<header><a class="brand" href="/">FAMILY ARCHIVE <span>가족 박물관</span></a><span class="local"><i></i> 내 PC에 저장</span></header>
+<header><a class="brand" href="/">FAMILY ARCHIVE <span>타이쿤 실험 관리</span></a><span class="local"><i></i> 최신 PC 관람과 연결</span></header>
 <main>
-  <section class="intro"><p class="eyebrow">COLLECTION STUDIO</p><h1>기억에 자리를 만들어 주세요.</h1><p>소중한 물건의 모형과 이야기를 더하면, 우리 가족의 전시가 됩니다.</p><a class="theme-jump secondary" href="#layout-heading">전시품 배치·수정 ↓</a> <a class="theme-jump secondary" href="#theme-heading">전시실 색상·테마 조정 ↓</a></section>
+  <section class="intro"><p class="eyebrow">COLLECTION STUDIO</p><h1>기억에 자리를 만들어 주세요.</h1><p>소중한 물건의 모형과 이야기를 더하면, 우리 가족의 전시가 됩니다.</p><a class="theme-jump secondary" href="#layout-heading">전시품 배치·수정 ↓</a> <a class="theme-jump secondary" href="#theme-heading">전시실 색상·테마 조정 ↓</a> <a class="theme-jump secondary" href="#visitors-heading">관람객 관리 ↓</a></section>
+  <p class="edition-note">이 페이지는 <strong>PC 관람 / 타이쿤 실험</strong> 앱의 전시품과 관람객을 관리합니다. 기존 버전 보관용 자료는 별도입니다. 전시품·배치 변경은 앱 재실행 후, 관람객 설정은 저장 후 자동 반영됩니다.</p>
+  <section class="panel visitor-panel" aria-labelledby="visitors-heading">
+    <div class="section-heading"><span class="section-number">운영</span><div><h2 id="visitors-heading">관람객 관리</h2><p>손님 수와 이동 속도를 정하고, 등장할 캐릭터를 골라 주세요.</p></div></div>
+    <form id="visitor-form">
+      <fieldset id="visitor-controls" disabled>
+        <label class="visitor-toggle"><input type="checkbox" id="visitor-enabled"> 관람객 받기</label>
+        <div class="visitor-options"><div><label for="visitor-count">목표 인원</label><input id="visitor-count" type="number" min="0" max="6" step="1" required><p class="hint">0~6명 · 입장·퇴장 중에는 실제 인원이 적을 수 있습니다.</p></div><div><label for="visitor-speed">이동 속도 <output id="visitor-speed-value">1.0배</output></label><input id="visitor-speed" type="range" min="0.5" max="1.5" step="0.1" value="1"><p class="hint">0.5배 느긋하게 · 1배 기본 · 1.5배 빠르게</p></div></div>
+        <h3>등장할 캐릭터</h3><div id="visitor-appearances"></div>
+        <p class="hint" id="visitor-empty-note" hidden>사용할 외형이 없거나 등장 비중이 모두 0이면 관람객이 생성되지 않습니다.</p>
+        <p class="hint" id="visitor-removed-note" hidden>현재 앱에 없는 예전 외형 설정은 적용되지 않으며, 이번 저장에서 정리됩니다.</p>
+        <p class="hint">비중 1:3이면 대략 25%:75%로 새 손님을 선택합니다. 외형을 끄면 해당 손님은 정리되고, 비중 변경은 다음 입장부터 반영됩니다. 새 캐릭터는 앱에 등록·빌드한 뒤 이 목록에 나타납니다.</p>
+        <div class="theme-actions"><button id="visitor-save" type="submit">관람객 설정 저장</button></div>
+      </fieldset>
+      <button id="visitor-reload" type="button" class="secondary">저장된 설정 다시 불러오기</button>
+      <p id="visitor-status" role="status" aria-live="polite">관람객 설정을 불러오는 중입니다.</p>
+      <p class="hint">이 설정은 다음 실행에도 유지됩니다. 앱 안의 인원 버튼은 임시 조절이며, 영구 저장은 여기서 해 주세요.</p>
+    </form>
+  </section>
   <div class="workspace">
     <section class="panel editor" aria-labelledby="add-heading">
       <div class="section-heading"><span class="section-number">01</span><div><h2 id="add-heading">새 전시품 추가</h2><p>모델이 없다면 준비된 샘플로 시작해 보세요.</p></div></div>

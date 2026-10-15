@@ -118,6 +118,11 @@ namespace FamilyMuseum
                     if (display == null || !display.IsFinished) detailsPassed = false;
                     else { yield return visitors.RunSmoke(); detailsPassed &= visitors.SmokePassed; }
                 }
+                if (Array.IndexOf(args, "-museum-visitor-settings-smoke") >= 0)
+                {
+                    if (display == null || !display.IsFinished) detailsPassed = false;
+                    else { yield return visitors.RunPreferencesSmoke(); detailsPassed &= visitors.SmokePassed; }
+                }
                 if (Array.IndexOf(args, "-museum-sign-preview") >= 0 && display != null && display.IsFinished) display.PreviewWayfinding();
                 yield return new WaitForSecondsRealtime(2f);
                 yield return new WaitForEndOfFrame();

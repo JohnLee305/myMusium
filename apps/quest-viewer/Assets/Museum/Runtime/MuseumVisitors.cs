@@ -25,10 +25,15 @@ namespace FamilyMuseum
         float spawnWait;
         int room=-1,sequence;
         bool simulation;
+        VisitorPreferencesFile preferencesFile;
+        VisitorPreferences preferences=VisitorPreferences.Default();
+        string settingsFingerprint,settingsError;
+        float settingsPoll;
+        public float SpeedMultiplier=>preferences.speed;
         public bool BlocksPointer(Vector2 screenPoint)
         {
             if(session==null || !session.desktopRig.activeInHierarchy) return false;
-            return new Rect(Mathf.Max(20,Screen.width-280),120,260,125).Contains(new Vector2(screenPoint.x,Screen.height-screenPoint.y));
+            return new Rect(Mathf.Max(20,Screen.width-280),120,260,155).Contains(new Vector2(screenPoint.x,Screen.height-screenPoint.y));
         }
         void Awake()
         {
@@ -36,10 +41,14 @@ namespace FamilyMuseum
             session=GetComponent<MuseumSession>();
             font=Font.CreateDynamicFontFromOSFont(new[]{"Malgun Gothic","Arial"},48);
             font.material.shader=Resources.Load<Shader>("WorldText");
+            preferencesFile=new VisitorPreferencesFile(LocalArchive.FindRoot());
+            ReloadPreferences();
         }
         void Update()
         {
             if(simulation) return;
+            settingsPoll-=Time.unscaledDeltaTime;
+            if(settingsPoll<=0) { settingsPoll=1; ReloadPreferences(); }
             gallery ??=GetComponent<GalleryDisplay>();
             if(gallery==null || !gallery.IsFinished || gallery.IsLoading) { ClearRoom(); return; }
             if(room!=gallery.CurrentRoom) PrepareRoom();
@@ -80,13 +89,43 @@ namespace FamilyMuseum
         }
         MuseumGuest Spawn(Vector3 position,VisitorAppearance selected=null)
         {
-            var appearance=selected??catalog?.Pick(random);
+            var appearance=selected??PickAppearance();
             if(appearance==null) return null;
             var root=new GameObject("Museum guest "+(++sequence)); root.transform.position=position;
             var guest=root.AddComponent<MuseumGuest>();
             if(!guest.Initialize(this,appearance,exhibits,font,sequence))
             { guest.Close(); Debug.LogWarning("VISITOR_APPEARANCE_FAILED: "+appearance.id); return null; }
             guests.Add(guest); Entered++; return guest;
+        }
+        bool AppearanceEnabled(VisitorAppearance appearance)
+        {
+            if(appearance==null || !appearance.IsUsable) return false;
+            var value=preferences.Find(appearance.id);
+            return value==null ? appearance.weight>0 : value.enabled && value.weight>0;
+        }
+        VisitorAppearance PickAppearance()
+        {
+            if(catalog==null) return null;
+            var options=catalog.GetAvailable().Where(AppearanceEnabled).ToArray();
+            double total=0; foreach(var entry in options) total+=preferences.Find(entry.id)?.weight??entry.weight;
+            double pick=random.NextDouble()*total;
+            foreach(var entry in options) { pick-=preferences.Find(entry.id)?.weight??entry.weight; if(pick<=0) return entry; }
+            return options.LastOrDefault();
+        }
+        void ReloadPreferences()
+        {
+            if(!preferencesFile.TryRead(out var next,out var fingerprint,out var error))
+            {
+                if(settingsError!=error) {settingsError=error;Debug.LogWarning("VISITOR_SETTINGS_REJECTED: "+error);}
+                return; // Keep the last valid settings when a damaged or partially written file is encountered.
+            }
+            settingsError=null;
+            if(fingerprint==settingsFingerprint) return;
+            preferences=next; settingsFingerprint=fingerprint;
+            for(int i=guests.Count-1;i>=0;i--) if(!AppearanceEnabled(guests[i].Visual.Appearance))
+            {guests[i].Close();guests.RemoveAt(i);}
+            SetCount(next.enabled?next.count:0);
+            Debug.Log($"VISITOR_SETTINGS_APPLIED: enabled={next.enabled} count={TargetCount} speed={SpeedMultiplier}");
         }
         public void RecordView() { Views++; }
         IEnumerable<Vector3> Bodies(MuseumGuest current)
@@ -112,15 +151,59 @@ namespace FamilyMuseum
             var style=new GUIStyle(GUI.skin.label){font=font,fontSize=15,alignment=TextAnchor.MiddleCenter};
             var button=new GUIStyle(GUI.skin.button){font=font,fontSize=15};
             float x=Mathf.Max(20,Screen.width-280);
-            GUI.Box(new Rect(x,120,260,125),"");
+            GUI.Box(new Rect(x,120,260,155),"");
             GUI.Label(new Rect(x+5,124,250,25),"관람객 · 타이쿤 실험",style);
             if(GUI.Button(new Rect(x+15,157,42,30),"−",button)) SetCount(TargetCount-1);
             GUI.Label(new Rect(x+60,157,135,30),$"{ActiveCount}명 / 목표 {TargetCount}명",style);
             if(GUI.Button(new Rect(x+203,157,42,30),"+",button)) SetCount(TargetCount+1);
             if(GUI.Button(new Rect(x+15,201,90,28),TargetCount==0?"켜기":"모두 끄기",button)) SetCount(TargetCount==0?1:0);
             GUI.Label(new Rect(x+110,200,140,30),$"관람 {Views} · 퇴장 {Exited}",style);
+            GUI.Label(new Rect(x+5,237,250,28),"앱 버튼은 임시 · 저장은 관리페이지",new GUIStyle(style){fontSize=12});
         }
         void OnDestroy() { ClearRoom(); if(font!=null) { Destroy(font.material); Destroy(font); } }
+
+        public IEnumerator RunPreferencesSmoke()
+        {
+            simulation=true; gallery=GetComponent<GalleryDisplay>(); PrepareRoom();
+            var file=preferencesFile.FilePath;
+            SmokePassed=System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(file),".visitor-test-fixture"));
+            if(!SmokePassed) {Debug.Log("VISITOR_PREFERENCES_SMOKE_FAIL: isolated fixture required");yield break;}
+            var original=System.IO.File.Exists(file)?System.IO.File.ReadAllText(file):null;
+            SmokePassed &= preferencesFile.TryRead(out var initial,out _,out _) && TargetCount==(initial.enabled?initial.count:0) && Mathf.Abs(SpeedMultiplier-initial.speed)<.0001f;
+            if(System.Array.IndexOf(System.Environment.GetCommandLineArgs(),"-museum-visitor-settings-startup-only")>=0)
+            {Debug.Log(SmokePassed?"VISITOR_PREFERENCES_SMOKE_PASS":"VISITOR_PREFERENCES_SMOKE_FAIL");yield break;}
+            try
+            {
+                var appearance=catalog.GetAvailable()[0];
+                var next=VisitorPreferences.Default(); next.count=3; next.speed=.7f;
+                next.appearances=new[]{new VisitorAppearancePreference{id=appearance.id,enabled=true,weight=2}};
+                void Save(VisitorPreferences value){System.IO.File.WriteAllText(file,JsonUtility.ToJson(value));ReloadPreferences();}
+                Save(next); SmokePassed &= TargetCount==3 && Mathf.Abs(SpeedMultiplier-.7f)<.001f;
+                Tick(.1f); SmokePassed &= ActiveCount==1;
+                SetCount(6); ReloadPreferences(); SmokePassed &= TargetCount==6; // Temporary app adjustment remains until the saved file changes.
+                System.IO.File.WriteAllText(file,JsonUtility.ToJson(next));
+                System.IO.File.SetLastWriteTimeUtc(file,System.DateTime.UtcNow.AddSeconds(1)); ReloadPreferences();
+                SmokePassed &= TargetCount==3; // Saving identical values must still override a temporary adjustment.
+                next.appearances[0].enabled=false; Save(next); Tick(3);
+                SmokePassed &= ActiveCount==0;
+                next.appearances=new[]{new VisitorAppearancePreference{id="removed-character",enabled=true,weight=100}};
+                Save(next); Tick(3); SmokePassed &= ActiveCount==1; // Unknown old IDs never become spawnable; the current catalog still supplies defaults.
+                next.enabled=false; Save(next); SmokePassed &= TargetCount==0 && ActiveCount==0;
+                next.speed=2; Save(next); SmokePassed &= TargetCount==0 && Mathf.Abs(SpeedMultiplier-.7f)<.001f;
+                System.IO.File.WriteAllText(file,"{"); ReloadPreferences(); SmokePassed &= TargetCount==0;
+                System.IO.File.WriteAllText(file,new string(' ',65537)); ReloadPreferences(); SmokePassed &= TargetCount==0;
+                next.speed=.7f; next.appearances=new[]{new VisitorAppearancePreference{id=appearance.id,enabled=true,weight=1},new VisitorAppearancePreference{id=appearance.id,enabled=true,weight=1}};
+                Save(next); SmokePassed &= TargetCount==0;
+            }
+            finally
+            {
+                if(original==null) System.IO.File.Delete(file); else System.IO.File.WriteAllText(file,original);
+                ReloadPreferences(); ClearRoom();
+            }
+            yield return null;
+            SmokePassed &= preferencesFile.TryRead(out var restored,out _,out _) && TargetCount==(restored.enabled?restored.count:0);
+            Debug.Log(SmokePassed?"VISITOR_PREFERENCES_SMOKE_PASS":"VISITOR_PREFERENCES_SMOKE_FAIL");
+        }
 
         public IEnumerator RunSmoke()
         {

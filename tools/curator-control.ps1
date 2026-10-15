@@ -1,5 +1,5 @@
 ﻿[CmdletBinding()]
-param([int]$Port=4177,[switch]$SmokeTest)
+param([int]$Port=4181,[switch]$SmokeTest)
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -20,10 +20,10 @@ $handler=New-Object System.Net.Http.HttpClientHandler
 $handler.UseProxy=$false
 $client=New-Object System.Net.Http.HttpClient($handler)
 $client.Timeout=[timespan]::FromSeconds(2)
-if($Port -lt 1024 -or $Port -gt 65535 -or ($SmokeTest -and $Port -eq 4177)){throw 'Invalid test port'}
+if($Port -lt 1024 -or $Port -gt 65535 -or ($SmokeTest -and $Port -eq 4181)){throw 'Invalid test port'}
 
 $form=New-Object Windows.Forms.Form
-$form.Text='VR 박물관 관리'
+$form.Text='VR 박물관 관리 · 타이쿤 실험'
 $form.ClientSize=New-Object Drawing.Size(620,365)
 $form.StartPosition='CenterScreen'
 $form.FormBorderStyle='FixedDialog'

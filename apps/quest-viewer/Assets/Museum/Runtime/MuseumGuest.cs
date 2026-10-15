@@ -93,7 +93,7 @@ namespace FamilyMuseum
             }
             else
             {
-                Vector3 next=Vector3.MoveTowards(transform.position,path[waypoint],Visual.Appearance.walkSpeed*dt);
+                Vector3 next=Vector3.MoveTowards(transform.position,path[waypoint],Visual.Appearance.walkSpeed*museum.SpeedMultiplier*dt);
                 if(!museum.CanMove(this,next))
                 {
                     blockedFor+=dt;
@@ -112,7 +112,7 @@ namespace FamilyMuseum
                     if(Vector3.Distance(next,path[waypoint])<.01f) waypoint++;
                 }
             }
-            Visual.Tick(moving,dt);
+            Visual.Tick(moving,dt,museum.SpeedMultiplier);
             if(thought!=null && Camera.main!=null) thought.transform.rotation=Quaternion.LookRotation(thought.transform.position-Camera.main.transform.position);
         }
         public void Close() { if(this==null) return; if(Visual!=null) Visual.Close(); gameObject.SetActive(false); Destroy(gameObject); }

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { CAPACITY, MAX_ARTIFACTS, normalizeRooms, place, remove } from './rooms.mjs';
 
 import { validateTheme } from './themes.mjs';
+import { DEFAULT_VISITORS, validateVisitorSettings, validateVisitorCatalog } from './visitors.mjs';
 const revision = () => crypto.createHash('sha256').update(fs.readFileSync(safe('manifest.json'))).digest('hex');
 const itemRevision = entry => crypto.createHash('sha256').update(fs.readFileSync(safe(entry))).digest('hex');
 const themeRevision = room => crypto.createHash('sha256').update(JSON.stringify(room.theme ?? null)).digest('hex');
@@ -14,7 +15,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const options = process.argv.slice(2);
 const option = (key, fallback) => options.includes(key) ? options[options.indexOf(key) + 1] : fallback;
 const root = path.resolve(option('--archive', path.join(here, '../../museum-archive')));
-const port = Number(option('--port', '4177'));
+const port = Number(option('--port', '4181'));
+const visitorCatalogFile=path.resolve(option('--visitor-catalog',path.join(here,'visitor-catalog.json')));
 const token = crypto.randomBytes(32).toString('hex');
 const MAX_GLB = 64 * 1024 * 1024;
 const samples = ['sample-vase', 'sample-books', 'sample-sculpture'];
@@ -87,6 +89,37 @@ function addRoom(data, title) {
     if (typeof title!=='string' || !title.trim() || title.length>80) fail('전시실 이름을 1~80자로 입력해 주세요.');
     const room={id:`room-${crypto.randomUUID()}`,title:title.trim(),artifacts:[],cells:[]};
     data.rooms.push(room); return room;
+}
+function visitorCatalog(){
+    try {
+        if(fs.statSync(visitorCatalogFile).size>128*1024) fail('캐릭터 목록이 너무 큽니다.',409);
+        return validateVisitorCatalog(JSON.parse(fs.readFileSync(visitorCatalogFile,'utf8').replace(/^\uFEFF/,'')));
+    } catch(error) { fail('실험 앱의 캐릭터 목록을 읽을 수 없습니다. 빌드 후 다시 열어 주세요.',409); }
+}
+function visitorRevision(){
+    const file=safe('visitors.json',false);
+    return fs.existsSync(file)?crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'):'missing';
+}
+function visitorState(){
+    const file=safe('visitors.json',false),catalog=visitorCatalog();
+    let settings={...DEFAULT_VISITORS,appearances:[]};
+    if(fs.existsSync(file)){
+        if(fs.statSync(file).size>64*1024) fail('관람객 설정 파일이 너무 큽니다.',409);
+        try {settings=validateVisitorSettings(JSON.parse(fs.readFileSync(file,'utf8').replace(/^\uFEFF/,'')));}
+        catch {fail('관람객 설정 파일이 손상되었습니다. 파일을 확인해 주세요.',409);}
+    }
+    return {settings,catalog:catalog.appearances,revision:visitorRevision(),edition:'타이쿤 실험',port};
+}
+function saveVisitors(value){
+    const settings=validateVisitorSettings(value.settings,visitorCatalog());
+    if(value.revision!==visitorRevision()) fail('다른 화면에서 관람객 설정이 바뀌었습니다. 저장된 설정을 다시 불러와 주세요.',409);
+    const file=safe('visitors.json',false),unique=crypto.randomUUID(),pending=safe(`.visitors-${unique}.tmp`,false),backups=safe('.admin-backups',false);
+    try{
+        fs.mkdirSync(backups,{recursive:true});
+        if(fs.existsSync(file)) fs.copyFileSync(file,path.join(backups,`visitors-${unique}.json`),fs.constants.COPYFILE_EXCL);
+        fs.writeFileSync(pending,JSON.stringify(settings,null,2)+'\n',{flag:'wx'});
+        fs.renameSync(pending,file);
+    } finally {fs.rmSync(pending,{force:true});}
 }
 function destinationRoom(data, id) {
     let room;
@@ -162,12 +195,15 @@ function send(res, status, data, type = 'application/json; charset=utf-8') {
     res.end(typeof data === 'object' && !Buffer.isBuffer(data) ? JSON.stringify(data) : data);
 }
 const assets = { '/preview.js':['preview.js','text/javascript; charset=utf-8'], '/preview-checks.mjs':['preview-checks.mjs','text/javascript; charset=utf-8'], ...Object.fromEntries(['three.module.js','three.core.js','GLTFLoader.js','OrbitControls.js','BufferGeometryUtils.js'].map(file=>['/vendor/'+file,['vendor/'+file,'text/javascript; charset=utf-8']])), '/layout-editor.js':['layout-editor.js','text/javascript; charset=utf-8'], '/themes.mjs':['themes.mjs','text/javascript; charset=utf-8'], '/theme-editor.js':['theme-editor.js','text/javascript; charset=utf-8'], '/': ['index.html', 'text/html; charset=utf-8'], '/style.css': ['style.css', 'text/css; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'] };
+assets['/visitor-editor.js']=['visitor-editor.js','text/javascript; charset=utf-8'];
+assets['/visitor-style.css']=['visitor-style.css','text/css; charset=utf-8'];
 const server = http.createServer(async (req, res) => {
     try {
         const host = `127.0.0.1:${server.address().port}`;
         if (req.headers.host !== host || (req.headers.origin && req.headers.origin !== `http://${host}`)) fail('이 PC의 관리 화면에서만 요청할 수 있습니다.', 403);
         const url = new URL(req.url, `http://${host}`);
-        if (req.method === 'GET' && url.pathname === '/api/health') return send(res, 200, { service: 'vr-museum-curator', archive: root });
+        if (req.method === 'GET' && url.pathname === '/api/health') return send(res, 200, { service: 'vr-museum-curator', archive: root, edition:'tycoon' });
+        if (req.method === 'GET' && url.pathname === '/api/visitors') return send(res,200,visitorState());
         if (req.method === 'GET' && url.pathname === '/api/session') return send(res, 200, { token });
         if (req.method === 'GET' && url.pathname === '/api/state') return send(res, 200, state());
         if (req.method === 'GET' && url.pathname.startsWith('/api/model/')) {
@@ -184,8 +220,21 @@ const server = http.createServer(async (req, res) => {
             const [file, type] = assets[url.pathname];
             return send(res, 200, fs.readFileSync(path.join(here, file)), type);
         }
-        if (req.method !== 'POST' || !['/api/artifacts','/api/rooms','/api/move','/api/room-theme','/api/shutdown','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname)) return send(res, 404, { error: '페이지를 찾을 수 없습니다.' });
+        if (req.method !== 'POST' || !['/api/visitors','/api/artifacts','/api/rooms','/api/move','/api/room-theme','/api/shutdown','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname)) return send(res, 404, { error: '페이지를 찾을 수 없습니다.' });
         if (req.headers['x-museum-token'] !== token) fail('관리 화면을 새로고침한 후 다시 등록해 주세요.', 403);
+        if(url.pathname==='/api/visitors'){
+            if(req.headers['content-type']!=='application/json') fail('잘못된 설정 형식입니다.',415);
+            if(Number(req.headers['content-length'])>64*1024) fail('관람객 설정이 너무 큽니다.',413);
+            if(saving) fail('저장 중입니다. 잠시 후 다시 시도해 주세요.',409);
+            saving=true;
+            try{
+                const chunks=[];let size=0;
+                for await(const chunk of req){size+=chunk.length;if(size>64*1024) fail('관람객 설정이 너무 큽니다.',413);chunks.push(chunk);}
+                let value;try{value=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{fail('관람객 설정을 읽을 수 없습니다.');}
+                if(!value || typeof value!=='object' || Array.isArray(value)) fail('관람객 설정 형식이 잘못되었습니다.');
+                saveVisitors(value); return send(res,200,visitorState());
+            }finally{saving=false;}
+        }
         if (req.headers['content-type'] !== 'application/octet-stream') fail('잘못된 업로드 형식입니다.', 415);
         if (saving) fail('다른 전시품을 저장 중입니다. 잠시 후 다시 시도해 주세요.', 409);
         saving = true;
