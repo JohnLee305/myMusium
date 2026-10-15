@@ -6,6 +6,15 @@
 
 개발을 재개할 때 실제 개발 폴더의 `STATUS.md`를 먼저 읽는다.
 
+
+## 전체 계획과 진행상황
+
+- [최신 전체 진행상황·개발 계획 (GitHub 실험 브랜치)](https://github.com/JohnLee305/myMusium/blob/codex/museum-tycoon/PROJECT_STATUS.md)
+- [이 브랜치의 진행상황 문서](PROJECT_STATUS.md)
+- [기준/실험 버전 구분과 복원](docs/VERSIONING.md)
+
+앞으로 기능을 추가·수정할 때마다 실제 작업 브랜치의 진행상황 MD와 검증 결과를 갱신하고, 관련 코드와 함께 GitHub에 올립니다.
+
 ## 개발 원칙
 
 - Museum Archive가 원본이며 Unity는 이를 읽는 Viewer다.
@@ -33,6 +42,4 @@ Unity 프로젝트: apps/quest-viewer
 
 
 ## HTML 전시품 추가
-Open-Curator.cmd를 더블클릭하면 관리 화면(http://127.0.0.1:4177)이 열린다. 샘플 또는 GLB 파일로 전시품을 등록하고 관람 앱을 재실행한다. 사용법: docs/CURATOR.md.
-
-
+기준 버전의 Open-Curator.cmd 또는 관리 바로가기를 열면 서버 제어창이 열린다. 서버 켜기 → 관리페이지 열기 순으로 사용한다. 실험 관리 서버는 별도 포트를 사용한다. 샘플 또는 GLB 파일로 전시품을 등록하고 관람 앱을 재실행한다. 사용법: docs/CURATOR.md.
