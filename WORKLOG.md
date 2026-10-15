@@ -462,3 +462,10 @@
 - 사용자 승인에 따라 JohnLee305/myMusium 비공개 변경 완료(isPrivate=true), 관리자 권한·원격 빈 상태 확인.
 - 예정: 기준/타이쿤 두 브랜치와 museum-baseline-20261015 태그 업로드. 모델은 Git LFS, 빌드 실행본은 로컬 백업 유지. 강제 push 없이 진행.
 
+
+## 2026-10-15 / 비공개 GitHub 연동 완료
+- https://github.com/JohnLee305/myMusium 비공개 확인. 기본 브랜치 codex/museum-baseline. 기준/타이쿤 두 브랜치 upstream 설정 및 복원 태그 museum-baseline-20261015 업로드 성공. 강제 덮어쓰기 없음.
+- 새 폴더 github-verify-20261015-202612에 실제 clone 성공. 기준 커밋 일치, LFS fsck 통과, 추적 모델6개 모두 로컬 원본과 SHA-256 일치. 모델 고유 LFS 객체4개 업로드 확인.
+- 실행파일·Unity Library·로그는 Git 제외. 실행본·자료313파일 로컬 백업 유지. GitHub에는 소스·설정·문서·모델·설명 및 기준태그 보관.
+- 중단점/다음: GitHub 연동 완료. 다음 기능 개발은 C:\Dev\vr-museum-tycoon / codex/museum-tycoon에서 관람객 프로토타입을 진행. 현재 관람객 미구현, 실제 Quest 검사 후속 유지.
+
