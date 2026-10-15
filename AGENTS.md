@@ -1,5 +1,18 @@
 # 작업 재개 규칙
 
+## 필수 사전 절차 · 모든 Work/Codex/기타 에이전트에 적용 (2026-10-16)
+
+**반드시 코드/문서 수정 전에** [docs/GIT_MULTI_AGENT_WORKFLOW.md](docs/GIT_MULTI_AGENT_WORKFLOW.md)의 시작 Gate를 수행한다. 최초 작업·'재개'·이어서 작업 모두 동일하게 적용한다.
+
+1. 작업 폴더/현재 브랜치/원격/HEAD 및 **미커밋 변경**을 먼저 확인한다. 로컬 사용자의 자료 및 다른 에이전트의 변경을 보호한다.
+2. `git fetch --prune origin`으로 GitHub **`codex/museum-tycoon` 최신 SHA를 가져와 비교**한다. 깨끗하고 동일 브랜치라면 `git pull --ff-only origin codex/museum-tycoon`으로 최신화한다. 다른 작업 브랜치/미커밋 상태는 안전한 별도 Worktree/브랜치에서 동기화 방법을 선택한다.
+3. 원격 실패·분기·충돌·미커밋 자료로 인해 안전한 최신화가 불가능하면 **새 작업을 임의로 시작하지 않는다.** 덮어쓰기/자동 stash/reset/force push 없이 차이를 보고한다.
+4. **최신 파일** `AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `STATUS.md`, `WORKLOG.md`, `docs/WORK_HANDOFF.md`, 해당 설계/ADR을 읽고 이미 다른 에이전트가 처리 중인 TODO ID/PR 및 의존관계를 확인한 다음 작업한다.
+5. 여러 에이전트는 **각자 별도 Clone 또는 Git Worktree + ID가 포함된 작업 브랜치**를 사용한다. 기본 통합은 기능 브랜치 push → PR → 최신 베이스/회귀 확인 → `codex/museum-tycoon`이다. 기준 `codex/museum-baseline`/복원 태그는 보존한다.
+6. 완료 전 다시 `fetch`하여 원격 변경과 충돌을 확인하고 테스트·`TASKS.md`·`PROJECT_STATUS.md`·`STATUS.md`·`WORKLOG.md`를 정리한다. PR 미병합과 통합 완료를 구분하여 보고한다.
+
+**아래의 과거 '작업 재개 규칙'은 로컬 상태·환경 점검용으로 유지한다. 충돌 시 위 최신 Git 선행 절차가 우선이다.** GitHub 기본 브랜치가 기준판이므로 ref 미지정 커밋/파일 수정을 하지 않는다.
+
 사용자가 '재개', '계속', '이어서'라고 요청하면 다음 순서로 진행한다.
 
 1. 실제 개발 루트 `C:\Dev\vr-museum`의 STATUS.md와 WORKLOG.md를 읽는다. 이 폴더가 존재하지 않을 때만 현재 작업공간의 문서를 참고한다.
@@ -21,8 +34,8 @@
 - 전체 계획과 현황의 기준 문서는 실험 브랜치의 PROJECT_STATUS.md입니다. 기존 재개 점검 후 실제 작업 브랜치의 이 문서도 읽습니다. 타이쿤 기능은 C:\Dev\vr-museum-tycoon에서 개발하고 그곳의 문서를 갱신합니다.
 - 기능 추가·수정마다 PROJECT_STATUS.md의 갱신 날짜, 기능 상태, 검증 결과, 다음 작업과 주요 변경 이력을 갱신합니다. TASKS.md의 관련 ID와 STATUS.md/WORKLOG.md도 맞춥니다.
 - 구현/미검증/PC 검증/Quest 실기기 검증을 구분하고, 미구현이나 실패를 완료로 표시하지 않습니다.
-- 사용자 지시에 따라 검토한 코드와 관련 MD를 기능 단위로 커밋하고 비공개 GitHub origin의 해당 브랜치에 push합니다. 매번 별도 승인을 다시 요청할 필요는 없습니다. 공개범위 변경·기준 버전 병합·파괴적 작업은 이 승인에 포함되지 않습니다.
-- push 후 원격 브랜치 SHA와 로컬 HEAD 일치를 확인합니다. 업로드 실패 시 로컬 변경을 보존하고 미완료 사유와 다음 동작을 기록·안내합니다. 인증값·로그·임시파일은 커밋하지 않습니다.
+- 사용자 지시에 따라 검토한 코드와 관련 MD를 기능 단위로 커밋/push합니다. **다중 에이전트 환경에서는 전용 작업 브랜치 + PR 통합을 기본으로 하고, 직접 통합 브랜치에 push하는 과거 절차보다 위 Git 선행·충돌방지 규칙이 우선합니다.** 별도 승인 대상은 공개범위 변경·기준 버전 병합·파괴적 작업 등입니다.
+- push 후 작업 브랜치 원격 SHA와 로컬 HEAD 일치를 확인하고, PR 병합 완료 시 통합 브랜치의 HEAD와 실제 반영 커밋을 추가 확인합니다. 업로드 실패 시 로컬 변경을 보존하고 미완료 사유와 다음 동작을 기록·안내합니다. 인증값·로그·임시파일은 커밋하지 않습니다.
 - 기존 기준 버전 기능과 museum-baseline-20261015 태그를 유지합니다. 최신 타이쿤 진행상황을 기존 브랜치에 기능과 함께 자동 병합하지 않습니다. 기준 브랜치의 README는 최신 실험 문서로 연결합니다.
 
 ## 아이디어 회의(ChatGPT) → Work 구현 인계 (2026-10-16)
@@ -31,5 +44,5 @@
 - 시작 전 [docs/WORK_HANDOFF.md](docs/WORK_HANDOFF.md)와 해당 기능 설계 문서, 이 브랜치의 TASKS.md 및 PROJECT_STATUS.md를 읽는다. `REACT-` 작업은 [docs/REACTION_SYSTEM_DESIGN.md](docs/REACTION_SYSTEM_DESIGN.md) 참고.
 - 이 저장소의 핵심 제품 목적은 **내 컬렉션/스토리에 반응하는 관람객이 있는 살아 있는 박물관**이다. 타이쿤 경제·해금은 선택적 미래 확장이다. NPC 성향·서술 생성은 해당 전시품의 실제 정보에 근거해야 한다.
 - `TASKS.md`에 **미완료**로 추가된 제안은 구현 완료가 아니며, Work가 명시적으로 작업을 시작하지 않는 한 자동 실행 대상도 아니다. 작업 시 단일 ID의 범위·선행 계약·테스트·회귀를 기록한다.
-- 로컬 `C:\Dev\vr-museum-tycoon`의 현재 브랜치/HEAD/`git status`와 GitHub 원격 `codex/museum-tycoon`을 대조한다. 로컬 미커밋 변경과 다른 Work 세션을 덮어쓰지 말 것. 기준 브랜치 `codex/museum-baseline`은 사용자 승인 없이 수정하지 않는다.
+- 로컬 `C:\Dev\vr-museum-tycoon` 또는 Work가 사용하는 독립 Clone/Worktree에서 Git 선행 Gate를 수행한다. `git fetch` 및 안전한 최신화 이후 문서를 읽고, 다른 세션의 변경을 보존한다. 기준 브랜치 `codex/museum-baseline`은 사용자 승인 없이 수정하지 않는다.
 - 사전 생성하는 관람객 반응 데이터는 현재 `artifact.json` v1과 호환되게 설계하고, 관리자 승인 문구만 런타임 표시한다. 실제 가족 기록을 외부 AI에 무단 전송하거나 공개 Git에 자동 올리지 말 것. 기존 모델/전시/관람객 기능과 Quest 미검증 구분을 유지한다.
