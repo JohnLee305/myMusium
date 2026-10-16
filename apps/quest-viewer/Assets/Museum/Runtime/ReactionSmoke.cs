@@ -63,7 +63,7 @@ namespace FamilyMuseum
                 SmokePassed &= guest.ThoughtVisible;
                 var text=guest.GetComponentsInChildren<TextMesh>().First(t=>t.gameObject.name=="Visitor thought");
                 var bounds=text.GetComponent<Renderer>().bounds;
-                bool readable=bounds.size.x>.5f&&bounds.size.x<2.5f&&bounds.size.y>.08f;
+                bool readable=bounds.size.x>.3f&&bounds.size.x<2.5f&&bounds.size.y>.08f;
                 SmokePassed &= readable;Debug.Log("REACTION_TEXT_SIZE_CHECK: "+bounds.size+" passed="+readable);
                 string priorText=guest.ReactionText;guest.SetReactionText(new string('가',72));guest.UpdateThoughtVisibility();yield return null;guest.UpdateThoughtVisibility();
                 var local=text.GetComponent<Renderer>().localBounds;float textScale=text.transform.localScale.x;

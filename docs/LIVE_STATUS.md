@@ -5,7 +5,7 @@
 > 남의 블록을 수정하지 않는다. 이 파일을 안 읽고 시작한 작업은 무효로 간주한다.
 > 갱신 시각은 KST 기준이다.
 
-갱신: 2026-10-16 23:15 (KST) / 작성: opencode
+갱신: 2026-10-16 23:40 (KST) / 작성: opencode
 
 ## 지금 손대면 안 되는 것
 
@@ -19,7 +19,7 @@
 
 | 작업 | 담당 | 폴더/브랜치 | 상태 | 마지막 SHA |
 |---|---|---|---|---|
-| REACT-014 생각풍선 만화풍·가시성 | opencode | sync-20261016 / codex/thought-bubble-20261016 | 검증 완료·tycoon 반영 예정 | 기반 a5a6d3d |
+| REACT-014 생각풍선 만화풍·가시성 | opencode | sync-20261016 / codex/thought-asset-20261016 | 사용자 승인·tycoon 반영 완료 | CC0 구름+Jua 확정 |
 | ROUTE-002 tycoon 통합 | opencode | sync-20261016 | 완료 (tycoon 반영 a5a6d3d) | 병합 9d6e492 |
 
 ## 검증 근거 (병합 트리)

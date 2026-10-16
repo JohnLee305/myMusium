@@ -40,9 +40,8 @@ Shader "Museum/Reaction Background"
             }
             fixed4 frag(Output i):SV_Target
             {
-                fixed4 color = i.color;
-                // Solid background using the same stereo-aware, depth-tested vertex path.
-                return color;
+                fixed4 tex = tex2D(_MainTex, i.uv);
+                return tex * i.color;
             }
             ENDCG
         }

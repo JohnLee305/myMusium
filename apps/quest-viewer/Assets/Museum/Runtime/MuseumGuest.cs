@@ -18,27 +18,13 @@ namespace FamilyMuseum
         float wait,blockedFor,lifetime;
         TextMesh thought;
         Material thoughtBackground;
-        Material thoughtOutline;
-        Material thoughtPip;
         GameObject bubble;
-        static Texture2D bubblePip;
         static readonly Color InkColor=new Color(.14f,.19f,.17f);
-        static readonly Color PaperColor=new Color(1f,.99f,.95f);
-        static Texture2D PipTexture()
-        {
-            if(bubblePip!=null) return bubblePip;
-            const int size=64; var tex=new Texture2D(size,size,TextureFormat.ARGB32,false);
-            tex.filterMode=FilterMode.Bilinear;
-            var center=new Vector2(size/2f,size/2f);
-            for(int y=0;y<size;y++) for(int x=0;x<size;x++)
-            {
-                float d=Vector2.Distance(new Vector2(x+.5f,y+.5f),center)/(size/2f);
-                Color col=new Color(0,0,0,0);
-                if(d<=1f) col=d>=.76f?InkColor:PaperColor;
-                tex.SetPixel(x,y,col);
-            }
-            tex.Apply(); tex.hideFlags=HideFlags.HideAndDontSave; bubblePip=tex; return tex;
-        }
+        const float BalloonWidth=.85f;
+        const float BalloonHeight=.68f;
+        const float TextMaxWidth=.55f;
+        const float TextMaxHeight=.30f;
+        const float TextCenterY=.17f;
         float thoughtTime;
         readonly Queue<string> reactionHistory=new Queue<string>();
         public string Persona {get;internal set;}
@@ -48,7 +34,7 @@ namespace FamilyMuseum
         static string Wrap(string value)
         {
             var result=new System.Text.StringBuilder();int column=0;
-            for(int i=0;i<value.Length;i++){result.Append(value[i]);if(char.IsHighSurrogate(value[i])&&i+1<value.Length)result.Append(value[++i]);if(++column>=18&&i+1<value.Length){result.Append('\n');column=0;}}
+            for(int i=0;i<value.Length;i++){result.Append(value[i]);if(char.IsHighSurrogate(value[i])&&i+1<value.Length)result.Append(value[++i]);if(++column>=10&&i+1<value.Length){result.Append('\n');column=0;}}
             return result.ToString();
         }
         internal void SetReactionText(string value)
@@ -64,12 +50,9 @@ namespace FamilyMuseum
             {
                 bubble.transform.rotation=Quaternion.LookRotation(bubble.transform.position-Camera.main.transform.position);
                 var bounds=thought.GetComponent<Renderer>().localBounds;
-                if(bounds.size.x>.001f)
+                if(bounds.size.x>.001f&&bounds.size.y>.001f)
                 {
-                    float scale=Mathf.Min(1,1.62f/bounds.size.x);thought.transform.localScale=Vector3.one*scale;
-                    var bodySize=new Vector3(1.8f,Mathf.Max(.32f,bounds.size.y*scale+.14f),1);
-                    bubble.transform.Find("Reaction background").localScale=bodySize;
-                    bubble.transform.Find("Reaction outline").localScale=new Vector3(bodySize.x+.1f,bodySize.y+.1f,1);
+                    float scale=Mathf.Min(1,TextMaxWidth/bounds.size.x,TextMaxHeight/bounds.size.y);thought.transform.localScale=Vector3.one*scale;
                 }
             }
         }
@@ -87,26 +70,17 @@ namespace FamilyMuseum
                 if(targets.Count>3) targets.RemoveRange(3,targets.Count-3);
             }
             bubble=new GameObject("Visitor reaction bubble");bubble.transform.SetParent(transform,false);
-            bubble.transform.localPosition=Vector3.up*(appearance.height+.35f);
+            bubble.transform.localPosition=Vector3.up*(appearance.height+.3f);
             var label=new GameObject("Visitor thought"); label.transform.SetParent(bubble.transform,false);
-            label.transform.localPosition=Vector3.zero;
-            thought=label.AddComponent<TextMesh>(); thought.font=font; thought.fontSize=48; thought.characterSize=.042f; thought.richText=false; thought.color=InkColor;
+            label.transform.localPosition=new Vector3(0,TextCenterY,0);
+            var cute=Resources.Load<Font>("ThoughtFont");
+            if(cute!=null) cute.material.shader=Resources.Load<Shader>("WorldText");
+            thought=label.AddComponent<TextMesh>(); thought.font=cute!=null?cute:font; thought.fontSize=48; thought.characterSize=.06f; thought.richText=false; thought.color=InkColor; thought.fontStyle=FontStyle.Bold;
             thought.anchor=TextAnchor.MiddleCenter; thought.alignment=TextAlignment.Center;
-            thought.GetComponent<Renderer>().sharedMaterial=font.material;
-            var outline=GameObject.CreatePrimitive(PrimitiveType.Quad);outline.name="Reaction outline";outline.transform.SetParent(bubble.transform,false);
-            outline.transform.localPosition=new Vector3(0,0,.024f);outline.transform.localScale=new Vector3(1.9f,.58f,1);
-            Destroy(outline.GetComponent<Collider>());thoughtOutline=new Material(Resources.Load<Shader>("ReactionBackground"));thoughtOutline.color=InkColor;outline.GetComponent<Renderer>().sharedMaterial=thoughtOutline;
+            thought.GetComponent<Renderer>().sharedMaterial=thought.font.material;
             var background=GameObject.CreatePrimitive(PrimitiveType.Quad);background.name="Reaction background";background.transform.SetParent(bubble.transform,false);
-            background.transform.localPosition=new Vector3(0,0,.012f);background.transform.localScale=new Vector3(1.8f,.48f,1);
-            Destroy(background.GetComponent<Collider>());thoughtBackground=new Material(Resources.Load<Shader>("ReactionBackground"));thoughtBackground.color=PaperColor;background.GetComponent<Renderer>().sharedMaterial=thoughtBackground;
-            thoughtPip=new Material(Resources.Load<Shader>("ReactionBackground"));thoughtPip.color=Color.white;thoughtPip.mainTexture=PipTexture();
-            float[] pipSize={.13f,.095f,.06f};
-            for(int i=0;i<pipSize.Length;i++)
-            {
-                var pip=GameObject.CreatePrimitive(PrimitiveType.Quad);pip.name="Reaction tail "+(i+1);pip.transform.SetParent(bubble.transform,false);
-                pip.transform.localPosition=new Vector3(-.06f*(i+1),-.26f-.07f*i,.012f);pip.transform.localScale=new Vector3(pipSize[i],pipSize[i],1);
-                Destroy(pip.GetComponent<Collider>());pip.GetComponent<Renderer>().sharedMaterial=thoughtPip;
-            }
+            background.transform.localPosition=new Vector3(0,.08f,.012f);background.transform.localScale=new Vector3(BalloonWidth,BalloonHeight,1);
+            Destroy(background.GetComponent<Collider>());thoughtBackground=new Material(Resources.Load<Shader>("ReactionBackground"));thoughtBackground.color=Color.white;thoughtBackground.mainTexture=Resources.Load<Texture2D>("ThoughtBalloon");background.GetComponent<Renderer>().sharedMaterial=thoughtBackground;
             bubble.SetActive(false);
             if(museum.OrderedTours){BeginTour();return true;}
             State=GuestState.Entering;
@@ -190,6 +164,6 @@ namespace FamilyMuseum
             Visual.Tick(moving,dt,museum.SpeedMultiplier);
             UpdateThoughtVisibility();
         }
-        public void Close() { if(this==null) return; if(Visual!=null) Visual.Close(); if(thoughtBackground!=null) Destroy(thoughtBackground); if(thoughtOutline!=null) Destroy(thoughtOutline); if(thoughtPip!=null) Destroy(thoughtPip); gameObject.SetActive(false); Destroy(gameObject); }
+        public void Close() { if(this==null) return; if(Visual!=null) Visual.Close(); if(thoughtBackground!=null) Destroy(thoughtBackground); gameObject.SetActive(false); Destroy(gameObject); }
     }
 }

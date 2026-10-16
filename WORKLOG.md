@@ -742,3 +742,9 @@
 - MuseumGuest.cs만 수정: 흰 종이 + 먹색 테두리 이중 풍선, 머리-풍선 꼬리 동그라미 3개, 글자 20% 확대 + 먹색. 줄바꿈·자동크기·광고판·표시조건 유지, Close 자원정리 포함.
 - 빌드 logs/unity-Build-20261016-230307.log exit 0. 반응 API 78 PASS (logs/reaction-tests-1792159418885), 플레이어 REACTION_SMOKE_PASS + 캡처 직접 확인.
 - 캡처 player.png: 흰 풍선·테두리·꼬리·먹색 글자 정상 표시.
+
+## 2026-10-16 / REACT-014 생각풍선 확정 (opencode, 사용자 승인)
+- CC0 구름 풍선(comic-3, Rawdanitsu) + Jua 폰트(OFL)로 확정. 풍선 0.85m, 글자 굵게·위로 배치.
+- 사용자 실행 확인 후 승인. 절차: 에셋 탐색 → 절차생성 시도·폐기 → CC0 복귀 → 크기·굵기·폰트 조정.
+- ReactionBackground.shader 텍스처 읽기 수정, ReactionSmoke 기준은 현 디자인에 맞춤.
+- 빌드 logs/unity-Build-20261016-233446.log exit 0, 반응 스모크 PASS.
