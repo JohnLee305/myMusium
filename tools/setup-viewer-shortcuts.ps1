@@ -1,8 +1,10 @@
-[CmdletBinding()]
-param()
+﻿[CmdletBinding()]
+param([string]$ArchivePath)
 $ErrorActionPreference='Stop'
 $experiment=Split-Path $PSScriptRoot -Parent
 $baseline='C:\Dev\vr-museum'
+if(-not $ArchivePath){$ArchivePath=Join-Path $experiment 'museum-archive'}
+$ArchivePath=(Resolve-Path -LiteralPath $ArchivePath).Path
 $desktop=[Environment]::GetFolderPath('DesktopDirectory')
 $shell=New-Object -ComObject WScript.Shell
 foreach($spec in @(
@@ -12,7 +14,7 @@ foreach($spec in @(
 )){
     $player=Join-Path $spec.root 'Builds\Windows\VRMuseum.exe'
     if(-not(Test-Path -LiteralPath $player)){throw "실행파일 없음: $player"}
-    $archive=Join-Path $spec.root 'museum-archive'
+    $archive=if($spec.root -eq $experiment){$ArchivePath}else{Join-Path $spec.root 'museum-archive'}
     $log=Join-Path $spec.root 'logs\viewer-desktop.log'
     $link=$shell.CreateShortcut((Join-Path $desktop ($spec.name+'.lnk')))
     $link.TargetPath=$player

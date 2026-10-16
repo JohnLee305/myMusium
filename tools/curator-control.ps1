@@ -1,12 +1,13 @@
 ﻿[CmdletBinding()]
-param([int]$Port=4181,[switch]$SmokeTest)
+param([int]$Port=4181,[string]$ArchivePath,[switch]$SmokeTest)
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Net.Http
 [Windows.Forms.Application]::EnableVisualStyles()
 $root=Split-Path $PSScriptRoot -Parent
-$archive=Join-Path $root 'museum-archive'
+if(-not $ArchivePath){$ArchivePath=Join-Path $root 'museum-archive'}
+$archive=(Resolve-Path -LiteralPath $ArchivePath).Path
 $url="http://127.0.0.1:$Port"
 $script:worker=$null
 $script:probe=$null
@@ -60,7 +61,7 @@ function RunAction([string]$action) {
  $script:errFile=Join-Path $root "logs/control-$stamp-error.log"
  $file=Join-Path $PSScriptRoot "$action-admin.ps1"
  $argsList=@('-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$file`"",'-Port',"$Port")
- if($action -eq 'start'){$argsList+='-NoBrowser'}
+ if($action -eq 'start'){$argsList+=@('-NoBrowser','-ArchivePath',"`"$archive`"")}
  $startButton.Enabled=$false;$stopButton.Enabled=$false;$openButton.Enabled=$false
  $status.Text=if($action -eq 'start'){'● 서버를 켜는 중…'}else{'● 서버를 끄는 중…'}
  $info.Text='작업이 끝나면 버튼이 다시 활성화됩니다.'
