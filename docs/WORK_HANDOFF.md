@@ -77,3 +77,6 @@
 - 기존 소스/데이터 호환·원본 보존·Quest 검증 수준 표기를 유지한다.
 
 **중요:** 사용자 승인 없이 공개 저장소에 개인 전시 기록이나 미승인 생성 텍스트를 추가하지 않는다.
+
+## 모델 맞춤 대사 처리 인계
+새 모델 대사 요청은 [museum-model-reactions](../.agents/skills/museum-model-reactions/SKILL.md)를 사용한다. [운영 순서](REACTION_AUTHORING_WORKFLOW.md)에 따라 관찰→작성→검토→승인/저장→실제 표시를 구분한다. 업로드 자동 실행은 미구현이며 명시적인 작업 요청 시 에이전트가 처리한다. 개인 콘텐츠는 로컬 Archive에 보존한다.
