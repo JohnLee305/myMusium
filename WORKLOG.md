@@ -736,3 +736,9 @@
 - 회귀: navigation API 29 PASS (logs/navigation-tests-1792159033105), exit-boundary single+four-directions PASS (logs/exit-boundary-tests-1792159033513), tour player PASS (tour-player-20261016-225816, 신규 픽스처), details 4 PASS (logs/details-tests-20261016-225722).
 - test-details.ps1은 UTF-8 BOM 없음 + PS 5.1 파싱 실패로 BOM 임시 부여 후 실행, 바이트 동일 복원. pwsh 미설치. node는 Codex 번들 런타임 사용.
 - 문서 분리 커밋 0493a75: docs/LIVE_STATUS.md 신설, WORK_HANDOFF §8 이어받기 절차, AGENTS Gate 현황판 1순위, .gitignore visitors.json 추가.
+
+## 2026-10-16 / REACT-014 생각풍선 만화풍 개선 (opencode)
+- 사용자 요청: 손님 생각을 만화 생각풍선으로, 가시성 개선. 브랜치 codex/thought-bubble-20261016 (기반 a5a6d3d).
+- MuseumGuest.cs만 수정: 흰 종이 + 먹색 테두리 이중 풍선, 머리-풍선 꼬리 동그라미 3개, 글자 20% 확대 + 먹색. 줄바꿈·자동크기·광고판·표시조건 유지, Close 자원정리 포함.
+- 빌드 logs/unity-Build-20261016-230307.log exit 0. 반응 API 78 PASS (logs/reaction-tests-1792159418885), 플레이어 REACTION_SMOKE_PASS + 캡처 직접 확인.
+- 캡처 player.png: 흰 풍선·테두리·꼬리·먹색 글자 정상 표시.
