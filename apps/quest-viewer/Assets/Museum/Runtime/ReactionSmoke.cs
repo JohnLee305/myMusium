@@ -39,7 +39,7 @@ namespace FamilyMuseum
                 try
                 {
                     Reactions.Clear();var history=new Queue<string>();var one=Reactions.Select(data,"general",history);var two=Reactions.Select(data,"general",history);var three=Reactions.Select(data,"general",history);
-                    SmokePassed &= one!=two && three=="";
+                    SmokePassed &= one!=two && three!=one && three!=two && three!="";
                     File.WriteAllText(file,saved.Replace("\"approved\"","\"draft\""));Reactions.Clear();SmokePassed &= Reactions.Select(data,"general")==ReactionCatalog.Fallback;
                     File.WriteAllText(file,saved.Replace("\"enabled\": true","\"enabled\": false"));SmokePassed &= Reactions.Select(data,"general")=="";
                     File.WriteAllText(file,"{");SmokePassed &= Reactions.Select(data,"general")==ReactionCatalog.Fallback;

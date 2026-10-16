@@ -119,7 +119,11 @@
       <label><input id="reaction-enabled" type="checkbox"> 이 전시품의 승인된 반응 표시</label>
       <div class="reaction-actions"><button id="reaction-generate" type="button">설명에서 반응 후보 만들기</button></div>
       <p class="hint">PC 안에서 원문을 인용한 후보를 만듭니다. 외부 AI로 전송하지 않습니다. 문구를 수정하면 검토 중으로 돌아갑니다.</p>
+      <div class="reaction-filters"><label>문구 검색<input id="reaction-search" type="search" placeholder="관심 있는 단어로 찾기"></label><div><label for="reaction-filter-persona">관심 성향</label><select id="reaction-filter-persona"><option value="all">전체 성향</option><option value="general">일반</option><option value="detail">디테일</option><option value="story">이야기</option><option value="collector">수집가</option></select></div><div><label for="reaction-filter-status">검토 상태</label><select id="reaction-filter-status"><option value="all">전체 상태</option><option value="draft">검토 중</option><option value="approved">승인</option><option value="rejected">거절</option></select></div></div>
+      <p id="reaction-summary" class="hint"></p>
+      <div class="reaction-actions"><button id="reaction-approve-page" type="button" class="secondary">이 페이지 후보 승인</button><button id="reaction-reject-page" type="button" class="secondary">이 페이지 후보 거절</button></div>
       <div id="reaction-rows"></div>
+      <div class="reaction-actions"><button id="reaction-previous" type="button" class="secondary">이전 후보</button><span id="reaction-page"></span><button id="reaction-next" type="button" class="secondary">다음 후보</button></div>
       <label for="reaction-persona">직접 추가할 반응의 관심 성향</label><select id="reaction-persona"><option value="general">일반</option><option value="detail">디테일</option><option value="story">이야기</option><option value="collector">수집가</option></select>
       <div class="reaction-actions"><button id="reaction-add" class="secondary" type="button">문구 직접 추가</button><button id="reaction-save" type="button">검토·승인 결과 저장</button></div>
       <details><summary>이전 저장 복원</summary><label for="reaction-history">최근 저장 기록 (최대 20개)</label><select id="reaction-history"></select><button id="reaction-restore" type="button" class="secondary">선택한 저장으로 복원</button><p class="hint">원문이 달라진 과거 문구는 복원해도 관람에 표시하지 않습니다.</p></details>

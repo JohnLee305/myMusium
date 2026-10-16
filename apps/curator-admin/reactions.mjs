@@ -37,8 +37,44 @@ export function generateReactions(item,previous=null){
     if(!point && next.points.length<16){point={id:'point-'+crypto.createHash('sha256').update(evidence).digest('hex').slice(0,16),evidence};next.points.push(point);}
     const quote='‘'+fragment+(sentence.length>fragment.length?'…':'')+'’';
     const candidates={general:[`${quote}라는 소개가 눈에 들어오네.`, '어떤 이야기가 담겨 있을지 더 읽어 보고 싶다.'],detail:[`설명에 적힌 ${quote} 부분을 다시 살펴봐야겠어.`, '작은 부분도 천천히 살펴보고 싶네.'],story:[`${quote}라는 이야기가 기억에 남네.`, '이 물건을 소개한 사람의 이야기가 궁금하다.'],collector:[`${quote}라는 설명과 함께 감상하니 새롭네.`, '다른 전시품과 나란히 감상해 보고 싶다.']};
+    candidates.general.push(
+        `설명에 나온 ${quote} 부분부터 보고 싶네.`,
+        `${quote}라는 말이 어떻게 보이는지 궁금하다.`,
+        '처음 본 인상과 자세히 본 인상이 다를까?',
+        '이 전시품에서 가장 먼저 눈에 들어오는 곳을 찾아봐야겠어.',
+        '다른 각도에서도 잠깐 살펴보고 싶다.',
+        '소개를 읽으니 그냥 지나치기 아쉽네.',
+        '내가 고른다면 어느 부분을 먼저 소개할까?',
+        '한 바퀴 둘러본 뒤 다시 보면 느낌이 달라질까?');
+    candidates.detail.push(
+        `${quote}라는 설명과 실제 모습을 비교하고 싶다.`,
+        `원문 속 ${quote}에 해당하는 부분이 궁금하네.`,
+        '눈에 띄는 부분 말고 작은 부분도 찾아보고 싶어.',
+        '전체 모양을 본 다음 세부로 시선을 옮겨 봐야겠어.',
+        '가까이 봤을 때만 보이는 특징이 있을까?',
+        '표면과 윤곽을 따로 살펴보면 어떨까?',
+        '설명에서 강조한 부분을 내 눈으로 확인하고 싶다.',
+        '한 가지 디테일을 골라 오래 바라보고 싶네.');
+    candidates.story.push(
+        `${quote}라는 소개 뒤의 이야기도 듣고 싶네.`,
+        `이 물건을 ${quote}라고 소개한 이유가 궁금하다.`,
+        '이 전시품을 여기에 놓기로 한 순간이 궁금해.',
+        '소장한 사람에게 어떤 의미가 있는 물건일까?',
+        '설명에 더해 어떤 기억을 남기고 싶었을까?',
+        '누군가에게 이 전시품을 소개한다면 무슨 말을 할까?',
+        '내가 이 물건을 기억한다면 어떤 장면으로 남을까?',
+        '전시품을 고른 사람의 시선으로도 바라보고 싶다.');
+    candidates.collector.push(
+        `${quote}라는 소개가 이 전시품을 구별해 주네.`,
+        `목록에 적는다면 ${quote}를 먼저 기록하고 싶다.`,
+        '이 전시품 옆에는 어떤 물건이 어울릴까?',
+        '같은 주제의 전시품을 함께 보면 무엇이 달라 보일까?',
+        '이 컬렉션에서 맡은 자리가 궁금하네.',
+        '다음에 다시 왔을 때도 알아볼 특징을 찾아봐야겠어.',
+        '한 가지를 골라 기억한다면 어떤 부분이 좋을까?',
+        '설명과 모습을 함께 기록해 두고 싶다.');
     for(const persona of PERSONAS) for(let n=0;n<candidates[persona].length;n++){
-        const candidate={id:`template-${persona}-${n}`,persona,tier:n===0?'normal':'short',text:candidates[persona][n],evidencePointIds:n===0&&point?[point.id]:[],status:'draft'};
+        const candidate={id:`template-${persona}-${n}`,persona,tier:n===0?'normal':'short',text:candidates[persona][n],evidencePointIds:point&&candidates[persona][n].includes(quote)?[point.id]:[],status:'draft'};
         if(next.reactions.length<48 && !next.reactions.some(r=>r.id===candidate.id)) next.reactions.push(candidate);
     }
     return validateReactions(next,item.id);

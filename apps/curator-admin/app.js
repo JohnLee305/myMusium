@@ -108,7 +108,7 @@ $('add-form').addEventListener('submit', async event => {
         const result = await response.json();
         if (!response.ok) throw new Error(result.error);
         $('add-form').reset(); $('description-count').textContent = '0'; $('file-note').textContent = 'GLB 파일 · 최대 64MB'; sourceChanged();
-        const notice = `${result.roomTitle}에 등록했습니다. 관람 앱을 다시 열고 해당 방으로 이동해 주세요.`;
+        const notice = `${result.roomTitle}에 등록했습니다. ${result.reactionWarning || `감상 반응 초안 ${result.reactionCount??0}개를 준비했습니다. 감상 반응 만들기에서 검토·승인해 주세요.`} 관람 앱을 다시 열고 해당 방으로 이동해 주세요.`;
         try { await refresh(); message(notice); } catch { message('등록은 완료됐지만 목록을 새로 불러오지 못했습니다. 중복 등록하지 말고 새로고침해 주세요.', true); }
     } catch (error) { message(error.message || '연결이 끊겼습니다. 새로고침으로 등록 여부를 확인한 후 다시 시도해 주세요.', true); }
     finally { saving = false; $('submit').disabled = !token || (cached && cached.artifacts.length >= cached.maxArtifacts); $('refresh').disabled = false; }
