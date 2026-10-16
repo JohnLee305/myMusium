@@ -1,0 +1,30 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {spawn} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {generateReactions,validateReactions,PERSONAS} from '../apps/curator-admin/reactions.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),fixture=path.join(root,'logs','reaction-registration-'+Date.now());fs.mkdirSync(fixture,{recursive:true});
+fs.writeFileSync(path.join(fixture,'manifest.json'),JSON.stringify({schemaVersion:'1.0',artifacts:[],rooms:[{id:'first',title:'등록 검증',artifacts:[],cells:[]}]}));
+const sample=fs.readFileSync(path.join(root,'museum-archive/artifacts/sample-books/models/pc.glb'));
+let child,passed=0;const pass=name=>{passed++;console.log('PASS '+name);};
+try{
+    child=spawn(process.execPath,[path.join(root,'apps/curator-admin/server.mjs'),'--port','0','--archive',fixture],{windowsHide:true});
+    const url=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('start timeout')),10000);child.once('error',reject);child.stdout.on('data',chunk=>{const match=chunk.toString().match(/CURATOR_READY (http:\/\/127\.0\.0\.1:\d+)/);if(match){clearTimeout(timer);resolve(match[1]);}});});
+    const token=(await(await fetch(url+'/api/session')).json()).token;
+    const add=(metadata,body=sample)=>fetch(url+'/api/artifacts',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Museum-Token':token,'X-Museum-Metadata':encodeURIComponent(JSON.stringify(metadata))},body});
+    const metadata={id:'new-model',title:'가상 전시품',description:'색과 형태를 살펴보는 시험 모형입니다.',scale:1};
+    let response=await add(metadata);const result=await response.json();assert.equal(response.status,201);assert.equal(result.reactionCount,40);assert.equal(result.reactionWarning,null);pass('registration stages forty drafts');
+    const folder=path.join(fixture,'artifacts/new-model'),file=path.join(folder,'reactions.json'),original=fs.readFileSync(file),doc=JSON.parse(original);
+    validateReactions(doc,metadata.id);assert.equal(new Set(doc.reactions.map(r=>r.text)).size,40);assert.ok(doc.reactions.every(r=>r.status==='draft'));assert.ok(PERSONAS.every(p=>doc.reactions.filter(r=>r.persona===p).length===10));pass('forty distinct / ten per persona / unapproved');
+    const item=JSON.parse(fs.readFileSync(path.join(folder,'artifact.json')));assert.equal(item.schemaVersion,'1.0');assert.deepEqual(Object.keys(item).sort(),['schemaVersion','id','title','description','model','scale'].sort());assert.deepEqual(fs.readFileSync(path.join(folder,'models/pc.glb')),sample);pass('v1 metadata and model preserved');
+    assert.equal((await add(metadata)).status,409);assert.deepEqual(fs.readFileSync(file),original);pass('duplicate preserves draft content');
+    response=await add({...metadata,id:'broken'},Buffer.from('not a model'));assert.equal(response.status,400);assert.ok(!fs.existsSync(path.join(fixture,'artifacts/broken')));pass('failed registration leaves no drafts or model');
+    response=await add({...metadata,id:'old-format',description:'기존 설명에는 <기호>도 있을 수 있습니다.'});const legacy=await response.json();assert.equal(response.status,201);assert.equal(legacy.reactionCount,0);assert.ok(legacy.reactionWarning);assert.ok(!fs.existsSync(path.join(fixture,'artifacts/old-format/reactions.json')));pass('unsupported reaction text does not break legacy registration');
+    const old={...structuredClone(doc),reactions:doc.reactions.filter(r=>/-(0|1)$/.test(r.id))};old.reactions[0].status='approved';old.reactions[0].text='이전에 검토한 문구';
+    const migrated=generateReactions(item,old);assert.equal(migrated.reactions.length,40);assert.equal(migrated.reactions.find(r=>r.id===old.reactions[0].id).text,'이전에 검토한 문구');assert.equal(migrated.reactions.find(r=>r.id===old.reactions[0].id).status,'approved');pass('old eight drafts expand without replacing approval');
+    const curated=structuredClone(doc);curated.points=[];curated.reactions=Array.from({length:48},(_,i)=>({id:'manual-'+i,persona:PERSONAS[i%4],tier:'normal',text:'직접 검토한 후보 '+i,evidencePointIds:[],status:i%2?'draft':'approved'}));
+    assert.deepEqual(generateReactions(item,curated).reactions,curated.reactions);pass('full curated forty-eight never overwritten');
+    for(const asset of ['/reaction-editor.js','/reaction-style.css'])assert.equal((await fetch(url+asset)).status,200);const html=await(await fetch(url)).text();for(const id of ['reaction-summary','reaction-search','reaction-next','reaction-approve-page'])assert.ok(html.includes(id));pass('review pagination and bulk controls served');
+    console.log(`REACTION_REGISTRATION_PASS: ${passed} cases | ${fixture}`);
+}finally{if(child&&child.exitCode===null)child.kill();}

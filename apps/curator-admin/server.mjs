@@ -1,5 +1,6 @@
 import http from 'node:http';
 import { createReactionService } from './reaction-service.mjs';
+import { generateReactions } from './reactions.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -161,12 +162,16 @@ function publish(meta, bytes) {
     const stage = safe(`artifacts/.import-${unique}`, false);
     const pending = safe(`.manifest-${unique}.tmp`, false);
     const backupDir = safe('.admin-backups', false);
-    let published = false;
+    let published = false, reactionDrafts=null, reactionWarning=null;
     try {
         fs.mkdirSync(path.join(stage, 'models'), { recursive: true });
         fs.writeFileSync(path.join(stage, 'models/pc.glb'), bytes, { flag: 'wx' });
         const artifact = { schemaVersion: '1.0', id, title: meta.title.trim(), description: meta.description.trim(), model: `artifacts/${id}/models/pc.glb`, scale: meta.scale };
         fs.writeFileSync(path.join(stage, 'artifact.json'), JSON.stringify(artifact, null, 2) + '\n', { flag: 'wx' });
+        // Optional content is staged with the model. Generation problems never invalidate a v1 exhibit.
+        try { reactionDrafts=generateReactions(artifact); }
+        catch { reactionWarning='설명 형식을 확인한 뒤 감상 반응 후보를 만들어 주세요.'; }
+        if(reactionDrafts)fs.writeFileSync(path.join(stage,'reactions.json'),JSON.stringify(reactionDrafts,null,2)+'\n',{flag:'wx'});
         data.artifacts.push(relative);
         place(room,relative);
         normalizeRooms(data);
@@ -178,7 +183,7 @@ function publish(meta, bytes) {
         published = true;
         fs.renameSync(pending, manifestFile);
         console.log(`ARTIFACT_ADDED: ${id} count=${data.artifacts.length}`);
-        return { id, displayed: true, roomId:room.id, roomTitle:room.title };
+        return { id, displayed: true, roomId:room.id, roomTitle:room.title, reactionCount:reactionDrafts?.reactions.length??0, reactionWarning };
     } catch (error) {
         // These are unique paths created by this request; existing exhibit folders are never removed.
         if (published) fs.rmSync(destination, { recursive: true, force: true });

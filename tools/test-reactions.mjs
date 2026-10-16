@@ -11,7 +11,8 @@ const good=generateReactions(item);let passed=0;
 const pass=name=>{passed++;console.log('PASS '+name);};
 const clone=v=>structuredClone(v);
 for(const dir of ['contract-valid','contract-invalid'])fs.mkdirSync(path.join(fixture,dir));
-for(const [name,document] of [['empty',emptyReactions(item)],['draft',good],['approved',{...clone(good),reactions:good.reactions.map(r=>({...r,status:'approved'}))}]]){
+const maximum=clone(good);for(let n=0;n<8;n++)maximum.reactions.push({id:'extra-'+n,persona:PERSONAS[n%4],tier:'normal',text:'경계 검사용 추가 문구 '+n,evidencePointIds:[],status:'draft'});
+for(const [name,document] of [['empty',emptyReactions(item)],['draft',good],['approved',{...clone(good),reactions:good.reactions.map(r=>({...r,status:'approved'}))}],['maximum48',maximum]]){
     validateReactions(document,item.id);fs.writeFileSync(path.join(fixture,'contract-valid',name+'.json'),JSON.stringify(document));pass('contract valid '+name);
 }
 const mutations={
@@ -24,7 +25,7 @@ const mutations={
 };
 for(const [name,mutate] of Object.entries(mutations)){const bad=clone(good);mutate(bad);assert.throws(()=>validateReactions(bad,item.id));fs.writeFileSync(path.join(fixture,'contract-invalid',name+'.json'),JSON.stringify(bad));pass('contract rejects '+name);}
 for(const desc of ['짧음','가'.repeat(400),'줄바꿈\n둘째 문장','😀'.repeat(150),'모델 설명에 역사·작가 정보는 없습니다.']){
-    const generated=generateReactions({...item,description:desc});assert.equal(generated.reactions.length,8);assert.ok(generated.reactions.every(r=>r.status==='draft'&&r.text.length<=72));pass('bounded generation '+desc.slice(0,8));
+    const generated=generateReactions({...item,description:desc});assert.equal(generated.reactions.length,40);assert.ok(generated.reactions.every(r=>r.status==='draft'&&r.text.length<=72));assert.equal(new Set(generated.reactions.map(r=>r.text)).size,40);pass('bounded distinct generation '+desc.slice(0,8));
 }
 let approved=clone(good);approved.reactions[0].status='approved';approved.reactions[0].text='직접 검토한 감상';assert.deepEqual(generateReactions(item,approved),approved);pass('regeneration preserves current approved edits');
 assert.notEqual(sourceHash({title:'a\nb',description:'c'}),sourceHash({title:'a',description:'b\nc'}));pass('source fingerprint has unambiguous field boundaries');
@@ -47,7 +48,7 @@ async function start(){
 async function get(){const response=await fetch(url+'/api/reactions?artifactId=reaction-a');assert.equal(response.status,200);return response.json();}
 async function post(state,action='save',overrides={},headers={}){return fetch(url+'/api/reactions',{method:'POST',headers:{'Content-Type':'application/json','X-Museum-Token':token,...headers},body:JSON.stringify({artifactId:'reaction-a',revision:state.revision,sourceHash:state.sourceHash,action,document:state.document,...overrides})});}
 try{
-    await start();let state=await get();assert.equal(state.stale,false);assert.equal(state.document.reactions.length,8);pass('API read without modifying artifact');
+    await start();let state=await get();assert.equal(state.stale,false);assert.equal(state.document.reactions.length,40);pass('API read without modifying artifact');
     for(const [headers,status] of [[{'X-Museum-Token':''},403],[{Origin:'http://example.invalid'},403],[{'Content-Type':'text/plain'},415]]){assert.equal((await post(state,'save',{},headers)).status,status);assert.deepEqual(fs.readFileSync(file),original);pass('API authentication/origin/type '+status);}
     for(const [name,mutate] of Object.entries(mutations)){const document=clone(state.document);mutate(document);const response=await post(state,'save',{document});assert.equal(response.status,400,await response.text());assert.deepEqual(fs.readFileSync(file),original);pass('API rejects '+name);}
     state.document.reactions[0].text='새로 승인한 감상';assert.equal((await post(state)).status,200);const oldState=state;state=await get();assert.equal(state.document.reactions[0].text,'새로 승인한 감상');assert.ok(state.history.length);pass('save and backup');

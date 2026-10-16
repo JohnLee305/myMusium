@@ -26,3 +26,7 @@
 ## 검증
 
 `node tools/test-reactions.mjs` → `tools/run-unity.ps1 -Task Build` → `tools/test-reactions-player.ps1`. 공통 유효·무효 fixture, API 인증/충돌/복원/원문 변경, 세 전시품×네 성향, 반복·손상·미승인·꺼짐·실제 감상 진입·방 전환·최대6명 검사. 실제 결과는 STATUS/WORKLOG에 기록한다.
+
+
+## 2026-10-16 REACT-010 보충
+기본 초안40개, 새 등록 staging 준비,12개 페이지 검토를 추가했다. 스키마/런타임 최대48개·64KiB 계약은 유지한다. 수동 외형 관찰 문구의 별도 근거·모델 변경 무효화 및1,000개 확장은 REACT-011~013 후속 설계로 구분한다.
