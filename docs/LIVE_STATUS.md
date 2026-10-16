@@ -5,21 +5,29 @@
 > 남의 블록을 수정하지 않는다. 이 파일을 안 읽고 시작한 작업은 무효로 간주한다.
 > 갱신 시각은 KST 기준이다.
 
-갱신: 2026-10-16 22:55 (KST) / 작성: opencode
+갱신: 2026-10-16 23:05 (KST) / 작성: opencode
 
 ## 지금 손대면 안 되는 것
 
 - `C:\Dev\vr-museum-tycoon` 미커밋 개인자료 3건 — 읽기 전용, 커밋·되돌리기 금지:
   - `museum-archive/manifest.json` 수정 (전시품 room-1 배정 + room-1 테마 변경, 사용자 관리페이지 작업)
   - `museum-archive/artifacts/exhibit-mv9n8ahg-c57c76/` 미추적 (사용자 등록 전시품 + 반응 파일)
-  - `museum-archive/visitors.json` 미추적 (관람객 설정)
+  - `museum-archive/visitors.json` 미추적 (관람객 설정, .gitignore 추가됨)
 - `codex/museum-baseline` + 태그 `museum-baseline-20261015` — 보존, 기능 병합 금지.
 
 ## 진행 중 작업
 
 | 작업 | 담당 | 폴더/브랜치 | 상태 | 마지막 SHA |
 |---|---|---|---|---|
-| ROUTE-002 tycoon 통합 | opencode | sync-20261016 / tmp/route-002-merge-20261016 | 병합 완료·빌드 중 | 9d6e492 (merge), 기반 05456e6 |
+| ROUTE-002 tycoon 통합 | opencode | sync-20261016 / tmp/route-002-merge-20261016 | 검증 완료·tycoon 반영 push 예정 | 병합 9d6e492, 문서 0493a75 |
+
+## 검증 근거 (병합 트리)
+
+- 빌드 `logs/unity-Build-20261016-225548.log` exit 0
+- 내비 API 29 PASS `logs/navigation-tests-1792159033105`
+- 출구 경계 PASS `logs/exit-boundary-tests-1792159033513` (single + four-directions)
+- 투어 플레이어 PASS `tour-player-20261016-225816` (신규 픽스처)
+- 상세 4 PASS `logs/details-tests-20261016-225722`
 
 ## 브랜치·통합 대기열
 

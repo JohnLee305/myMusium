@@ -729,3 +729,10 @@
 - 순차 관람 회귀 logs/navigation-tests-1792154323758/tour-player-20261016-215527.log PASS. 최종 외부 NPC 통행 보정 전 동일 관람 로직 검사이며, 추가된 외부 분기는 최종 출구 검사에 포함. 상세화면4회귀 logs/details-tests-20261016-215734 PASS. 첫 상세검사 Windows PowerShell5.1 한글 인코딩 실패는 pwsh로 재실행해 해결(제품 코드 실패 아님).
 - 바탕화면 PC 대상/개인Archive 확인 후 최신 실행본 재실행. 관리4186은 코드 변경 없으므로 재시작하지 않음, health/기존48승인 확인. 개인 자료/모델/대사 및 Quest/기준판 바로가기 변경 없음.
 - 실제 Quest 미검증. 현재 외부 처리는 안전 바닥·충돌 경계와 입장/종료 안내, 전체 실외 로비 건물은 후속. 기능/사용법·검증 자료 PR 통합 후 원격 확인 예정.
+## 2026-10-16 / ROUTE-002 tycoon 통합 이어받기 (opencode)
+- Codex 사용량 한도로 끊긴 ROUTE-002 통합을 이어받음. 원 브랜치 push(05456e6) 확인, tycoon 폴더 미커밋 개인자료 3건은 읽기 전용으로 보존.
+- sync 폴더에 tmp/route-002-merge-20261016 (origin/tycoon 기준) 생성, origin/route-002 병합. 충돌 없음. 병합 9d6e492.
+- Unity 빌드 logs/unity-Build-20261016-225548.log exit 0.
+- 회귀: navigation API 29 PASS (logs/navigation-tests-1792159033105), exit-boundary single+four-directions PASS (logs/exit-boundary-tests-1792159033513), tour player PASS (tour-player-20261016-225816, 신규 픽스처), details 4 PASS (logs/details-tests-20261016-225722).
+- test-details.ps1은 UTF-8 BOM 없음 + PS 5.1 파싱 실패로 BOM 임시 부여 후 실행, 바이트 동일 복원. pwsh 미설치. node는 Codex 번들 런타임 사용.
+- 문서 분리 커밋 0493a75: docs/LIVE_STATUS.md 신설, WORK_HANDOFF §8 이어받기 절차, AGENTS Gate 현황판 1순위, .gitignore visitors.json 추가.
