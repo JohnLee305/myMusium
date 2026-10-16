@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace FamilyMuseum
 {
-    public sealed class GalleryDisplay : MonoBehaviour
+    public sealed partial class GalleryDisplay : MonoBehaviour
     {
         public const int Capacity = 30;
         public bool IsFinished { get; private set; }
@@ -175,6 +175,7 @@ namespace FamilyMuseum
             var session = GetComponent<MuseumSession>();
             var controller = session.desktopRig.GetComponent<CharacterController>();
             controller.enabled = false;
+            session.desktopRig.GetComponent<DesktopNavigator>().ResetMotion();
             var nav=TourNavigation.Get(rooms[CurrentRoom]);var paths=TourNavigation.Paths(rooms[CurrentRoom]);var entry=TourNavigation.Door(nav.entrance);var forward=TourNavigation.Inward(nav.entrance);var side=Vector3.Cross(Vector3.up,forward);var spawn=entry;
             foreach(var candidate in new[]{entry+forward*2+side*.9f,entry+forward*2-side*.9f,entry+forward*1.2f,entry})if(paths.Clear(candidate)&&paths.Find(entry,candidate)!=null){spawn=candidate;break;}
             session.desktopRig.transform.SetPositionAndRotation(spawn+Vector3.up*.05f, Quaternion.LookRotation(forward));
@@ -186,17 +187,17 @@ namespace FamilyMuseum
         }
         void Update()
         {
-            if (!IsFinished || IsLoading || RoomCount < 2 || GetComponent<ArtifactDetailsPanel>().BlocksNavigation || (GetComponent<VRExhibitInteraction>()?.Busy ?? false)) return;
+            if (boundarySmoke || IsOutside || !IsFinished || IsLoading || GetComponent<ArtifactDetailsPanel>().BlocksNavigation || (GetComponent<VRExhibitInteraction>()?.Busy ?? false)) return;
             var keys = Keyboard.current;
             if (keys != null && keys.pageDownKey.wasPressedThisFrame) { _ = SwitchRoomAsync(CurrentRoom + 1); return; }
             if (keys != null && keys.pageUpKey.wasPressedThisFrame) { _ = SwitchRoomAsync(CurrentRoom - 1); return; }
             if (Time.unscaledTime < portalReadyAt || Camera.main == null) return;
             Vector3 pos = Camera.main.transform.position; pos.y = 0;
-            if (Vector3.Distance(pos, leftPortal) < .8f) _ = SwitchRoomAsync(CurrentRoom - 1);
-            else if (Vector3.Distance(pos, rightPortal) < .8f) _ = SwitchRoomAsync(CurrentRoom + 1);
+            CheckDoorTransition(pos);
         }
         void OnGUI()
         {
+            if(IsOutside){DrawExitPanel();return;}
             if (GetComponent<ArtifactDetailsPanel>().IsOpen) return;
             var style = new GUIStyle(GUI.skin.label) { font = font, fontSize = 16, alignment = TextAnchor.MiddleCenter };
             if (IsLoading)

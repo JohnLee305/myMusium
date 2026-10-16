@@ -46,8 +46,10 @@ namespace FamilyMuseum
             controller.Move(velocity * Time.deltaTime);
         }
 
+        public void ResetMotion(){verticalVelocity=0;}
         void OnDisable()
         {
+            ResetMotion();
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
