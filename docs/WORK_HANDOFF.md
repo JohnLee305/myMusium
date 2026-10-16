@@ -82,3 +82,12 @@
 새 모델 대사 요청은 [museum-model-reactions](../.agents/skills/museum-model-reactions/SKILL.md)를 사용한다. [운영 순서](REACTION_AUTHORING_WORKFLOW.md)에 따라 관찰→작성→검토→승인/저장→실제 표시를 구분한다. 업로드 자동 실행은 미구현이며 명시적인 작업 요청 시 에이전트가 처리한다. 개인 콘텐츠는 로컬 Archive에 보존한다.
 ## 관람객 이동 동선
 ROUTE-001 구현은 [ORDERED_TOUR.md](ORDERED_TOUR.md)를 읽는다. roomOrder/navigation은 선택적 v1 계약이며 Node·Unity·스키마·CLI를 함께 유지한다. 사용자 카메라 방 이동 시 손님 관람 진행을 초기화하지 않는다. 새 동선 변경은 미로·막힌 출구·실제 순서/퇴장·기존 배치/반응 회귀와 바탕화면 실행 경로를 확인한다.
+
+## 8. 중단 작업 이어받기 (takeover)
+
+누군가 작업을 끝내지 못하고 끊겼을 때(한도·세션 종료 등) 다른 주체가 이어받는 절차다.
+
+1. **이어받기 선언:** `WORKLOG.md`에 `작업 ID / 원래 담당·브랜치·마지막 SHA / 중단 지점 / 이어받는 이·시작 SHA`를 먼저 기록한다. `LIVE_STATUS.md` 진행 중 작업 블록도 갱신한다.
+2. **상태 확인 순서:** 담당 브랜치 push 여부 → 미커밋·untracked·stash 확인 → PR open/merged 확인 → 남은 Gate 항목 식별. `LIVE_STATUS.md`의 "손대면 안 되는 것"을 먼저 읽고, 개인자료는 읽기 전용으로 둔다.
+3. **원칙:** 원 작업자의 커밋·기록을 수정·삭제하지 않고 추가만 한다. 판단이 필요하면(충돌·자료歸屬 불명·파괴적 조작) 중단·보고가 우선이다. `reset --hard`/`clean -fd`/무단 `force push` 금지.
+4. **완료 시:** 이어받음~완료 구간을 같은 작업 ID 아래에 연속 기록하고 통합 SHA를 남긴다. 임시 브랜치·폴더는 삭제하고 작업 폴더 원상복구를 확인한 뒤 `LIVE_STATUS.md`에서 자신의 블록을 닫는다.

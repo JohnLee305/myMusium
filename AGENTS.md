@@ -7,9 +7,10 @@
 1. 작업 폴더/현재 브랜치/원격/HEAD 및 **미커밋 변경**을 먼저 확인한다. 로컬 사용자의 자료 및 다른 에이전트의 변경을 보호한다.
 2. `git fetch --prune origin`으로 GitHub **`codex/museum-tycoon` 최신 SHA를 가져와 비교**한다. 깨끗하고 동일 브랜치라면 `git pull --ff-only origin codex/museum-tycoon`으로 최신화한다. 다른 작업 브랜치/미커밋 상태는 안전한 별도 Worktree/브랜치에서 동기화 방법을 선택한다.
 3. 원격 실패·분기·충돌·미커밋 자료로 인해 안전한 최신화가 불가능하면 **새 작업을 임의로 시작하지 않는다.** 덮어쓰기/자동 stash/reset/force push 없이 차이를 보고한다.
-4. **최신 파일** `AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `STATUS.md`, `WORKLOG.md`, `docs/WORK_HANDOFF.md`, 해당 설계/ADR을 읽고 이미 다른 에이전트가 처리 중인 TODO ID/PR 및 의존관계를 확인한 다음 작업한다.
+4. **최신 파일** `AGENTS.md`, `docs/LIVE_STATUS.md` (실시간 현황판, 최우선), `PROJECT_STATUS.md`, `TASKS.md`, `STATUS.md`, `WORKLOG.md`, `docs/WORK_HANDOFF.md`, 해당 설계/ADR을 읽고 이미 다른 에이전트가 처리 중인 TODO ID/PR 및 의존관계를 확인한 다음 작업한다.
 5. 여러 에이전트는 **각자 별도 Clone 또는 Git Worktree + ID가 포함된 작업 브랜치**를 사용한다. 기본 통합은 기능 브랜치 push → PR → 최신 베이스/회귀 확인 → `codex/museum-tycoon`이다. 기준 `codex/museum-baseline`/복원 태그는 보존한다.
 6. 완료 전 다시 `fetch`하여 원격 변경과 충돌을 확인하고 테스트·`TASKS.md`·`PROJECT_STATUS.md`·`STATUS.md`·`WORKLOG.md`를 정리한다. PR 미병합과 통합 완료를 구분하여 보고한다.
+7. 작업 시작/종료 시 `docs/LIVE_STATUS.md`에 자신의 블록만 갱신하고 push한다 (남의 블록 수정 금지). 끊긴 작업을 이어받을 때는 `docs/WORK_HANDOFF.md` §8 절차를 따른다.
 
 **아래의 과거 '작업 재개 규칙'은 로컬 상태·환경 점검용으로 유지한다. 충돌 시 위 최신 Git 선행 절차가 우선이다.** GitHub 기본 브랜치가 기준판이므로 ref 미지정 커밋/파일 수정을 하지 않는다.
 
