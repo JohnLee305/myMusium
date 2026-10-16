@@ -291,3 +291,9 @@ GitHub에는 소스·설정·문서·전시 모델/설명을 저장합니다. Un
 - 실제 개인 모델 문구는 검토 전 draft이며 아직 관람객에게 노출하지 않는다. 사용자 검토·페이지 승인·저장 후 새 관람 앱 재실행 필요.
 -1,000개는 docs/REACTION_CONTENT_SCALE.md 및 REACT-011~013 후속. 현재 한도48개/64KiB 유지, 자동40개는 설명 기반 템플릿이며 자동 시각 해석 아님. 모델만 바뀔 때 시각 근거 무효화는 미구현. Quest 실기기 미검증.
 - 종료 상태: 시험4187 정상종료 완료, 사용자4186은 최신 공식 시작도구로 개인 Archive에 연결해 유지. 기존4177/4181·바탕화면 경로 및 기준판/태그 유지. 통합 전 원격 재확인→작업 브랜치 PR 통합→원격 소스 동일성 확인.
+
+## 2026-10-16 / OPS-005 바탕화면 최신 실행 경로 적용
+- PC관람/타이쿤실험 및 관리/관리타이쿤 네 바로가기를 최신 작업폴더 실행본으로 재연결. 기존 개인 Archive는 명시적 ArchivePath로 유지, 관리포트4186. 이전 바로가기는 logs/desktop-shortcuts-backup-*에 백업. 기준판/Quest 실행대상 보존.
+- setup-viewer-shortcuts.ps1에 ArchivePath, setup-admin-shortcuts.ps1에 ArchivePath/Port, curator-control.ps1에 ArchivePath 전달 지원. Windows PowerShell5.1 한글 스크립트는 UTF-8 BOM 유지(초기 BOM 없는 setup 파싱 실패 후 보정).
+- 검증: Windows PowerShell5.1 관리 UI4188 offline→on→off→on→off CONTROL_UI_PASS, 실제 개인 Archive health 일치. 네 바로가기 저장 후 대상/인수 재읽기, PC관람 바로가기 실행 프로세스의 최신 exe/기존 Archive 확인. 사용자 관리4186 유지. Quest 미검증.
+- 다음 기능 배포부터 바탕화면 대상/자료 경로·관리포트와 실제 실행을 완료 Gate에 포함. 소스/빌드만 갱신한 상태는 사용자 적용 완료로 보고하지 않음.
