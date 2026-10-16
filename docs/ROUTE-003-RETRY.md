@@ -25,3 +25,10 @@
 3. **서버·상한 정합**: 개인 Archive에는 96개 반응 파일이 있다. 96-cap 이전 코드로 4186을 실행하면 반응 섹션이 오류가 난다. 동선 작업 브랜치는 REACT-015 포함 여부(merge 또는 rebase)를 먼저 결정하고, 4186 재시작 후 권총 96개 조회를 매번 확인한다.
 4. **4186 재시작 절차**: 해당 포트 PID 확인 → 종료 → 같은 Archive 경로로 새 코드 실행 → `/api/reactions`(권총 96) + `/navigation.mjs` 200 확인. 시험용 임시 포트는 사용 후 반드시 종료한다.
 5. **베이스**: REACT-015 PR 미병합 상태에서는 동선 브랜치 베이스를 `origin/codex/museum-tycoon` 최신으로 하고, 필요시 REACT-015를 merge한다(2026-10-17에 merge로 해결한 전례). PR은 REACT-015 병합 후 ROUTE-003 순서를 권장한다.
+
+## 재시도 결과 (2026-10-17, 브랜치 `codex/route-003-wall-slots-20261017`, 커밋 `a9660ce`, push 후 원격 SHA 일치)
+
+- DOM 가드 `tools/test-navigation-editor-dom.mjs` 신설(8개): 렌더 상한 + 벽 슬롯 개수/순서 + 미리보기 도달/차단. 기존 `test-navigation.mjs` 29개 통과(`/navigation.mjs` 제공 확인 포함).
+- 벽 슬롯: 3열 격자 정렬, 좌우 열은 위→아래 5→1 표시로 방 좌표와 일치. 사용자 눈 확인 통과.
+- 미리보기: 격자 아래 "저장 전 확인" 1줄, 서버와 같은 `checkReachable`. 사용자 눈 확인 통과.
+- 4186 재시작 2회(벽 슬롯은 디스크 직독으로 무재시작, `server.mjs` 에셋 추가는 재시작 필요). 실제 Archive 수정 없음.
