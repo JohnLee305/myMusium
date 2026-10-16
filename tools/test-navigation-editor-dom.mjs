@@ -119,6 +119,13 @@ if (wallTop && wallBottom && wallLeft && wallRight && wallTop.children.length > 
   assert.equal(wallLeft.children.length, 5, 'left wall has 5 slots');
   assert.equal(wallRight.children.length, 5, 'right wall has 5 slots');
   pass('wall slots rendered with fixed counts 6/6/5/5');
+  assert.ok(wallTop.children[0].textContent.startsWith('위1'), 'top row starts with slot 1');
+  assert.ok(wallBottom.children[0].textContent.startsWith('아래1'), 'bottom row starts with slot 1');
+  assert.ok(wallLeft.children[0].textContent.startsWith('왼쪽5'), 'left column top is slot 5 (slot 0 is bottom row)');
+  assert.ok(wallLeft.children[4].textContent.startsWith('왼쪽1'), 'left column bottom is slot 1');
+  assert.ok(wallRight.children[0].textContent.startsWith('오른쪽5'), 'right column top is slot 5');
+  assert.ok(wallRight.children[4].textContent.startsWith('오른쪽1'), 'right column bottom is slot 1');
+  pass('wall slot order matches room coordinates');
   const before = appended;
   created = 0; appended = 0;
   const target = wallRight.children[1] ?? wallRight.children[0];

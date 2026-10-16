@@ -34,7 +34,10 @@ const WALL_NAME={front:'아래',back:'위',left:'왼쪽',right:'오른쪽'};
 function renderWalls(){
  for(const [id,side,count] of WALL_SIDES){
   const box=$(id);if(!box)continue;box.replaceChildren();
-  for(let slot=0;slot<count;slot++){
+  // 좌우 벽은 slot 0이 아래쪽 행이므로 위에서 아래로 큰 번호부터 표시한다.
+  const vertical=side==='left'||side==='right';
+  for(let i=0;i<count;i++){
+   const slot=vertical?count-1-i:i;
    const b=document.createElement('button');b.type='button';
    const isEntrance=nav.entrance.side===side&&nav.entrance.slot===slot,isExit=nav.exit.side===side&&nav.exit.slot===slot;
    b.className='wall-slot'+(isEntrance?' door-entrance':'')+(isExit?' door-exit':'');
