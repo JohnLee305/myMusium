@@ -87,3 +87,6 @@ rooms[].cells는 artifacts와 길이가 같은 정수 배열이다. 각 값은 0
 
 ## 선택적 전시품 반응 사이드카
 `artifacts/{id}/reactions.json` 1.0은 기존 artifact/manifest v1과 독립적이다. 누락은 정상, 손상/원문 지문 불일치/미승인은 기본 문구로 폴백한다. 실제 계약·제한·저장 경계는 [ADR-0006](decisions/0006-approved-reactions.md), JSON Schema는 `schemas/reactions.schema.json`이다. 원문·모델·배치·진행 세이브와 분리하며 개인정보 공개 정책은 동일하게 적용한다.
+
+## 선택적 순차 관람 동선
+manifest.roomOrder와 rooms[].navigation에 문 위치·통행금지·전시품 관람순서를 저장할 수 있다. 기존 v1은 기본 동선으로 계속 읽는다. [저장 계약·이동 방식·검증](ORDERED_TOUR.md) 참고.

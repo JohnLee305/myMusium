@@ -32,22 +32,23 @@ namespace FamilyMuseum
             signs = new GameObject("Wall-mounted gallery signage");
             signs.transform.SetParent(transform, false);
             font = labelFont;
-            Plaque(-1, width, current - 1, current, rooms);
-            Plaque(1, width, current + 1, current, rooms);
+            var nav=TourNavigation.Get(rooms[current]);bool backDoor=nav.entrance.side=="back"||nav.exit.side=="back";
+            // Entrance/exit geometry and destination labels are built by TourDoors.
 
             var identity = new GameObject("Museum identity plaque").transform;
             identity.SetParent(signs.transform, false);
             identity.position = new Vector3(0,3.03f,back-.15f);
+            identity.gameObject.SetActive(!backDoor);
             Block(identity, "Brass perimeter", Vector3.zero, new Vector3(5.9f,1.03f,.08f), brass);
             Block(identity, "Enamel face", new Vector3(0,0,-.046f), new Vector3(5.83f,.96f,.03f), enamel);
             foreach (string name in new[] { "Museum title", "Museum subtitle" })
             {
                 var label = GameObject.Find(name).GetComponent<TextMesh>();
                 var position = label.transform.position; position.z = back - .23f;
-                label.transform.position = position; label.color = Ivory;
+                label.transform.position = position; label.color = Ivory;label.GetComponent<Renderer>().enabled=!backDoor;
             }
             var accent = GameObject.Find("Wall accent").transform;
-            accent.position = new Vector3(0,2.7f,back-.235f);
+            accent.position = new Vector3(0,2.7f,back-.235f);accent.GetComponent<Renderer>().enabled=!backDoor;
         }
         void Plaque(int side, float width, int destination, int current, MuseumRoom[] rooms)
         {

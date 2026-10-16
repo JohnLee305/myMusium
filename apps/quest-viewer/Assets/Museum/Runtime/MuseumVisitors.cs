@@ -38,7 +38,7 @@ namespace FamilyMuseum
             if(Camera.main==null)return false;
             var camera=Camera.main;var point=guest.transform.position+Vector3.up*1.9f;
             if(Vector3.Distance(camera.transform.position,point)>7f || Vector3.Dot(camera.transform.forward,point-camera.transform.position)<=0)return false;
-            return guests.Where(g=>g!=null&&g.State==GuestState.Viewing&&!string.IsNullOrEmpty(g.ReactionText)&&Vector3.Distance(camera.transform.position,g.transform.position+Vector3.up*1.9f)<=7f&&Vector3.Dot(camera.transform.forward,g.transform.position+Vector3.up*1.9f-camera.transform.position)>0).OrderBy(g=>(g.transform.position-camera.transform.position).sqrMagnitude).Take(2).Contains(guest);
+            return guests.Where(g=>g!=null&&g.gameObject.activeInHierarchy&&g.State==GuestState.Viewing&&!string.IsNullOrEmpty(g.ReactionText)&&Vector3.Distance(camera.transform.position,g.transform.position+Vector3.up*1.9f)<=7f&&Vector3.Dot(camera.transform.forward,g.transform.position+Vector3.up*1.9f-camera.transform.position)>0).OrderBy(g=>(g.transform.position-camera.transform.position).sqrMagnitude).Take(2).Contains(guest);
         }
         public bool BlocksPointer(Vector2 screenPoint)
         {
@@ -61,12 +61,13 @@ namespace FamilyMuseum
             settingsPoll-=Time.unscaledDeltaTime;
             if(settingsPoll<=0) { settingsPoll=1; ReloadPreferences(); }
             gallery ??=GetComponent<GalleryDisplay>();
-            if(gallery==null || !gallery.IsFinished || gallery.IsLoading) { ClearRoom(); return; }
+            if(gallery==null || !gallery.IsFinished || gallery.IsLoading) return;
             if(room!=gallery.CurrentRoom) PrepareRoom();
             Tick(Mathf.Min(.1f,Time.deltaTime));
         }
         void PrepareRoom()
         {
+            if(OrderedTours){PrepareTours();return;}
             ClearRoom();
             room=gallery.CurrentRoom;
             exhibits=FindObjectsByType<ArtifactDisplay>(FindObjectsSortMode.None).Where(s=>s.managedSlot).OrderBy(s=>s.transform.position.z).ThenBy(s=>s.transform.position.x).ToArray();
@@ -84,8 +85,8 @@ namespace FamilyMuseum
             spawnWait-=dt;
             if(guests.Count<TargetCount && spawnWait<=0)
             {
-                Vector3 entrance=new Vector3(-1.8f,0,-4.1f);
-                if(guests.All(g=>(g.transform.position-entrance).sqrMagnitude>.8f*.8f))
+                Vector3 entrance=OrderedTours?TourNavigation.Door(TourNavigation.Get(TourRooms[0]).entrance):new Vector3(-1.8f,0,-4.1f);
+                if(guests.Where(g=>!OrderedTours||g.TourRoom==0).All(g=>(g.transform.position-entrance).sqrMagnitude>.8f*.8f))
                 {
                     Spawn(entrance); spawnWait=2.5f;
                 }
@@ -143,13 +144,13 @@ namespace FamilyMuseum
         public void RecordView() { Views++; }
         IEnumerable<Vector3> Bodies(MuseumGuest current)
         {
-            foreach(var guest in guests) if(guest!=current) yield return guest.transform.position;
-            if(Camera.main!=null) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
+            foreach(var guest in guests) if(guest!=current && (!OrderedTours||guest.TourRoom==current.TourRoom)) yield return guest.transform.position;
+            if(Camera.main!=null && (!OrderedTours||current.TourRoom==VisibleRoom)) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
         }
-        public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)=>Paths.Find(guest.transform.position,destination,Bodies(guest));
+        public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)=>(OrderedTours?TourPath(guest.TourRoom):Paths).Find(guest.transform.position,destination,Bodies(guest));
         public bool CanMove(MuseumGuest current,Vector3 next)
         {
-            if(!Paths.Clear(next)) return false;
+            if(!(OrderedTours?TourPath(current.TourRoom):Paths).Clear(next)) return false;
             foreach(var body in Bodies(current))
                 if((next-body).sqrMagnitude<.65f*.65f && (next-body).sqrMagnitude<=(current.transform.position-body).sqrMagnitude) return false;
             return true;
@@ -167,7 +168,7 @@ namespace FamilyMuseum
             GUI.Box(new Rect(x,120,260,185),"");
             GUI.Label(new Rect(x+5,124,250,25),"관람객 · 타이쿤 실험",style);
             if(GUI.Button(new Rect(x+15,157,42,30),"−",button)) SetCount(TargetCount-1);
-            GUI.Label(new Rect(x+60,157,135,30),$"{ActiveCount}명 / 목표 {TargetCount}명",style);
+            GUI.Label(new Rect(x+60,157,135,30),$"{guests.Count(g=>g.gameObject.activeInHierarchy)}명 · 전체 {ActiveCount}/{TargetCount}",style);
             if(GUI.Button(new Rect(x+203,157,42,30),"+",button)) SetCount(TargetCount+1);
             if(GUI.Button(new Rect(x+15,201,90,28),TargetCount==0?"켜기":"모두 끄기",button)) SetCount(TargetCount==0?1:0);
             GUI.Label(new Rect(x+110,200,140,30),$"관람 {Views} · 퇴장 {Exited}",style);

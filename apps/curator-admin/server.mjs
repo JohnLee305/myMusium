@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { createReactionService } from './reaction-service.mjs';
 import { generateReactions } from './reactions.mjs';
+import {navigationFor,orderFor} from './navigation.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -84,13 +85,13 @@ function state() {
         } catch { return { id: relative, title: '읽을 수 없는 전시품', description: '해당 JSON 파일을 확인해 주세요.', error: true, displayed: true, ...membership.get(relative) }; }
     });
     const trash=(data.trash??[]).map(t=>{try {return {...t,...json(t.entry)};} catch {return {...t,id:t.entry.split('/')[1],title:'읽을 수 없는 전시품',error:true};}});
-    return { token, artifacts, trash, revision:revision(), rooms:data.rooms.map(room=>({id:room.id,title:room.title,count:room.artifacts.length,cells:room.cells,artifacts:room.artifacts,theme:room.theme??null,themeRevision:themeRevision(room)})), capacity: CAPACITY, maxArtifacts: MAX_ARTIFACTS, samples: samples.filter(id => fs.existsSync(path.join(root, `artifacts/${id}/models/pc.glb`))) };
+    return { token, artifacts, trash, revision:revision(), roomOrder:orderFor(data), rooms:data.rooms.map(room=>({id:room.id,title:room.title,count:room.artifacts.length,cells:room.cells,artifacts:room.artifacts,theme:room.theme??null,themeRevision:themeRevision(room),navigation:navigationFor(room)})), capacity: CAPACITY, maxArtifacts: MAX_ARTIFACTS, samples: samples.filter(id => fs.existsSync(path.join(root, `artifacts/${id}/models/pc.glb`))) };
 }
 function addRoom(data, title) {
     if (data.rooms.length>=1000) fail('전시실은 최대 1,000개까지 지원합니다.',409);
     if (typeof title!=='string' || !title.trim() || title.length>80) fail('전시실 이름을 1~80자로 입력해 주세요.');
     const room={id:`room-${crypto.randomUUID()}`,title:title.trim(),artifacts:[],cells:[]};
-    data.rooms.push(room); return room;
+    data.rooms.push(room); if(data.roomOrder)data.roomOrder.push(room.id); return room;
 }
 function visitorCatalog(){
     try {
@@ -125,10 +126,10 @@ function saveVisitors(value){
 }
 function destinationRoom(data, id) {
     let room;
-    if (!id || id==='auto') room=data.rooms.find(r=>r.artifacts.length<CAPACITY) || addRoom(data,`${data.rooms.length+1}번 전시실`);
+    if (!id || id==='auto') room=data.rooms.find(r=>r.artifacts.length+(r.navigation?.blockedCells.length??0)<CAPACITY) || addRoom(data,`${data.rooms.length+1}번 전시실`);
     else room=data.rooms.find(r=>r.id===id);
     if (!room) fail('선택한 전시실이 없습니다. 새로고침해 주세요.',409);
-    if (room.artifacts.length>=CAPACITY) fail('선택한 방이 30개로 가득 찼습니다. 다른 방이나 자동 배정을 선택해 주세요.',409);
+    if (room.artifacts.length+(room.navigation?.blockedCells.length??0)>=CAPACITY) fail('선택한 방이 30개로 가득 찼습니다. 다른 방이나 자동 배정을 선택해 주세요.',409);
     return room;
 }
 function saveManifest(data) {
@@ -201,7 +202,7 @@ function send(res, status, data, type = 'application/json; charset=utf-8') {
     res.end(typeof data === 'object' && !Buffer.isBuffer(data) ? JSON.stringify(data) : data);
 }
 const reactions=createReactionService({safe,json,manifest,fail});
-const assets = { '/preview.js':['preview.js','text/javascript; charset=utf-8'], '/preview-checks.mjs':['preview-checks.mjs','text/javascript; charset=utf-8'], ...Object.fromEntries(['three.module.js','three.core.js','GLTFLoader.js','OrbitControls.js','BufferGeometryUtils.js'].map(file=>['/vendor/'+file,['vendor/'+file,'text/javascript; charset=utf-8']])), '/layout-editor.js':['layout-editor.js','text/javascript; charset=utf-8'], '/themes.mjs':['themes.mjs','text/javascript; charset=utf-8'], '/theme-editor.js':['theme-editor.js','text/javascript; charset=utf-8'], '/': ['index.html', 'text/html; charset=utf-8'], '/style.css': ['style.css', 'text/css; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'] };
+const assets = { '/navigation-editor.js':['navigation-editor.js','text/javascript; charset=utf-8'], '/preview.js':['preview.js','text/javascript; charset=utf-8'], '/preview-checks.mjs':['preview-checks.mjs','text/javascript; charset=utf-8'], ...Object.fromEntries(['three.module.js','three.core.js','GLTFLoader.js','OrbitControls.js','BufferGeometryUtils.js'].map(file=>['/vendor/'+file,['vendor/'+file,'text/javascript; charset=utf-8']])), '/layout-editor.js':['layout-editor.js','text/javascript; charset=utf-8'], '/themes.mjs':['themes.mjs','text/javascript; charset=utf-8'], '/theme-editor.js':['theme-editor.js','text/javascript; charset=utf-8'], '/': ['index.html', 'text/html; charset=utf-8'], '/style.css': ['style.css', 'text/css; charset=utf-8'], '/app.js': ['app.js', 'text/javascript; charset=utf-8'] };
 assets['/visitor-editor.js']=['visitor-editor.js','text/javascript; charset=utf-8'];
 assets['/visitor-style.css']=['visitor-style.css','text/css; charset=utf-8'];
 assets['/reaction-editor.js']=['reaction-editor.js','text/javascript; charset=utf-8'];
@@ -230,8 +231,22 @@ const server = http.createServer(async (req, res) => {
             const [file, type] = assets[url.pathname];
             return send(res, 200, fs.readFileSync(path.join(here, file)), type);
         }
-        if (req.method !== 'POST' || !['/api/reactions','/api/visitors','/api/artifacts','/api/rooms','/api/move','/api/room-theme','/api/shutdown','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname)) return send(res, 404, { error: '페이지를 찾을 수 없습니다.' });
+        if (req.method !== 'POST' || !['/api/reactions','/api/visitors','/api/artifacts','/api/rooms','/api/move','/api/room-theme','/api/shutdown','/api/navigation','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname)) return send(res, 404, { error: '페이지를 찾을 수 없습니다.' });
         if (req.headers['x-museum-token'] !== token) fail('관리 화면을 새로고침한 후 다시 등록해 주세요.', 403);
+        if(url.pathname==='/api/navigation'){
+            if(req.headers['content-type']!=='application/json')fail('동선은 JSON 형식으로 저장해 주세요.',415);
+            if(saving)fail('저장 중입니다. 잠시 후 다시 시도해 주세요.',409);
+            saving=true;
+            try{
+                const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>262144)fail('동선 요청이 너무 큽니다.',413);chunks.push(chunk);}
+                let value;try{value=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{fail('동선 요청을 읽을 수 없습니다.');}
+                if(!value||typeof value!=='object'||Array.isArray(value))fail('동선 요청 형식이 잘못되었습니다.');
+                if(value.revision!==revision())fail('다른 화면에서 목록이 변경됐습니다. 다시 불러와 주세요.',409);
+                const data=manifest(),room=data.rooms.find(r=>r.id===value.roomId);if(!room)fail('전시실이 없습니다.',404);
+                if(!value.navigation||!value.roomOrder)fail('동선 설정이 없습니다.',409);
+                room.navigation=value.navigation;data.roomOrder=value.roomOrder;saveManifest(data);return send(res,200,{saved:true});
+            }finally{saving=false;}
+        }
         if(url.pathname==='/api/reactions'){
             if(req.headers['content-type']!=='application/json')fail('반응은 JSON 형식으로 저장해 주세요.',415);
             if(Number(req.headers['content-length'])>65536)fail('반응 요청은 64KiB 이하여야 합니다.',413);
@@ -274,7 +289,7 @@ const server = http.createServer(async (req, res) => {
             }
             if (url.pathname !== '/api/artifacts') {
                 const data=manifest();
-                if (['/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname) && meta.revision!==revision()) fail('다른 화면에서 목록이 변경됐습니다. 새로고침 후 다시 시도해 주세요.',409);
+                if (['/api/navigation','/api/layout','/api/edit','/api/trash','/api/restore'].includes(url.pathname) && meta.revision!==revision()) fail('다른 화면에서 목록이 변경됐습니다. 새로고침 후 다시 시도해 주세요.',409);
                 if (url.pathname==='/api/layout') {
                     const room=data.rooms.find(r=>r.id===meta.roomId);
                     if (!room) fail('전시실이 없습니다.',404);

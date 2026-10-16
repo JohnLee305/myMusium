@@ -1,4 +1,4 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
 $fixtures=Join-Path $root "logs/grid-player-$(Get-Date -Format yyyyMMdd-HHmmss)"
 $player=Join-Path $root 'Builds/Windows/VRMuseum.exe'

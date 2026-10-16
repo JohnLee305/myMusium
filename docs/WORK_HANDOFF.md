@@ -80,3 +80,5 @@
 
 ## 모델 맞춤 대사 처리 인계
 새 모델 대사 요청은 [museum-model-reactions](../.agents/skills/museum-model-reactions/SKILL.md)를 사용한다. [운영 순서](REACTION_AUTHORING_WORKFLOW.md)에 따라 관찰→작성→검토→승인/저장→실제 표시를 구분한다. 업로드 자동 실행은 미구현이며 명시적인 작업 요청 시 에이전트가 처리한다. 개인 콘텐츠는 로컬 Archive에 보존한다.
+## 관람객 이동 동선
+ROUTE-001 구현은 [ORDERED_TOUR.md](ORDERED_TOUR.md)를 읽는다. roomOrder/navigation은 선택적 v1 계약이며 Node·Unity·스키마·CLI를 함께 유지한다. 사용자 카메라 방 이동 시 손님 관람 진행을 초기화하지 않는다. 새 동선 변경은 미로·막힌 출구·실제 순서/퇴장·기존 배치/반응 회귀와 바탕화면 실행 경로를 확인한다.

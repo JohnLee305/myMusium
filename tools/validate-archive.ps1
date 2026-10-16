@@ -64,6 +64,10 @@ try {
         Test-Glb (Resolve-ArchiveFile $artifact.model)
         Write-Output "ARTIFACT_VALID: $($artifact.id)"
     }
+    if ($null -ne $manifest.roomOrder -or @($manifest.rooms | Where-Object { $null -ne $_.navigation }).Count -gt 0) {
+        & node (Join-Path $PSScriptRoot 'validate-navigation.mjs') (Resolve-ArchiveFile 'manifest.json')
+        if ($LASTEXITCODE -ne 0) { throw 'TOUR_NAVIGATION_INVALID' }
+    }
     Write-Output 'ARCHIVE_VALID'
     exit 0
 } catch { Write-Output "ARCHIVE_INVALID: $($_.Exception.Message)"; exit 1 }
