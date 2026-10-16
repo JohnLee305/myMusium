@@ -680,3 +680,9 @@
 - setup-viewer-shortcuts.ps1에 ArchivePath, setup-admin-shortcuts.ps1에 ArchivePath/Port, curator-control.ps1에 ArchivePath 전달 지원. Windows PowerShell5.1 한글 스크립트는 UTF-8 BOM 유지(초기 BOM 없는 setup 파싱 실패 후 보정).
 - 검증: Windows PowerShell5.1 관리 UI4188 offline→on→off→on→off CONTROL_UI_PASS, 실제 개인 Archive health 일치. 네 바로가기 저장 후 대상/인수 재읽기, PC관람 바로가기 실행 프로세스의 최신 exe/기존 Archive 확인. 사용자 관리4186 유지. Quest 미검증.
 - 다음 기능 배포부터 바탕화면 대상/자료 경로·관리포트와 실제 실행을 완료 Gate에 포함. 소스/빌드만 갱신한 상태는 사용자 적용 완료로 보고하지 않음.
+## 2026-10-16 / OPS-006 사용자 요청 반응 실제 활성화
+- 사용자: 적용을 요청했는데 대사가 계속 같다는 보고. 원인: 맞춤48개가 모두 draft여서 런타임 승인 후보0개, 기본 fallback 사용. OPS-005는 실행경로만 고쳤으며 반응 활성화까지 완료했다고 볼 수 없었음.
+- 최신 통합72fe736에서 Codex 전용브랜치 codex/ops-006-activate-user-reactions-20261016. 소스 로직 변경 없음. 사용자 명시적 적용 요청에 따라 대상 모델의 기존48개를 관리 API(낙관적 revision/sourceHash 검사 및 자동백업)로 approved 저장. 다른 전시품 상태는 변경하지 않음.
+- 검증: API/관리 화면 모두48승인·0초안·표시enabled·stale false·error null, 성향별12개 및 고유문구48개. 원본 metadata/GLB/manifest/visitors 해시 일치, 백업 존재. 개인 문구/모델은 공개Git 제외.
+- 런타임은 감상 시작마다 ReactionCatalog.Load로 디스크 파일을 읽고 해당 성향 approved에서 선택함을 확인. PC 바탕화면 바로가기로 최신 앱 실행. 말풍선 직접 시각 검증은 별도이며 승인상태/파일경로 검증과 구분한다.
+- 이후 사용자가 작성한 반응의 적용을 명시 요청하면 승인/활성화 저장과 실제 실행경로까지 완료한다. 의도적으로 초안만 작성한 경우 실제 적용 미완료임을 명확히 안내한다. Quest 미검증 유지.
