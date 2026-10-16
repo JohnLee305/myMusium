@@ -23,8 +23,8 @@ try{
     response=await add({...metadata,id:'old-format',description:'기존 설명에는 <기호>도 있을 수 있습니다.'});const legacy=await response.json();assert.equal(response.status,201);assert.equal(legacy.reactionCount,0);assert.ok(legacy.reactionWarning);assert.ok(!fs.existsSync(path.join(fixture,'artifacts/old-format/reactions.json')));pass('unsupported reaction text does not break legacy registration');
     const old={...structuredClone(doc),reactions:doc.reactions.filter(r=>/-(0|1)$/.test(r.id))};old.reactions[0].status='approved';old.reactions[0].text='이전에 검토한 문구';
     const migrated=generateReactions(item,old);assert.equal(migrated.reactions.length,40);assert.equal(migrated.reactions.find(r=>r.id===old.reactions[0].id).text,'이전에 검토한 문구');assert.equal(migrated.reactions.find(r=>r.id===old.reactions[0].id).status,'approved');pass('old eight drafts expand without replacing approval');
-    const curated=structuredClone(doc);curated.points=[];curated.reactions=Array.from({length:48},(_,i)=>({id:'manual-'+i,persona:PERSONAS[i%4],tier:'normal',text:'직접 검토한 후보 '+i,evidencePointIds:[],status:i%2?'draft':'approved'}));
-    assert.deepEqual(generateReactions(item,curated).reactions,curated.reactions);pass('full curated forty-eight never overwritten');
+    const curated=structuredClone(doc);curated.points=[];curated.reactions=Array.from({length:96},(_,i)=>({id:'manual-'+i,persona:PERSONAS[i%4],tier:'normal',text:'직접 검토한 후보 '+i,evidencePointIds:[],status:i%2?'draft':'approved'}));
+    assert.deepEqual(generateReactions(item,curated).reactions,curated.reactions);pass('full curated ninety-six never overwritten');
     for(const asset of ['/reaction-editor.js','/reaction-style.css'])assert.equal((await fetch(url+asset)).status,200);const html=await(await fetch(url)).text();for(const id of ['reaction-summary','reaction-search','reaction-next','reaction-approve-page'])assert.ok(html.includes(id));pass('review pagination and bulk controls served');
     console.log(`REACTION_REGISTRATION_PASS: ${passed} cases | ${fixture}`);
 }finally{if(child&&child.exitCode===null)child.kill();}

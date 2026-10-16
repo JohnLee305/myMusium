@@ -11,14 +11,14 @@ export function emptyReactions(item){return {schemaVersion:'1.0',artifactId:item
 export function validateReactions(v,artifactId){
     if(!exact(v,['schemaVersion','artifactId','enabled','source','points','reactions']) || v.schemaVersion!=='1.0' || !id.test(v.artifactId) || v.artifactId!==artifactId || typeof v.enabled!=='boolean') bad('전시품 반응 형식과 ID를 확인해 주세요.');
     if(!exact(v.source,['title','description','sha256']) || !text(v.source.title,80,true) || !text(v.source.description,400,true) || !/^[a-f0-9]{64}$/.test(v.source.sha256) || sourceHash(v.source)!==v.source.sha256) bad('반응의 원문과 지문이 일치하지 않습니다.');
-    if(!Array.isArray(v.points) || v.points.length>16 || !Array.isArray(v.reactions) || v.reactions.length>48) bad('감상 포인트는 16개, 반응은 48개까지 저장할 수 있습니다.');
+    if(!Array.isArray(v.points) || v.points.length>16 || !Array.isArray(v.reactions) || v.reactions.length>96) bad('감상 포인트는 16개, 반응은 96개까지 저장할 수 있습니다.');
     const points=new Set(),seen=new Set();
     for(const p of v.points){
         if(!exact(p,['id','evidence']) || !id.test(p.id) || points.has(p.id) || !text(p.evidence,400,true) || !(v.source.title.includes(p.evidence)||v.source.description.includes(p.evidence))) bad('감상 근거는 원문에서 그대로 가져와야 합니다.');
         points.add(p.id);
     }
     for(const r of v.reactions){
-        if(!exact(r,['id','persona','tier','text','evidencePointIds','status']) || !id.test(r.id) || seen.has(r.id) || !PERSONAS.includes(r.persona) || !['short','normal','rare'].includes(r.tier) || !text(r.text,72) || !['draft','approved','rejected'].includes(r.status) || !Array.isArray(r.evidencePointIds) || r.evidencePointIds.length>16 || new Set(r.evidencePointIds).size!==r.evidencePointIds.length || r.evidencePointIds.some(p=>!points.has(p))) bad('반응 문구·성향·승인 상태·근거를 확인해 주세요. 문구는 72자 이하입니다.');
+        if(!exact(r,['id','persona','tier','text','evidencePointIds','status']) || !id.test(r.id) || seen.has(r.id) || !id.test(r.persona) || !['short','normal','rare'].includes(r.tier) || !text(r.text,72) || !['draft','approved','rejected'].includes(r.status) || !Array.isArray(r.evidencePointIds) || r.evidencePointIds.length>16 || new Set(r.evidencePointIds).size!==r.evidencePointIds.length || r.evidencePointIds.some(p=>!points.has(p))) bad('반응 문구·성향·승인 상태·근거를 확인해 주세요. 문구는 72자 이하입니다.');
         seen.add(r.id);
     }
     if(Buffer.byteLength(JSON.stringify(v))>MAX_REACTION_BYTES) bad('반응 파일은 64KiB 이하여야 합니다.');
@@ -75,7 +75,7 @@ export function generateReactions(item,previous=null){
         '설명과 모습을 함께 기록해 두고 싶다.');
     for(const persona of PERSONAS) for(let n=0;n<candidates[persona].length;n++){
         const candidate={id:`template-${persona}-${n}`,persona,tier:n===0?'normal':'short',text:candidates[persona][n],evidencePointIds:point&&candidates[persona][n].includes(quote)?[point.id]:[],status:'draft'};
-        if(next.reactions.length<48 && !next.reactions.some(r=>r.id===candidate.id)) next.reactions.push(candidate);
+        if(next.reactions.length<96 && !next.reactions.some(r=>r.id===candidate.id)) next.reactions.push(candidate);
     }
     return validateReactions(next,item.id);
 }

@@ -16,7 +16,7 @@ function renderRows(){
     $('reaction-rows').replaceChildren();
     for(const r of slice){
         const row=document.createElement('article');row.className='reaction-row';row.dataset.id=r.id;
-        const heading=document.createElement('h3');heading.textContent=labels[r.persona]+' · '+tierLabels[r.tier];
+        const heading=document.createElement('h3');heading.textContent=(labels[r.persona]||r.persona)+' · '+tierLabels[r.tier];
         const evidence=document.createElement('p');evidence.className='hint';evidence.textContent=r.evidencePointIds.map(id=>current.document.points.find(p=>p.id===id)?.evidence).filter(Boolean).join(' / ')||'직접 작성한 감상·질문입니다. 외형 관찰과 원문에 근거하는지 확인해 주세요.';
         const input=document.createElement('textarea');input.maxLength=72;input.rows=2;input.value=r.text;input.setAttribute('aria-label',heading.textContent+' 문구');
         const select=document.createElement('select');select.setAttribute('aria-label',heading.textContent+' 승인 상태');
@@ -82,7 +82,7 @@ $('reaction-artifact').addEventListener('change',load);$('reaction-reload').addE
 $('reaction-enabled').addEventListener('change',()=>{current.document.enabled=$('reaction-enabled').checked;dirty=true;});
 for(const action of ['generate','save','restore'])$('reaction-'+action).addEventListener('click',()=>request(action));
 $('reaction-add').addEventListener('click',()=>{
-    if(!current||current.document.reactions.length>=48){notice('현재는 최대48개입니다. 기존 후보 문구를 수정해 사용해 주세요.',true);return;}
+    if(!current||current.document.reactions.length>=96){notice('현재는 최대96개입니다. 기존 후보 문구를 수정해 사용해 주세요.',true);return;}
     const r={id:'manual-'+crypto.randomUUID(),persona:$('reaction-persona').value,tier:'short',text:'어떤 이야기가 담겨 있을까?',evidencePointIds:[],status:'draft'};
     current.document.reactions.push(r);dirty=true;$('reaction-search').value='';$('reaction-filter-persona').value='all';$('reaction-filter-status').value='all';page=Math.floor((current.document.reactions.length-1)/pageSize);renderRows();
 });

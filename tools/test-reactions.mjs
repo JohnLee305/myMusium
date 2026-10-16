@@ -11,17 +11,18 @@ const good=generateReactions(item);let passed=0;
 const pass=name=>{passed++;console.log('PASS '+name);};
 const clone=v=>structuredClone(v);
 for(const dir of ['contract-valid','contract-invalid'])fs.mkdirSync(path.join(fixture,dir));
-const maximum=clone(good);for(let n=0;n<8;n++)maximum.reactions.push({id:'extra-'+n,persona:PERSONAS[n%4],tier:'normal',text:'경계 검사용 추가 문구 '+n,evidencePointIds:[],status:'draft'});
-for(const [name,document] of [['empty',emptyReactions(item)],['draft',good],['approved',{...clone(good),reactions:good.reactions.map(r=>({...r,status:'approved'}))}],['maximum48',maximum]]){
+const maximum=clone(good);for(let n=0;n<56;n++)maximum.reactions.push({id:'extra-'+n,persona:PERSONAS[n%4],tier:'normal',text:'경계 검사용 추가 문구 '+n,evidencePointIds:[],status:'draft'});
+for(const [name,document] of [['empty',emptyReactions(item)],['draft',good],['approved',{...clone(good),reactions:good.reactions.map(r=>({...r,status:'approved'}))}],['maximum96',maximum]]){
     validateReactions(document,item.id);fs.writeFileSync(path.join(fixture,'contract-valid',name+'.json'),JSON.stringify(document));pass('contract valid '+name);
 }
+const openPersona=clone(good);openPersona.reactions[0].persona='nostalgic';validateReactions(openPersona,item.id);pass('contract accepts extensible persona value');
 const mutations={
     version:d=>d.schemaVersion='2.0',id:d=>d.artifactId='other',enabled:d=>delete d.enabled,unknown:d=>d.extra='x',sourceUnknown:d=>d.source.extra='x',fingerprint:d=>d.source.sha256='0'.repeat(64),numericPointId:d=>d.points[0].id=123,numericReactionId:d=>d.reactions[0].id=123,
     evidence:d=>d.points[0].evidence='설명에 없는 희귀한 유물',duplicatePoint:d=>d.points.push(d.points[0]),duplicateReaction:d=>d.reactions.push(d.reactions[0]),
-    persona:d=>d.reactions[0].persona='skin-color',tier:d=>d.reactions[0].tier='forever',status:d=>d.reactions[0].status='published',textType:d=>d.reactions[0].text=5,
+    persona:d=>d.reactions[0].persona='Bad Persona!',tier:d=>d.reactions[0].tier='forever',status:d=>d.reactions[0].status='published',textType:d=>d.reactions[0].text=5,
     long:d=>d.reactions[0].text='가'.repeat(73),html:d=>d.reactions[0].text='<b>문구</b>',control:d=>d.reactions[0].text='문구\u0000',surrogate:d=>d.reactions[0].text='\ud800',
     missingEvidence:d=>d.reactions[0].evidencePointIds=['absent'],duplicateEvidence:d=>d.reactions[0].evidencePointIds.push(d.reactions[0].evidencePointIds[0]),
-    many:d=>d.reactions=Array.from({length:49},(_,i)=>({...d.reactions[0],id:'r-'+i})),null:d=>d.points=null,extraReaction:d=>d.reactions[0].secret='x'
+    many:d=>d.reactions=Array.from({length:97},(_,i)=>({...d.reactions[0],id:'r-'+i})),null:d=>d.points=null,extraReaction:d=>d.reactions[0].secret='x'
 };
 for(const [name,mutate] of Object.entries(mutations)){const bad=clone(good);mutate(bad);assert.throws(()=>validateReactions(bad,item.id));fs.writeFileSync(path.join(fixture,'contract-invalid',name+'.json'),JSON.stringify(bad));pass('contract rejects '+name);}
 for(const desc of ['짧음','가'.repeat(400),'줄바꿈\n둘째 문장','😀'.repeat(150),'모델 설명에 역사·작가 정보는 없습니다.']){

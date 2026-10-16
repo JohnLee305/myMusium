@@ -55,11 +55,11 @@ namespace FamilyMuseum
                 Check(Id(id)&&points.Add(id)&&Text(evidence,400,true)&&(doc.Title.Contains(evidence)||doc.Description.Contains(evidence)));
             }
             var seen=new HashSet<string>();
-            foreach(var value in Array(root["reactions"],48))
+            foreach(var value in Array(root["reactions"],96))
             {
                 var r=Object(value,"id","persona","tier","text","evidencePointIds","status");
                 var entry=new Entry{Id=Str(r["id"]),Persona=Str(r["persona"]),Tier=Str(r["tier"]),Text=Str(r["text"]),Status=Str(r["status"]),Evidence=Array(r["evidencePointIds"],16).Select(Str).ToArray()};
-                Check(Id(entry.Id)&&seen.Add(entry.Id)&&Personas.Contains(entry.Persona)&&new[]{"short","normal","rare"}.Contains(entry.Tier)&&Text(entry.Text,72)&&new[]{"draft","approved","rejected"}.Contains(entry.Status)&&entry.Evidence.Distinct().Count()==entry.Evidence.Length&&entry.Evidence.All(points.Contains));
+                Check(Id(entry.Id)&&seen.Add(entry.Id)&&Id(entry.Persona)&&new[]{"short","normal","rare"}.Contains(entry.Tier)&&Text(entry.Text,72)&&new[]{"draft","approved","rejected"}.Contains(entry.Status)&&entry.Evidence.Distinct().Count()==entry.Evidence.Length&&entry.Evidence.All(points.Contains));
                 doc.Entries.Add(entry);
             }
             return doc;
@@ -116,7 +116,7 @@ namespace FamilyMuseum
             Need(depth<10);Space();Need(at<input.Length);
             if(input[at]=='"')return String();
             if(Take('{')){var obj=new Dictionary<string,object>();if(Take('}'))return obj;do{Space();string key=String();Need(Take(':')&&!obj.ContainsKey(key));obj.Add(key,Value(depth+1));}while(Take(','));Need(Take('}'));return obj;}
-            if(Take('[')){var list=new List<object>();if(Take(']'))return list;do{Need(list.Count<(manifest?10000:48));list.Add(Value(depth+1));}while(Take(','));Need(Take(']'));return list;}
+            if(Take('[')){var list=new List<object>();if(Take(']'))return list;do{Need(list.Count<(manifest?10000:96));list.Add(Value(depth+1));}while(Take(','));Need(Take(']'));return list;}
             foreach(var literal in new[]{"true","false"})if(input.Length-at>=literal.Length&&input.Substring(at,literal.Length)==literal){at+=literal.Length;return literal=="true";}
             if(manifest){if(input.Length-at>=4&&input.Substring(at,4)=="null"){at+=4;return null;}var match=Regex.Match(input.Substring(at),@"^-?(?:0|[1-9][0-9]*)(?:.[0-9]+)?(?:[eE][+-]?[0-9]+)?");if(match.Success){at+=match.Length;double number=double.Parse(match.Value,System.Globalization.CultureInfo.InvariantCulture);Need(!double.IsInfinity(number)&&!double.IsNaN(number));return number;}}
             throw new InvalidDataException("REACTION_JSON_TYPE_INVALID");

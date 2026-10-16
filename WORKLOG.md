@@ -733,6 +733,12 @@
 - Codex 사용량 한도로 끊긴 ROUTE-002 통합을 이어받음. 원 브랜치 push(05456e6) 확인, tycoon 폴더 미커밋 개인자료 3건은 읽기 전용으로 보존.
 - sync 폴더에 tmp/route-002-merge-20261016 (origin/tycoon 기준) 생성, origin/route-002 병합. 충돌 없음. 병합 9d6e492.
 - Unity 빌드 logs/unity-Build-20261016-225548.log exit 0.
+## 2026-10-16 / REACT-015 반응 기준 v2·96개 상한·테스트권총 +48초안 진행
+- 사용자 선택(b): 에셋당 48개씩 추가. 기준 v2 확정(4관점 유지+persona 개방형, 설명 사실+사람다운 감상, tier 유지+감정 8종, 72자 유지, 미확인 스펙 단정 금지). 작업브랜치 codex/react-015-96-reactions-20261016(origin codex/museum-tycoon 5b99b9e 기준).
+- 코드: reactions.mjs(검증·생성채움 96, persona ID형식 허용), ReactionCatalog.cs(파싱 96·persona ID검사·strict 배열 96), reaction-editor.js(추가제한 96·미등록 성향명 표시), 테스트 경계 96/97·개방성향 허용·97 거부·96개 보존.
+- 검증: node tools/test-reactions.mjs 79개 통과(logs/reaction-tests-1792162420454), test-reaction-registration.mjs 9개 통과(logs/reaction-registration-1792162422958).
+- 데이터: 임시관리서버 4187(새 코드·개인Archive)로 테스트권총에 병합 96개 저장. 재조회 총96=승인48+초안48, stale false, history 2, enabled true. 기존 승인·원문·모델·manifest 변경 없음. 새 48개 고유문구·최대34자·성향별24개·17,057바이트. 개인 문구/관찰 Git 제외, 임시서버 종료.
+- Unity 빌드·플레이어 회귀 진행 중. Quest 미검증 유지.
 - 회귀: navigation API 29 PASS (logs/navigation-tests-1792159033105), exit-boundary single+four-directions PASS (logs/exit-boundary-tests-1792159033513), tour player PASS (tour-player-20261016-225816, 신규 픽스처), details 4 PASS (logs/details-tests-20261016-225722).
 - test-details.ps1은 UTF-8 BOM 없음 + PS 5.1 파싱 실패로 BOM 임시 부여 후 실행, 바이트 동일 복원. pwsh 미설치. node는 Codex 번들 런타임 사용.
 - 문서 분리 커밋 0493a75: docs/LIVE_STATUS.md 신설, WORK_HANDOFF §8 이어받기 절차, AGENTS Gate 현황판 1순위, .gitignore visitors.json 추가.
