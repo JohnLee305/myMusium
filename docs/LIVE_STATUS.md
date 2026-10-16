@@ -19,7 +19,7 @@
 
 | 작업 | 담당 | 폴더/브랜치 | 상태 | 마지막 SHA |
 |---|---|---|---|---|
-| ROUTE-002 tycoon 통합 | opencode | sync-20261016 / tmp/route-002-merge-20261016 | 검증 완료·tycoon 반영 push 예정 | 병합 9d6e492, 문서 0493a75 |
+| ROUTE-002 tycoon 통합 | opencode | sync-20261016 | 완료 (tycoon 반영 e3eaca7) | 병합 9d6e492, 문서 0493a75 |
 
 ## 검증 근거 (병합 트리)
 
