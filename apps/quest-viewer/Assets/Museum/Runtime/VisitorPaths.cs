@@ -12,19 +12,17 @@ namespace FamilyMuseum
         readonly int width,depth;
         readonly bool[] blocked;
         readonly List<Vector3> avoided=new List<Vector3>();
-        public VisitorPaths(Bounds floorBounds,IEnumerable<ArtifactDisplay> exhibits)
+        Vector3 searchStart;
+        public VisitorPaths(Bounds floorBounds,IEnumerable<ArtifactDisplay> exhibits):this(floorBounds,ExhibitObstacles(exhibits)) {}
+        static IEnumerable<Rect> ExhibitObstacles(IEnumerable<ArtifactDisplay> exhibits)
+        {
+            foreach(var exhibit in exhibits)foreach(var collider in exhibit.GetComponentsInChildren<Collider>()){if(collider.isTrigger)continue;var b=collider.bounds;yield return new Rect(b.min.x-.3f,b.min.z-.3f,b.size.x+.6f,b.size.z+.6f);}
+        }
+        public VisitorPaths(Bounds floorBounds,IEnumerable<Rect> rectangles)
         {
             floor=new Rect(floorBounds.min.x+.55f,floorBounds.min.z+.55f,floorBounds.size.x-1.1f,floorBounds.size.z-1.1f);
             width=Mathf.FloorToInt(floor.width/Step)+1; depth=Mathf.FloorToInt(floor.height/Step)+1;
-            foreach(var exhibit in exhibits)
-            {
-                foreach(var collider in exhibit.GetComponentsInChildren<Collider>())
-                {
-                    if(collider.isTrigger) continue;
-                    var bounds=collider.bounds;
-                    obstacles.Add(new Rect(bounds.min.x-.3f,bounds.min.z-.3f,bounds.size.x+.6f,bounds.size.z+.6f));
-                }
-            }
+            obstacles.AddRange(rectangles);
             blocked=new bool[width*depth];
             for(int i=0;i<blocked.Length;i++) blocked[i]=!Clear(Point(i));
         }
@@ -38,7 +36,11 @@ namespace FamilyMuseum
         bool NavigationClear(Vector3 point)
         {
             if(!Clear(point)) return false;
-            foreach(var body in avoided) if((point-body).sqrMagnitude<.7f*.7f) return false;
+            foreach(var body in avoided) {
+                if((point-searchStart).sqrMagnitude<.0000001f)continue;
+                float distance=(point-body).sqrMagnitude,initial=(searchStart-body).sqrMagnitude;
+                if(distance<.7f*.7f && distance<=Mathf.Min(.7f*.7f,initial)+.000001f)return false;
+            }
             return true;
         }
         Vector3 Point(int index)=>new Vector3(floor.xMin+(index%width)*Step,0,floor.yMin+(index/width)*Step);
@@ -49,7 +51,7 @@ namespace FamilyMuseum
             {
                 if(blocked[i] || !NavigationClear(Point(i))) continue;
                 float d=(Point(i)-point).sqrMagnitude;
-                if(d<distance) { distance=d; best=i; }
+                if(d<distance && Segment(point,Point(i))) { distance=d; best=i; }
             }
             return best;
         }
@@ -62,8 +64,8 @@ namespace FamilyMuseum
         public List<Vector3> Find(Vector3 start,Vector3 destination,IEnumerable<Vector3> bodies=null)
         {
             start.y=destination.y=0;
-            avoided.Clear();
-            if(bodies!=null) foreach(var body in bodies) if((body-start).sqrMagnitude>.72f*.72f) avoided.Add(body);
+            searchStart=start;avoided.Clear();
+            if(bodies!=null) foreach(var body in bodies) avoided.Add(body);
             if(!NavigationClear(start) || !NavigationClear(destination)) return null;
             int from=Nearest(start),to=Nearest(destination);
             if(from<0 || to<0 || !Segment(start,Point(from)) || !Segment(Point(to),destination)) return null;

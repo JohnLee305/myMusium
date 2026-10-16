@@ -18,14 +18,14 @@ function render(){
  const grid=$('room-grid');grid.replaceChildren();
  // Back wall is at the top; row 1 is nearest the entrance, matching Unity +Z.
  for(let row=4;row>=0;row--)for(let col=0;col<6;col++){
-  const cell=row*6+col,entry=occupied(cell),item=entry&&itemFor(entry.entry);
-  const button=document.createElement('button');button.type='button';button.className='grid-cell'+(entry?' filled':'')+(entry?.entry===selected?' selected':'');
-  button.dataset.cell=cell;button.disabled=busy||editing;button.setAttribute('aria-label',`${cellName(cell)} · ${item?.title??'빈 칸'}`);button.setAttribute('aria-pressed',String(!!entry&&entry.entry===selected));
-  const num=document.createElement('small');num.textContent=cellName(cell);const title=document.createElement('span');title.textContent=item?.title??'＋ 빈 칸';button.append(num,title);
+  const cell=row*6+col,entry=occupied(cell),item=entry&&itemFor(entry.entry),blocked=state.rooms.find(r=>r.id===roomId)?.navigation.blockedCells.includes(cell);
+  const button=document.createElement('button');button.type='button';button.className='grid-cell'+(entry?' filled':'')+(blocked?' route-blocked':'')+(entry?.entry===selected?' selected':'');
+  button.dataset.cell=cell;button.disabled=busy||editing||blocked;button.setAttribute('aria-label',`${cellName(cell)} · ${item?.title??(blocked?'통행 금지':'빈 칸')}`);button.setAttribute('aria-pressed',String(!!entry&&entry.entry===selected));
+  const num=document.createElement('small');num.textContent=cellName(cell);const title=document.createElement('span');title.textContent=item?.title??(blocked?'■ 통행 금지':'＋ 빈 칸');button.append(num,title);
   button.draggable=!!entry&&!editing;
   button.addEventListener('dragstart',e=>{selected=entry.entry;e.dataTransfer.setData('text/plain',selected);e.dataTransfer.effectAllowed='move';});
   button.addEventListener('dragover',e=>{if(!busy&&!editing)e.preventDefault();});
-  button.addEventListener('drop',e=>{e.preventDefault();if(busy||editing)return;const source=e.dataTransfer.getData('text/plain');if(draft.some(a=>a.entry===source)){selected=source;move(cell);}});
+  button.addEventListener('drop',e=>{e.preventDefault();if(busy||editing||blocked)return;const source=e.dataTransfer.getData('text/plain');if(draft.some(a=>a.entry===source)){selected=source;move(cell);}});
   button.addEventListener('click',()=>{if(selected&&(moving||!entry))move(cell);else if(entry){selected=entry.entry;render();fillEditor();}});
   grid.append(button);
  }
@@ -40,7 +40,7 @@ function move(cell){
 function destinations(roomSelect,cellSelect,preferred){
  roomSelect.replaceChildren(...state.rooms.map(r=>new Option(`${r.title} (${r.count}/30)`,r.id)));
  roomSelect.value=state.rooms.some(r=>r.id===preferred)?preferred:state.rooms[0].id;
- const update=()=>{const room=state.rooms.find(r=>r.id===roomSelect.value);cellSelect.replaceChildren(...Array.from({length:30},(_,n)=>n).filter(n=>!room.cells.includes(n)).map(n=>new Option(cellName(n),String(n))));};
+ const update=()=>{const room=state.rooms.find(r=>r.id===roomSelect.value);cellSelect.replaceChildren(...Array.from({length:30},(_,n)=>n).filter(n=>!room.cells.includes(n)&&!room.navigation.blockedCells.includes(n)).map(n=>new Option(cellName(n),String(n))));};
  roomSelect.onchange=update;update();
 }
 function fillEditor(){
@@ -86,7 +86,7 @@ export function initLayoutEditor(refreshFn){
  refresh=refreshFn;
  $('layout-room').onchange=()=>{roomId=$('layout-room').value;loadRoom();};
  $('layout-move').onclick=()=>{moving=!moving;controls();};
- $('layout-auto').onclick=()=>{if(editing)return status('설명 수정을 저장하거나 취소해 주세요.',true);draft.sort((a,b)=>a.cell-b.cell).forEach((e,i)=>e.cell=i);dirty=true;render();fillEditor();status('입구 쪽부터 순서대로 정돈했습니다. 배치 저장을 눌러 주세요.');};
+ $('layout-auto').onclick=()=>{if(editing)return status('설명 수정을 저장하거나 취소해 주세요.',true);const blocked=state.rooms.find(r=>r.id===roomId).navigation.blockedCells;const free=Array.from({length:30},(_,i)=>i).filter(i=>!blocked.includes(i));draft.sort((a,b)=>a.cell-b.cell).forEach((e,i)=>e.cell=free[i]);dirty=true;render();fillEditor();status('입구 쪽부터 순서대로 정돈했습니다. 배치 저장을 눌러 주세요.');};
  $('layout-cancel').onclick=async()=>{dirty=false;editing=false;await refresh();};
  $('layout-save').onclick=()=>post('/api/layout',{roomId,entries:draft});
  $('edit-form').oninput=()=>{editing=true;controls();render();};

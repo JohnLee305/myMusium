@@ -1,4 +1,5 @@
 import { validateTheme } from './themes.mjs';
+import {validateNavigation,validateRoomOrder} from './navigation.mjs';
 export const CAPACITY = 30;
 export const MAX_ARTIFACTS = 10000;
 export function normalizeRooms(data) {
@@ -11,10 +12,12 @@ export function normalizeRooms(data) {
         if (room.theme !== undefined) validateTheme(room.theme);
         if (room.cells === undefined) room.cells=room.artifacts.map((_,i)=>i);
         if (!Array.isArray(room.cells) || room.cells.length!==room.artifacts.length || new Set(room.cells).size!==room.cells.length || room.cells.some(n=>!Number.isInteger(n)||n<0||n>=CAPACITY)) error();
+        validateNavigation(room);
         ids.add(room.id);
         for (const entry of room.artifacts) { if (!all.has(entry) || entries.has(entry)) error(); entries.add(entry); }
     }
     if (entries.size!==all.size) error();
+    validateRoomOrder(data);
     if (data.trash !== undefined) {
         if (!Array.isArray(data.trash) || data.trash.length>MAX_ARTIFACTS) error();
         const removed=new Set();
@@ -26,12 +29,13 @@ export function normalizeRooms(data) {
     return data.rooms;
 }
 export function place(room,entry,cell) {
-    if (cell===undefined) cell=Array.from({length:CAPACITY},(_,i)=>i).find(n=>!room.cells.includes(n));
+    if (cell===undefined) cell=Array.from({length:CAPACITY},(_,i)=>i).find(n=>!room.cells.includes(n)&&!room.navigation?.blockedCells.includes(n));
     if (!Number.isInteger(cell)||cell<0||cell>=CAPACITY||room.cells.includes(cell)) throw Object.assign(new Error('빈 칸을 선택해 주세요.'),{status:409});
     room.artifacts.push(entry); room.cells.push(cell);
+    if(room.navigation)room.navigation.visitOrder.push(entry);
 }
 export function remove(room,entry) {
     const index=room.artifacts.indexOf(entry);
     if (index<0) throw new Error('Missing room entry');
-    room.artifacts.splice(index,1); return room.cells.splice(index,1)[0];
+    room.artifacts.splice(index,1); if(room.navigation)room.navigation.visitOrder=room.navigation.visitOrder.filter(p=>p!==entry); return room.cells.splice(index,1)[0];
 }

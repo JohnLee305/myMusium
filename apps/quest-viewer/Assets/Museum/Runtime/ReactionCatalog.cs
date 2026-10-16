@@ -101,12 +101,12 @@ namespace FamilyMuseum
         public void Clear(){recent.Clear();lastUsed.Clear();}
     }
 
-    // This contract contains only objects, arrays, strings and booleans. Reject duplicates,
+    // Reaction mode permits only objects, arrays, strings and booleans. Manifest mode also permits numbers/null. Reject duplicates,
     // unknown properties (above), trailing tokens, non-JSON whitespace and excessive nesting.
     internal sealed class StrictReactionJson
     {
-        readonly string input;int at;
-        public StrictReactionJson(string value){input=value;}
+        readonly string input;int at;readonly bool manifest;
+        public StrictReactionJson(string value,bool manifest=false){input=value;this.manifest=manifest;}
         void Space(){while(at<input.Length&&" \n\r\t".IndexOf(input[at])>=0)at++;}
         void Need(bool condition){if(!condition)throw new InvalidDataException("REACTION_JSON_INVALID");}
         bool Take(char c){Space();if(at<input.Length&&input[at]==c){at++;return true;}return false;}
@@ -116,8 +116,9 @@ namespace FamilyMuseum
             Need(depth<10);Space();Need(at<input.Length);
             if(input[at]=='"')return String();
             if(Take('{')){var obj=new Dictionary<string,object>();if(Take('}'))return obj;do{Space();string key=String();Need(Take(':')&&!obj.ContainsKey(key));obj.Add(key,Value(depth+1));}while(Take(','));Need(Take('}'));return obj;}
-            if(Take('[')){var list=new List<object>();if(Take(']'))return list;do{Need(list.Count<48);list.Add(Value(depth+1));}while(Take(','));Need(Take(']'));return list;}
+            if(Take('[')){var list=new List<object>();if(Take(']'))return list;do{Need(list.Count<(manifest?10000:48));list.Add(Value(depth+1));}while(Take(','));Need(Take(']'));return list;}
             foreach(var literal in new[]{"true","false"})if(input.Length-at>=literal.Length&&input.Substring(at,literal.Length)==literal){at+=literal.Length;return literal=="true";}
+            if(manifest){if(input.Length-at>=4&&input.Substring(at,4)=="null"){at+=4;return null;}var match=Regex.Match(input.Substring(at),@"^-?(?:0|[1-9][0-9]*)(?:.[0-9]+)?(?:[eE][+-]?[0-9]+)?");if(match.Success){at+=match.Length;double number=double.Parse(match.Value,System.Globalization.CultureInfo.InvariantCulture);Need(!double.IsInfinity(number)&&!double.IsNaN(number));return number;}}
             throw new InvalidDataException("REACTION_JSON_TYPE_INVALID");
         }
         string String()

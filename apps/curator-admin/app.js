@@ -1,6 +1,7 @@
 import { initLayoutEditor, syncLayoutEditor, selectLayoutItem } from './layout-editor.js';
 import { initThemeEditor, syncThemeEditor } from './theme-editor.js';
 import './visitor-editor.js';
+import {initNavigationEditor,syncNavigationEditor} from './navigation-editor.js';
 const $ = id => document.getElementById(id);
 let token = '', saving = false, cached = null;
 function message(text, error = false) {
@@ -31,6 +32,7 @@ async function refresh() {
         cached = data;
         syncThemeEditor(data);
         syncLayoutEditor(data);
+        syncNavigationEditor(data);
         $('capacity-text').textContent = `${data.rooms.length}개 전시실 · 총 ${data.artifacts.length}개 전시품 · 방당 ${data.capacity}개`;
         for (const [selectId,firstValue,firstTitle] of [['target-room','auto','자동 배정 · 가득 차면 새 방 생성'],['room-filter','all','전체 전시실']]) {
             const select=$(selectId), previous=select.value;
@@ -114,6 +116,7 @@ $('add-form').addEventListener('submit', async event => {
     finally { saving = false; $('submit').disabled = !token || (cached && cached.artifacts.length >= cached.maxArtifacts); $('refresh').disabled = false; }
 });
 initLayoutEditor(refresh);
+initNavigationEditor(refresh);
 initThemeEditor(refresh);
 sourceChanged();
 refresh().catch(() => {});

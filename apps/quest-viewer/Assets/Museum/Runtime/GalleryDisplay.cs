@@ -28,6 +28,7 @@ namespace FamilyMuseum
         Font font;
         Vector3 leftPortal, rightPortal;
         GalleryWayfinding wayfinding;
+        TourDoors tourDoors;
         float portalReadyAt;
 
         public async Task LoadAsync(ArtifactDisplay first)
@@ -60,7 +61,8 @@ namespace FamilyMuseum
             if (IsLoading || index < 0 || index >= rooms.Length || index == CurrentRoom) return;
             GetComponent<ArtifactDetailsPanel>()?.Close();
             GetComponent<VRExhibitInteraction>()?.Cancel();
-            GetComponent<MuseumVisitors>()?.ClearRoom();
+            // Guests retain their logical tour while only the displayed room is loaded.
+            var visitors=GetComponent<MuseumVisitors>();if(visitors!=null && !visitors.OrderedTours)visitors.ClearRoom();
             IsLoading = true; IsFinished = false;
             var navigator = GetComponent<MuseumSession>().desktopRig.GetComponent<DesktopNavigator>();
             navigator.enabled = false;
@@ -151,19 +153,21 @@ namespace FamilyMuseum
             {
                 var item = GameObject.Find(name).transform; var pos = item.position; pos.z = back - .15f; item.position = pos;
             }
-            leftPortal = new Vector3(-width/2 + 1.2f, 0, -1.4f);
-            rightPortal = new Vector3(width/2 - 1.2f, 0, -1.4f);
+            leftPortal=TourNavigation.Door(TourNavigation.Get(rooms[CurrentRoom]).entrance);
+            rightPortal=TourNavigation.Door(TourNavigation.Get(rooms[CurrentRoom]).exit);
             if (wayfinding == null) wayfinding = gameObject.AddComponent<GalleryWayfinding>();
             if (environmentPalette == null) environmentPalette = gameObject.AddComponent<RoomPalette>();
             environmentPalette.ApplyRoom(CurrentTheme);
             wayfinding.Build(width, back, font, CurrentRoom, rooms);
+            if(tourDoors==null)tourDoors=gameObject.AddComponent<TourDoors>();tourDoors.Build(rooms,CurrentRoom,font);
         }
         public void PreviewWayfinding()
         {
             var rig = GetComponent<MuseumSession>().desktopRig;
             var controller = rig.GetComponent<CharacterController>();
             controller.enabled = false;
-            rig.transform.SetPositionAndRotation(new Vector3(rightPortal.x-1.8f,.05f,rightPortal.z),Quaternion.Euler(0,90,0));
+            var inward=TourNavigation.Inward(TourNavigation.Get(rooms[CurrentRoom]).exit);
+            rig.transform.SetPositionAndRotation(rightPortal+inward*2.4f+Vector3.up*.05f,Quaternion.LookRotation(-inward));
             controller.enabled = true;
         }
         void ResetVisitor()
@@ -171,12 +175,14 @@ namespace FamilyMuseum
             var session = GetComponent<MuseumSession>();
             var controller = session.desktopRig.GetComponent<CharacterController>();
             controller.enabled = false;
-            session.desktopRig.transform.SetPositionAndRotation(new Vector3(0,.05f,-2.8f), Quaternion.identity);
+            var nav=TourNavigation.Get(rooms[CurrentRoom]);var paths=TourNavigation.Paths(rooms[CurrentRoom]);var entry=TourNavigation.Door(nav.entrance);var forward=TourNavigation.Inward(nav.entrance);var side=Vector3.Cross(Vector3.up,forward);var spawn=entry;
+            foreach(var candidate in new[]{entry+forward*2+side*.9f,entry+forward*2-side*.9f,entry+forward*1.2f,entry})if(paths.Clear(candidate)&&paths.Find(entry,candidate)!=null){spawn=candidate;break;}
+            session.desktopRig.transform.SetPositionAndRotation(spawn+Vector3.up*.05f, Quaternion.LookRotation(forward));
             controller.enabled = true;
             var xr = session.xrRig.transform;
             var head = session.xrRig.GetComponentInChildren<Camera>(true).transform;
             var offset = head.position - xr.position;
-            xr.position = new Vector3(-offset.x, 0, -2.8f - offset.z);
+            xr.position = new Vector3(spawn.x-offset.x, 0, spawn.z-offset.z);
         }
         void Update()
         {
@@ -208,7 +214,7 @@ namespace FamilyMuseum
             GUI.enabled = CurrentRoom+1 < RoomCount;
             if (GUI.Button(new Rect(620,37,100,35), "Next >")) _ = SwitchRoomAsync(CurrentRoom+1);
             GUI.enabled = true;
-            GUI.Label(new Rect(120,61,480,30), "Page Up / Page Down · 입구 표지에 가까이 가도 이동합니다", style);
+            GUI.Label(new Rect(120,61,480,30), "Page Up / Page Down · 출입문에 가까이 가도 이동합니다", style);
         }
         void OnDestroy()
         {

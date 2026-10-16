@@ -68,7 +68,14 @@
   </div>
   <section class="panel layout-panel" aria-labelledby="layout-heading">
     <div class="section-heading"><span class="section-number">02</span><div><h2 id="layout-heading">전시실 배치</h2><p>방을 위에서 내려다본 모습입니다. 전시대와 명판이 함께 이동합니다.</p></div></div>
-    <label for="layout-room">배치할 전시실</label><select id="layout-room"></select>
+    <details class="route-editor" open><summary>입구·출구와 관람 동선</summary>
+<p>입구로 들어와 번호순으로 감상한 뒤 다음 방으로 이동합니다. 마지막 방의 문은 박물관 출구입니다.</p>
+<label for="nav-room">동선을 편집할 방</label><select id="nav-room"></select>
+<div class="layout-actions"><div><label for="nav-entrance">입구 위치</label><select id="nav-entrance"></select></div><div><label for="nav-exit">출구·다음 방 문 위치</label><select id="nav-exit"></select></div></div>
+<p id="nav-door-summary"></p><div id="nav-grid" aria-label="관람 동선 6열 5행 격자"></div><p>위쪽이 안쪽 벽입니다. 문 표시는 해당 벽의 위치를 뜻하며 전시품 칸을 차지하지 않습니다. 빈 칸을 눌러 벽·통행 금지를 지정하세요.</p>
+<div class="layout-workspace"><div><h3>이 방의 전시품 관람 순서</h3><ol id="nav-exhibits" class="route-list"></ol></div><div><h3>방 관람 순서와 연결</h3><ol id="nav-rooms" class="route-list"></ol></div></div>
+<div class="layout-actions"><button id="nav-save" type="button" disabled>관람 동선 저장</button><button id="nav-cancel" class="secondary" type="button" disabled>동선 변경 취소·다시 불러오기</button></div><p id="nav-status" role="status" aria-live="polite"></p></details>
+<label for="layout-room">배치할 전시실</label><select id="layout-room"></select>
     <div class="layout-workspace"><div>
       <div class="room-edge">안쪽 벽 · 5행</div><div id="room-grid" aria-label="전시실 6열 5행 배치"></div><div class="room-edge entrance">입구 · 1행　↑ 바라보는 방향</div>
       <div class="layout-actions"><button id="layout-move" class="secondary" type="button" disabled>선택한 전시품 위치 바꾸기</button><button id="layout-auto" class="secondary" type="button">입구부터 자동 정돈</button></div>

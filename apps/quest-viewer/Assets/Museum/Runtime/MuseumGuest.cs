@@ -4,7 +4,7 @@ using UnityEngine;
 namespace FamilyMuseum
 {
     public enum GuestState { Entering, Walking, Viewing, Leaving, Finished }
-    public sealed class MuseumGuest : MonoBehaviour
+    public sealed partial class MuseumGuest : MonoBehaviour
     {
         public GuestState State { get; private set; }
         public VisitorVisual Visual { get; private set; }
@@ -23,7 +23,7 @@ namespace FamilyMuseum
         readonly Queue<string> reactionHistory=new Queue<string>();
         public string Persona {get;internal set;}
         public string ReactionText {get;private set;}="";
-        public string CurrentArtifactTitle=>target?.Data?.title??"";
+        public string CurrentArtifactTitle=>tourTarget?.title??target?.Data?.title??"";
         public bool ThoughtVisible=>bubble!=null&&bubble.activeSelf;
         static string Wrap(string value)
         {
@@ -38,7 +38,7 @@ namespace FamilyMuseum
         public void UpdateThoughtVisibility()
         {
             if(bubble==null)return;
-            bool visible=museum.ShowReactions && State==GuestState.Viewing && thoughtTime>0 && !string.IsNullOrEmpty(ReactionText) && Camera.main!=null && museum.CanShowThought(this);
+            bool visible=gameObject.activeInHierarchy && museum.ShowReactions && State==GuestState.Viewing && thoughtTime>0 && !string.IsNullOrEmpty(ReactionText) && Camera.main!=null && museum.CanShowThought(this);
             bubble.SetActive(visible);
             if(visible)
             {
@@ -75,6 +75,7 @@ namespace FamilyMuseum
             background.transform.localPosition=new Vector3(0,0,.012f);background.transform.localScale=new Vector3(1.8f,.48f,1);
             Destroy(background.GetComponent<Collider>());thoughtBackground=new Material(Resources.Load<Shader>("ReactionBackground"));thoughtBackground.color=new Color(.055f,.16f,.12f);background.GetComponent<Renderer>().sharedMaterial=thoughtBackground;
             bubble.SetActive(false);
+            if(museum.OrderedTours){BeginTour();return true;}
             State=GuestState.Entering;
             SetPath(new Vector3(-1.8f,0,-2.3f));
             return true;
@@ -106,6 +107,7 @@ namespace FamilyMuseum
         }
         public void Tick(float dt)
         {
+            if(museum.OrderedTours){TickTour(dt);return;}
             if(State==GuestState.Finished) return;
             lifetime+=dt;
             if(lifetime>180) { Aborted=true; State=GuestState.Finished; Visual.Tick(false,dt); return; }

@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace FamilyMuseum
 {
-    [Serializable] public sealed class MuseumManifest { public string schemaVersion; public string[] artifacts; public MuseumRoom[] rooms; }
-    [Serializable] public sealed class MuseumRoom { public string id; public string title; public string[] artifacts; public int[] cells; public RoomTheme theme; }
+    [Serializable] public sealed class MuseumManifest { public string schemaVersion; public string[] artifacts; public MuseumRoom[] rooms; public string[] roomOrder; }
+    [Serializable] public sealed class MuseumRoom { public string id; public string title; public string[] artifacts; public int[] cells; public RoomTheme theme; public RoomNavigation navigation; }
     [Serializable] public sealed class ArtifactData
     {
         public string schemaVersion;
@@ -62,6 +62,7 @@ namespace FamilyMuseum
         public MuseumRoom[] ReadRooms()
         {
             var manifest = Read<MuseumManifest>("manifest.json");
+            TourNavigation.ReadPresence(manifest,File.ReadAllText(Resolve("manifest.json")));
             if (manifest == null || manifest.schemaVersion != "1.0" || manifest.artifacts == null || manifest.artifacts.Length > 10000) throw new InvalidDataException("MANIFEST_INVALID: expected 0..10000 artifacts");
             var seen = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
             foreach (string path in manifest.artifacts)
@@ -87,10 +88,12 @@ namespace FamilyMuseum
                     string.IsNullOrWhiteSpace(room.title) || room.title.Length > 80 || room.artifacts == null || room.artifacts.Length > 30) throw new InvalidDataException("ROOM_INVALID");
                 room.theme?.Validate();
                 ValidateCells(room);
+                TourNavigation.Validate(room);
                 foreach (string entry in room.artifacts)
                     if (entry == null || !seen.Contains(entry) || !assigned.Add(entry)) throw new InvalidDataException("ROOM_MEMBERSHIP_INVALID");
             }
             if (assigned.Count != seen.Count) throw new InvalidDataException("ROOM_UNASSIGNED_ARTIFACT");
+            if(manifest.roomOrder!=null){if(manifest.roomOrder.Length!=manifest.rooms.Length||new System.Collections.Generic.HashSet<string>(manifest.roomOrder).Count!=manifest.roomOrder.Length)throw new InvalidDataException("TOUR_ROOM_ORDER_INVALID");var ordered=new System.Collections.Generic.List<MuseumRoom>();foreach(string id in manifest.roomOrder){MuseumRoom found=null;foreach(var r in manifest.rooms)if(r.id==id)found=r;if(found==null)throw new InvalidDataException("TOUR_ROOM_ORDER_INVALID");ordered.Add(found);}return ordered.ToArray();}
             return manifest.rooms;
         }
         static void ValidateCells(MuseumRoom room)

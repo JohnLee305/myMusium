@@ -1,4 +1,4 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 $root=Split-Path $PSScriptRoot -Parent
 $fixtures=Join-Path $root "logs/visitor-tests-$(Get-Date -Format yyyyMMdd-HHmmss)"
 foreach($case in @('normal','empty','dense','missing')) {
