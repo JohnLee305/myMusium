@@ -48,7 +48,7 @@ try{
  const saved=fs.readFileSync(path.join(fixture,'manifest.json'));await post({navigation:{...state.rooms[0].navigation,blockedCells:[...state.rooms[0].navigation.blockedCells,11]}},409);assert.deepEqual(saved,fs.readFileSync(path.join(fixture,'manifest.json')));pass('unreachable exit rejected without changing archive');
  await post({roomOrder:['room-b','room-a','empty']});await read();assert.deepEqual(state.roomOrder,['room-b','room-a','empty']);pass('museum entry room and next-room order configurable');
  await post({roomOrder:data.roomOrder,navigation:data.rooms[0].navigation});await read();
- for(const asset of ['/navigation-editor.js','/app.js'])assert.equal((await fetch(url+asset)).status,200);pass('editor assets served');
+ for(const asset of ['/navigation.mjs','/navigation-editor.js','/app.js'])assert.equal((await fetch(url+asset)).status,200);pass('editor assets served');
  const shutdown=await fetch(url+'/api/shutdown',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Museum-Token':state.token,'X-Museum-Metadata':'{}'},body:new Uint8Array()});assert.equal(shutdown.status,200);
  await new Promise(resolve=>server.exitCode!==null?resolve():server.once('exit',resolve));
  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(fixture,'manifest.json'))).rooms[0].navigation,data.rooms[0].navigation);pass('reloaded disk preserves full route');

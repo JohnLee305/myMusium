@@ -137,4 +137,17 @@ if (wallTop && wallBottom && wallLeft && wallRight && wallTop.children.length > 
   pass('wall slots absent (baseline) — skipped');
 }
 
+// Reachability preview: same checkReachable as the server save path.
+assert.match(getOrCreate('nav-reach').textContent, /연결됩니다/, 'reachable preview shown');
+pass('reachability preview shows reachable state');
+getOrCreate('nav-room').value = 'room-a';
+const blocked = structuredClone(data);
+blocked.rooms[0].navigation.blockedCells = Array.from({length: 27}, (_, i) => i + 3);
+await getOrCreate('nav-cancel').onclick();
+created = 0; appended = 0;
+editor.syncNavigationEditor(blocked);
+assert.ok(created < 1000 && appended < 2000, `blocked preview render bounded (created=${created} appended=${appended})`);
+assert.ok(getOrCreate('nav-reach').classList.contains('error'), 'blocked preview marked as error');
+pass('reachability preview shows blocked state without DOM blowup');
+
 console.log(`NAVIGATION_EDITOR_DOM_PASS: ${passed} cases | created=${firstCreated} appended=${firstAppended}`);
