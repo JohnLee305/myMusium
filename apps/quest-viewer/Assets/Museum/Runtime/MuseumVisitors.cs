@@ -42,6 +42,7 @@ namespace FamilyMuseum
         }
         public bool BlocksPointer(Vector2 screenPoint)
         {
+            if(gallery!=null&&gallery.IsOutside)return true;
             if(session==null || !session.desktopRig.activeInHierarchy) return false;
             return new Rect(Mathf.Max(20,Screen.width-280),120,260,185).Contains(new Vector2(screenPoint.x,Screen.height-screenPoint.y));
         }
@@ -145,7 +146,7 @@ namespace FamilyMuseum
         IEnumerable<Vector3> Bodies(MuseumGuest current)
         {
             foreach(var guest in guests) if(guest!=current && (!OrderedTours||guest.TourRoom==current.TourRoom)) yield return guest.transform.position;
-            if(Camera.main!=null && (!OrderedTours||current.TourRoom==VisibleRoom)) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
+            if(Camera.main!=null && !(gallery?.IsOutside??false) && (!OrderedTours||current.TourRoom==VisibleRoom)) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
         }
         public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)=>(OrderedTours?TourPath(guest.TourRoom):Paths).Find(guest.transform.position,destination,Bodies(guest));
         public bool CanMove(MuseumGuest current,Vector3 next)
@@ -161,7 +162,7 @@ namespace FamilyMuseum
         }
         void OnGUI()
         {
-            if(!session.desktopRig.activeInHierarchy || (GetComponent<ArtifactDetailsPanel>()?.IsOpen??false)) return;
+            if((gallery!=null&&gallery.IsOutside) || !session.desktopRig.activeInHierarchy || (GetComponent<ArtifactDetailsPanel>()?.IsOpen??false)) return;
             var style=new GUIStyle(GUI.skin.label){font=font,fontSize=15,alignment=TextAnchor.MiddleCenter};
             var button=new GUIStyle(GUI.skin.button){font=font,fontSize=15};
             float x=Mathf.Max(20,Screen.width-280);

@@ -76,7 +76,7 @@ namespace FamilyMuseum
         }
         void OnGUI()
         {
-            if (!session.desktopRig.activeInHierarchy || gallery.IsLoading) return;
+            if (!session.desktopRig.activeInHierarchy || gallery.IsLoading || gallery.IsOutside) return;
             var oldMatrix = GUI.matrix;
             var oldColor = GUI.color;
             float scale = Mathf.Min(1.5f, Screen.width / 960f, Screen.height / 640f);
