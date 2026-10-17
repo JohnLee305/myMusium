@@ -11,14 +11,14 @@
 - 개인 자료: `C:/Dev/vr-museum-tycoon/museum-archive` (소스 버전과 분리·공개 Git 제외)
 - 관리: 4186, PC 실행: `Builds/Windows/VRMuseum.exe`
 - 보존 대상: `codex/museum-tycoon`
-- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-114603.log`. 현재 실행 여부는 재확인한다.
+- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-160228.log`. 현재 실행 여부는 재확인한다.
 
 ## 작업 인계
 
 | ID | 담당 | 기록 상태 | 작업 브랜치 | 통합 이력 |
 |---|---|---|---|---|
 | ADMIN-006 | Codex | validated | codex/admin-006-admin-workspace-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/16) |
-| CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | 미게시 |
+| CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/20) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -38,9 +38,9 @@
 
 FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 보완
 
-- 근거: 실제 VisitorQueue.cs 컴파일 및 FIFO/소유권/취소/120명 처리 18사례 PASS; 동선 Node/API29사례 PASS; 최초 샌드박스 로컬 연결 제한 후 권한 실행 통과; Windows 빌드 exit0: logs/unity-Build-20261017-151753.log; 미로3방·6명 PC: 관람54/정상퇴장13/aborted0, FIFO/몸간격/관람순서/방전환 티켓 유지 PASS; logs/navigation-tests-1792217140822/tour-player-20261017-151900.log; 인접 전시물3방·6명 PC: 관람137/정상퇴장40/aborted0, 대기자·관람자 제거 후 예약 정리 PASS; logs/queue-compact-20261017-152006/tour-player-20261017-152006.log; 표시한 PC 시험창의 대기 캡처 직접 확인: logs/queue-compact-20261017-152006/tour-player-20261017-152006.png.queue.png; CROWD-001C: 관리 HTML/API/Unity 수동 상한0~12 일치, API35·관리DOM14 PASS; logs/visitor-admin-1792218445184; 설정6/12 live/restart4프로세스 PASS: logs/visitor-settings-6-20261017-152836 및 visitor-settings-12-20261017-152906 (build152730; 이후 동선 양보만 변경); 최종 Windows build153239 exit0: logs/unity-Build-20261017-153239.log; 최종 미로12: 실제peak12·84관람/22정상퇴장/aborted0·후반120초18관람/6퇴장, FIFO·간격·제거·방전환 PASS: logs/navigation-tests-1792217140822/tour-player-12-20261017-153326.log; 최종 미로6 회귀: peak6·55관람/13퇴장·후반11관람/1퇴장 PASS: logs/navigation-tests-1792217140822/tour-player-6-20261017-153412.log; 최종 인접전시물12: peak12·206관람/60퇴장·후반42관람/14퇴장 PASS: logs/queue-compact-20261017-153436/tour-player-12-20261017-153436.log; 2026-10-17 사용자 반영해 요청으로 A/B/C 커밋·게시·통합·실행판 반영 명시 승인; 통합 전 로컬 Node CI15묶음 PASS: logs/crowd-001-local-ci.log
-- 다음: 사용자 통합 승인됨. 필수CI 확인→PR 통합→활성 실행폴더FF/빌드→관리4186 재시작·실제 실행/개인자료 해시·바탕화면 연결 확인. 검증 후 배포 기록을 후속 문서PR로 통합.
-- 제한: PC 실행의 모의시간 행동 회귀이며 실시간 프레임 성능 측정이 아님; Quest 실기기 미검증; 현재 바탕화면 실행판 미반영; 개인 Archive·바로가기 변경 없음; 수동 총 목표12명이며 방 수 자동 연동·수용량/입장량 자동 조절·문 통과 예약은 후속; 안전한 관람/퇴장 공간이 없는 전체 배치를 보증하지 않음; 강제 통과나 관람순서 생략 없이 대기; 숨김 시험창 캡처는 검게 저장되어 이번 숫자 확대의 시각 검증 근거로 사용하지 않음; 이전 표시창 대기 캡처는 A/B 근거
+- 근거: 실제 VisitorQueue.cs 컴파일 및 FIFO/소유권/취소/120명 처리 18사례 PASS; 동선 Node/API29사례 PASS; 최초 샌드박스 로컬 연결 제한 후 권한 실행 통과; Windows 빌드 exit0: logs/unity-Build-20261017-151753.log; 미로3방·6명 PC: 관람54/정상퇴장13/aborted0, FIFO/몸간격/관람순서/방전환 티켓 유지 PASS; logs/navigation-tests-1792217140822/tour-player-20261017-151900.log; 인접 전시물3방·6명 PC: 관람137/정상퇴장40/aborted0, 대기자·관람자 제거 후 예약 정리 PASS; logs/queue-compact-20261017-152006/tour-player-20261017-152006.log; 표시한 PC 시험창의 대기 캡처 직접 확인: logs/queue-compact-20261017-152006/tour-player-20261017-152006.png.queue.png; CROWD-001C: 관리 HTML/API/Unity 수동 상한0~12 일치, API35·관리DOM14 PASS; logs/visitor-admin-1792218445184; 설정6/12 live/restart4프로세스 PASS: logs/visitor-settings-6-20261017-152836 및 visitor-settings-12-20261017-152906 (build152730; 이후 동선 양보만 변경); 최종 Windows build153239 exit0: logs/unity-Build-20261017-153239.log; 최종 미로12: 실제peak12·84관람/22정상퇴장/aborted0·후반120초18관람/6퇴장, FIFO·간격·제거·방전환 PASS: logs/navigation-tests-1792217140822/tour-player-12-20261017-153326.log; 최종 미로6 회귀: peak6·55관람/13퇴장·후반11관람/1퇴장 PASS: logs/navigation-tests-1792217140822/tour-player-6-20261017-153412.log; 최종 인접전시물12: peak12·206관람/60퇴장·후반42관람/14퇴장 PASS: logs/queue-compact-20261017-153436/tour-player-12-20261017-153436.log; 2026-10-17 사용자 반영해 요청으로 A/B/C 커밋·게시·통합·실행판 반영 명시 승인; 통합 전 로컬 Node CI15묶음 PASS: logs/crowd-001-local-ci.log; PR20 필수Ubuntu/Windows15묶음·handoff-policy·museum-required PASS, 병합22e2a4576f94f02d614b97b04236a09994f9bab6 확인; Actions39012001789; 활성 실행폴더FF 및 Windows 빌드exit0: logs/unity-Build-20261017-160228.log; 활성 실행경로12명: peak12·84관람/22퇴장·후반18관람/6퇴장 PASS: logs/navigation-tests-1792220609455/tour-player-12-20261017-160545.log; 개인자료 실제 실행: MUSEUM_SMOKE_PASS·기존목표4 유지·4전시품로드, 화면 확인: logs/crowd-001-live-20261017-160705.log/.png; 관리4186 재시작·HTML상한12·실제API13거부(0~12 안내)·기존4명 유지 확인; 개인Archive52파일 SHA256 및 PC/Quest/관리3바로가기 대상·인수 불변 확인; 실행sourceRoot·관리4186 일치
+- 다음: 사용자 승인 기능PR20 통합·실행판/관리 반영 완료. 배포 기록 문서PR CI/통합 후 실행폴더 문서FF, 담당done/release. 다음 기능은 별도ID CROWD-002 자동 안전 수용량/목표·입장대기, 이후003 성능.
+- 제한: PC 행동 회귀이며 실시간 FPS/Quest 실기기 성능 보장이 아님; Quest는 미검증; 기존 개인 목표4명을 유지했으며 관리화면에서 최대12명으로 조절 가능; 방 수 자동 연동·안전 수용량/입장량 조절·문 통과 예약은 후속; 안전한 관람/퇴장 공간이 없는 모든 배치를 보증하지 않음; 바탕화면의 기존PC/Quest/관리 바로가기를 그대로 사용; 실제 기기 연결은 별도
 - 원본: [작업 인계](handoffs/CROWD-001.json), 시작 f0aa996 / 갱신 2026-10-17
 
 ### OPS-002
