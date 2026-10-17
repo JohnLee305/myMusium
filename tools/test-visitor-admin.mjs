@@ -45,6 +45,6 @@ try{
     fs.writeFileSync(catalogFile,JSON.stringify({...catalog,appearances:[catalog.appearances[0]]}));state=await get();assert.equal(state.catalog.length,1);assert.equal(state.settings.appearances.length,2);pass('removed appearance preserved on read for recovery');
     fs.writeFileSync(catalogFile,JSON.stringify(catalog));
     for(const asset of ['/visitor-editor.js','/visitor-style.css'])assert.equal((await fetch(url+asset)).status,200);
-    const html=await(await fetch(url)).text();assert.ok(html.includes('visitors-heading')&&html.includes('타이쿤 실험 관리'));pass('management UI and assets served');
+    const html=await(await fetch(url)).text();assert.ok(html.includes('visitors-heading')&&html.includes('박물관 관리'));pass('management UI and assets served');
     console.log(`VISITOR_ADMIN_TESTS_PASS: ${passed} cases | ${fixture}`);
 }finally{if(child && child.exitCode===null)child.kill();}

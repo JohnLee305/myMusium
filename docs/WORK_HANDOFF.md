@@ -4,7 +4,7 @@
 
 ## 먼저 찾을 세 가지
 
-1. **최신 코드:** origin/codex/museum-tycoon와 실제 PR 병합SHA. GitHub 기본브랜치는 보존판이다.
+1. **최신 코드:** origin/codex/museum-tycoon와 실제 PR 병합SHA. GitHub 기본브랜치도 동일한 단일 최신판이다.
 2. **어디서 실행하는가:** PROJECT_STATE.json. Windows 경로는 그 PC용이며 클라우드에서 존재한다고 가정하지 않는다.
 3. **누가 무엇을 하는가:** handoffs/ID.json → 자동생성 LIVE_STATUS.md. 기록된 프로세스PID가 현재 살아 있다고 가정하지 않는다.
 
@@ -33,6 +33,6 @@
 
 ## 새 에이전트에게 전달할 문장
 
-> JohnLee305/myMusium의 origin/codex/museum-tycoon을 기준으로 진행해 줘. AGENTS.md와 docs/LIVE_STATUS.md부터 읽고 Git 사전Gate를 수행해. docs/PROJECT_STATE.json에서 실제실행/개인자료경로를 확인하고, TASKS의 해당ID와 작업별 인계JSON에서 담당·다음행동을 확인해. 별도 codex/ID 브랜치로 작업하고 실제검증 뒤 인계JSON과 생성현황판을 갱신해. 개인자료와 기준판은 보존하고 PR/CI를 거쳐 통합해.
+> JohnLee305/myMusium의 origin/codex/museum-tycoon을 기준으로 진행해 줘. AGENTS.md와 docs/LIVE_STATUS.md부터 읽고 Git 사전Gate를 수행해. docs/PROJECT_STATE.json에서 실제실행/개인자료경로를 확인하고, TASKS의 해당ID와 작업별 인계JSON에서 담당·다음행동을 확인해. 별도 codex/ID 브랜치로 작업하고 실제검증 뒤 인계JSON과 생성현황판을 갱신해. 개인자료와 과거 복구기록은 보존하고 PR/CI를 거쳐 통합해.
 
 [상세 Git 절차](GIT_MULTI_AGENT_WORKFLOW.md) · [과거 인계 원문](history/WORK_HANDOFF_20261017.md)

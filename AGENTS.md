@@ -2,7 +2,7 @@
 
 ## 1. 작업 전 필수 Gate
 
-1. 이 저장소는 `JohnLee305/myMusium`, 소스 정본은 `origin/codex/museum-tycoon`이다. GitHub 기본브랜치/다른 로컬폴더를 최신이라고 가정하지 않는다.
+1. 이 저장소는 `JohnLee305/myMusium`, 소스 정본은 `origin/codex/museum-tycoon`이다. GitHub 기본브랜치도 이 최신 통합판으로 통일한다. Windows 개발·빌드·실행은 PROJECT_STATE의 sourceRoot 한 곳만 사용한다. C:/Dev/vr-museum 및 C:/Dev/vr-museum-tycoon은 기록/개인자료 보존용이며 개발·실행하지 않는다.
 2. 실제 루트·HEAD·브랜치·미커밋/미추적 자료를 확인하고 fetch한다. [공유 담당 목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) 또는 `node tools/task-coordination.mjs list`로 담당을 확인하고, 전용브랜치에서 `claim --task ID --agent 담당 --summary 목적`에 성공한 뒤 작업한다. [담당 선점 절차](docs/TASK_COORDINATION.md)를 따른다. Windows `./tools/git-preflight.ps1 -TaskId 실제ID`, 공통 `node tools/git-preflight.mjs --task 실제ID`를 사용한다. 시작 전 detached면 최신원격에서 작업전용 codex/ID 브랜치를 먼저 만든다. dirty/분기/원격실패/중복작업은 자료를 보존하고 보고한다. 자동stash/reset/clean/force push 금지.
 3. **읽기 순서:** 이 파일 → [현재 현황](docs/LIVE_STATUS.md) → [배포 정본](docs/PROJECT_STATE.json) → TASKS.md의 해당ID → 관련 설계/인계. STATUS/WORKLOG 전체와 과거 문서를 매번 읽지 않는다. 필요할 때 해당ID의 검증 이력만 검색한다.
 4. 작업별 별도 Clone/Worktree·codex/ID 브랜치를 사용한다. 같은 물리폴더·Unity Library/빌드·관리포트를 동시에 쓰지 않는다. 동일 작업의 PR/브랜치 및 docs/handoffs 기록을 확인한다.
@@ -19,7 +19,7 @@
 
 ## 3. 보호와 제품 방향
 
-- codex/museum-baseline 및 museum-baseline-20261015 태그는 보존. 기능 병합·기본브랜치 변경은 별도 사용자 요청 없이 하지 않는다.
+- 2026-10-17 사용자 승인으로 기준판을 은퇴했다. 단일 정본 codex/museum-tycoon과 개인 Archive를 보호한다. baseline 브랜치/태그를 다시 만들거나 과거 폴더에서 개발·실행하지 않는다. Git 과거기록은 로컬 bundle/백업에 보존한다. 임시 작업브랜치는 검증·PR 통합 후 삭제한다.
 - 개인 Archive/모델/대사/가족기록은 공개Git/외부AI에 무단 전송하지 않는다. 실행소스와 개인자료를 분리하고 기존 metadata/모델/설정/승인을 보존한다.
 - PC Quest Link 우선, standalone 후속. 소장품/스토리에 반응하는 살아있는 박물관이 목적이며 경제/해금은 미래 선택 확장이다.
 - 새 모델 맞춤 대사/보충 요청은 [.agents/skills/museum-model-reactions/SKILL.md](.agents/skills/museum-model-reactions/SKILL.md)를 읽는다. 에이전트가 관찰→작성→검토→요청에 따라draft/승인→API·실제표시를 확인한다. 업로드 자동실행/1,000개 저장은 미구현.

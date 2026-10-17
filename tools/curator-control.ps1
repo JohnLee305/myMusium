@@ -24,7 +24,7 @@ $client.Timeout=[timespan]::FromSeconds(2)
 if($Port -lt 1024 -or $Port -gt 65535 -or ($SmokeTest -and $Port -eq 4181)){throw 'Invalid test port'}
 
 $form=New-Object Windows.Forms.Form
-$form.Text='VR 박물관 관리 · 타이쿤 실험'
+$form.Text='VR 박물관 관리'
 $form.ClientSize=New-Object Drawing.Size(620,365)
 $form.StartPosition='CenterScreen'
 $form.FormBorderStyle='FixedDialog'

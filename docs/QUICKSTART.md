@@ -1,8 +1,10 @@
+> 최신 실행 기준: [단일 버전](VERSIONING.md)과 [배포 정본](PROJECT_STATE.json). 개인 Archive는 C:/Dev/vr-museum-tycoon/museum-archive, 관리는4186. 과거 기본 Archive/포트를 그대로 쓰지 않는다.
+
 # 실행 및 재개 안내
 
 ## 데스크톱 미리보기
 
-바탕화면 **VR 박물관 (PC 관람)** 또는 `C:\Dev\vr-museum-tycoon\Builds\Windows\VRMuseum.exe`를 실행합니다. 기존 버전은 **기존 버전 보관** 바로가기입니다.
+바탕화면 **VR 박물관 (PC 관람)**을 실행합니다. 최신 실행파일은 `C:\Dev\vr-museum-sync-20261016\Builds\Windows\VRMuseum.exe`이며 개인 Archive 인수까지 포함한 바로가기를 사용합니다. Quest Link도 같은 최신 실행파일/자료를 사용합니다. 기존 버전 바로가기는 은퇴했습니다.
 
 - WASD: 이동
 - Q / E 또는 방향키 ← / →: 좌우 시점 회전 (누르고 있으면 계속 회전)
@@ -14,19 +16,19 @@
 - 입구 좌우 이동 표지에 가까이 가도 방 전환. 로딩 후 입구 중앙에서 관람 재개.
 - 창 닫기: 종료
 
-현재 전시품은 **항아리·책·고리 조형물 3개**다. manifest.json의 순서대로 배치하며 각 artifact.json에서 이름·설명·크기를 읽는다.
+기본 샘플은 **항아리·책·고리 조형물 3개**이며 실제 개인 컬렉션과 다르다. manifest.json의 순서대로 배치하며 각 artifact.json에서 이름·설명·크기를 읽는다.
 
 실제 소장품이 없어도 샘플로 개발할 수 있다. 항아리는 직접 생성했으며 나중에 본인의 스캔 에셋으로 교체할 수 있다. JSON 수정 후 검증 도구를 실행하고 앱을 다시 열면 재빌드 없이 반영된다. 자세한 규칙은 `docs/ARCHIVE.md` 참고.
 
 ```powershell
-C:\Dev\vr-museum\tools\validate-archive.ps1
+C:\Dev\vr-museum-sync-20261016\tools\validate-archive.ps1
 ```
 
 모델이나 JSON이 잘못되면 대체 큐브와 오류 안내를 표시한다. 방당 최대30개를 자동 배치하며 초과분은 다음 방에서 볼 수 있다. 하나가 실패해도 다른 전시품은 정상 표시한다.
 
 ## Unity Editor
 
-프로젝트: `C:\Dev\vr-museum\apps\quest-viewer`
+프로젝트: `C:\Dev\vr-museum-sync-20261016\apps\quest-viewer`
 
 씬: `Assets/Museum/Scenes/MuseumEntrance.unity`
 
@@ -43,7 +45,7 @@ C:\Dev\vr-museum\tools\validate-archive.ps1
 3. Editor 메뉴에서 VR 모드를 실행하거나 아래 명령을 사용한다.
 
 ```powershell
-C:\Dev\vr-museum\tools\open-viewer.ps1 -Vr
+C:\Dev\vr-museum-sync-20261016\tools\open-viewer.ps1 -Vr
 ```
 
 현재는 HMD와 좌우 컨트롤러의 위치/회전 입력을 설정했다. 실제 트래킹, 컨트롤러 동작 및 프레임 성능은 아직 검증하지 않았다. Grab/텔레포트는 후속 구현이다.
@@ -54,9 +56,9 @@ OpenXR 로더 시작에 실패하면 데스크톱 화면으로 돌아가며 안�
 Unity Editor를 닫은 후 실행한다.
 
 ```powershell
-C:\Dev\vr-museum\tools\check-environment.ps1
-C:\Dev\vr-museum\tools\run-unity.ps1 -Task Verify
-C:\Dev\vr-museum\tools\run-unity.ps1 -Task Build
+C:\Dev\vr-museum-sync-20261016\tools\check-environment.ps1
+C:\Dev\vr-museum-sync-20261016\tools\run-unity.ps1 -Task Verify
+C:\Dev\vr-museum-sync-20261016\tools\run-unity.ps1 -Task Build
 ```
 
 패키지 버전은 Packages/manifest.json과 packages-lock.json에 고정한다.
@@ -67,7 +69,7 @@ STATUS.md → WORKLOG.md → TASKS.md 순서로 읽는다. '재개해줘' 요청
 
 
 ## HTML에서 전시품 추가
-C:\Dev\vr-museum\Open-Curator.cmd를 더블클릭한다. 샘플 선택 또는 GLB 파일 업로드 후 이름·설명·크기를 입력해 등록한다. 관람 앱 재실행 시 반영. 자세한 내용은 docs/CURATOR.md.
+C:\Dev\vr-museum-sync-20261016\Open-Curator.cmd를 더블클릭한다. 샘플 선택 또는 GLB 파일 업로드 후 이름·설명·크기를 입력해 등록한다. 관람 앱 재실행 시 반영. 자세한 내용은 docs/CURATOR.md.
 
 
 
@@ -147,4 +149,4 @@ PC용 빌드에 VR 컨트롤러 상호작용을 구현했습니다. 자동검사
 
 ## 관람객 관리·저장 (ADMIN-005 / 2026-10-15)
 
-바탕화면 **VR 박물관 관리** → 서버 켜기 → 관리페이지 → **관람객 관리**. 최신4181과 PC 관람은 같은 실험 자료를 사용하며, 기존 버전 관리4177은 별도입니다. 인원·속도·외형별 설정은 저장 후 약1초 자동 반영되고 다음 실행에도 유지됩니다. [자세한 사용법·저장 및 확장 규칙](VISITOR-ADMIN.md).
+바탕화면 **VR 박물관 관리** → 서버 켜기 → 관리페이지 → **관람객 관리**. 최신4186과 PC/Quest Link는 같은 개인 자료를 사용합니다. 기존 버전 관리 바로가기는 은퇴했습니다. 인원·속도·외형별 설정은 저장 후 약1초 자동 반영되고 다음 실행에도 유지됩니다. [자세한 사용법·저장 및 확장 규칙](VISITOR-ADMIN.md).

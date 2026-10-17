@@ -6,16 +6,16 @@
 
 가족의 소중한 물건과 이야기를 3D로 보존하고 관람하는 확장형 개인 박물관.
 
-기준판은 보존하고 최신 소스는 `codex/museum-tycoon`에서 개발한다. 실제 배포/개인자료 경로는 [배포 정본](docs/PROJECT_STATE.json)을 확인한다. Work 등 별도 환경은 독립 Clone/Worktree를 사용한다.
+기본브랜치와 유일한 최신 소스는 `codex/museum-tycoon`이다. Windows 개발·빌드·실행 폴더는 `C:/Dev/vr-museum-sync-20261016` 하나다. 예전 폴더는 기록/개인자료 보관용이다. 실제 배포/개인자료 경로는 [배포 정본](docs/PROJECT_STATE.json)을 확인한다. Work 등 별도 환경은 독립 Clone/Worktree를 사용한다.
 
 **모든 개발 에이전트는 작업 시작·재개 전 GitHub 최신 코드를 안전하게 동기화하고 최신 `TASKS.md`/`PROJECT_STATUS.md`/`STATUS.md`/`WORKLOG.md`를 확인한다.** [Git 다중 에이전트 작업 규칙](docs/GIT_MULTI_AGENT_WORKFLOW.md) 및 [Work 인계 가이드](docs/WORK_HANDOFF.md) 참조.
 
 
 ## 전체 계획과 진행상황
 
-- [최신 전체 진행상황·개발 계획 (GitHub 실험 브랜치)](https://github.com/JohnLee305/myMusium/blob/codex/museum-tycoon/PROJECT_STATUS.md)
+- [최신 전체 진행상황·개발 계획 (GitHub 최신 통합판)](https://github.com/JohnLee305/myMusium/blob/codex/museum-tycoon/PROJECT_STATUS.md)
 - [이 브랜치의 진행상황 문서](PROJECT_STATUS.md)
-- [기준/실험 버전 구분과 복원](docs/VERSIONING.md)
+- [단일 버전·실행 경로 운영](docs/VERSIONING.md)
 - [매 작업 시작 전 Git 최신화 / 다중 에이전트 충돌 방지](docs/GIT_MULTI_AGENT_WORKFLOW.md)
 - [ChatGPT 기획 → Work 구현 인계](docs/WORK_HANDOFF.md)
 
@@ -48,7 +48,7 @@ Unity 프로젝트: apps/quest-viewer
 
 
 ## HTML 전시품 추가
-기준 버전의 Open-Curator.cmd 또는 관리 바로가기를 열면 서버 제어창이 열린다. 서버 켜기 → 관리페이지 열기 순으로 사용한다. 실험 관리 서버는 별도 포트를 사용한다. 샘플 또는 GLB 파일로 전시품을 등록하고 관람 앱을 재실행한다. 사용법: docs/CURATOR.md.
+바탕화면 VR 박물관 관리 바로가기로 최신4186 서버를 사용한다. 서버 켜기 → 관리페이지 열기 순으로 사용한다. 샘플 또는 GLB 파일로 전시품을 등록하고 관람 앱을 재실행한다. 사용법: docs/CURATOR.md.
 
 ## 타이쿤 실험 관람객
 이 브랜치의 실제 개발·실행 폴더는 [배포 정본](docs/PROJECT_STATE.json)을 확인합니다. 바탕화면 VR 박물관 (타이쿤 실험)으로 실행하고 오른쪽 패널에서 관람객을 0~6명 조절합니다. 기존 관람 버전은 별도 폴더·바로가기로 유지합니다.

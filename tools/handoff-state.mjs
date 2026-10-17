@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 export function readHandoff(root){
  const project=JSON.parse(fs.readFileSync(path.join(root,'docs/PROJECT_STATE.json'),'utf8'));
  assert.equal(project.schemaVersion,1);assert.equal(project.repository,'JohnLee305/myMusium');assert.equal(project.integrationBranch,'codex/museum-tycoon');
- assert.ok(project.protectedRefs.includes('codex/museum-baseline')&&project.protectedRefs.includes('museum-baseline-20261015'));
+ assert.ok(project.protectedRefs.includes(project.integrationBranch),'The single integration branch must be protected');
  assert.ok(Number.isInteger(project.windowsDeployment.adminPort)&&project.windowsDeployment.adminPort>=1024&&project.windowsDeployment.adminPort<=65535);
  for(const field of ['sourceRoot','archiveRoot'])assert.match(project.windowsDeployment[field],/^[A-Z]:\//i);
  assert.match(project.windowsDeployment.viewerRelativePath,/^Builds\/[^.]+\.exe$/);
