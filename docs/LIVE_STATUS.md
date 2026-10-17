@@ -23,7 +23,7 @@
 | CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
 | CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/27) |
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
-| DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | 미게시 |
+| DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
