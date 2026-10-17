@@ -1,0 +1,114 @@
+[
+  {
+    "file": "valid-placed.json",
+    "schemaValid": true,
+    "semanticContains": [],
+    "note": "기본 전시대와 상판 꽃병"
+  },
+  {
+    "file": "valid-stored.json",
+    "schemaValid": true,
+    "semanticContains": [],
+    "note": "보관한 부모와 부착된 자식: 모두 보관 수량에 포함"
+  },
+  {
+    "file": "invalid-unknown-field.json",
+    "schemaValid": false,
+    "semanticContains": [],
+    "note": "중복 수량 정본을 허용하지 않음"
+  },
+  {
+    "file": "invalid-version-zero.json",
+    "schemaValid": false,
+    "semanticContains": [],
+    "note": "버전 양의 정수"
+  },
+  {
+    "file": "invalid-duplicate-id.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "DUPLICATE_INSTANCE_ID"
+    ],
+    "note": "유일성은 의미 검사"
+  },
+  {
+    "file": "invalid-missing-parent.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "PARENT_NOT_FOUND"
+    ],
+    "note": "없는 부모"
+  },
+  {
+    "file": "invalid-cycle.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "PARENT_CYCLE"
+    ],
+    "note": "순환 탐지는 표면/종류 검사보다 먼저"
+  },
+  {
+    "file": "invalid-outside-room.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "OUTSIDE_ROOM"
+    ],
+    "note": "중심이 안쪽이어도 외곽은 밖으로 나감"
+  },
+  {
+    "file": "invalid-missing-definition.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "DEFINITION_NOT_FOUND"
+    ],
+    "note": "정확한 ID+버전"
+  },
+  {
+    "file": "invalid-wrong-surface.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "SURFACE_KIND_INVALID"
+    ],
+    "note": "상판 전용 꽃병을 바닥에 설치"
+  },
+  {
+    "file": "invalid-support-overhang.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "SUPPORT_OVERHANG"
+    ],
+    "note": "꽃병 밑면이 상판 외곽을 넘음"
+  },
+  {
+    "file": "invalid-sibling-overlap.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "ITEM_COLLISION"
+    ],
+    "note": "같은 상판의 자식끼리 충돌"
+  },
+  {
+    "file": "invalid-door-zone.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "RESERVED_ZONE_BLOCKED"
+    ],
+    "note": "출입구 여유 공간 침범"
+  },
+  {
+    "file": "invalid-bad-variant.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "VARIANT_NOT_FOUND"
+    ],
+    "note": "허용 색상 참조"
+  },
+  {
+    "file": "invalid-parent-height.json",
+    "schemaValid": true,
+    "semanticContains": [
+      "SUPPORT_HEIGHT_INVALID"
+    ],
+    "note": "공중에 뜬 소품"
+  }
+]

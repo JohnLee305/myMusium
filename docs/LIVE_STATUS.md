@@ -22,6 +22,7 @@
 | CROWD-002 | Codex | validated | codex/crowd-002-auto-capacity-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/33) |
 | CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
 | CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/27) |
+| DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -76,6 +77,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: PR27통합·활성실행판교체/검증·개인자료보존·PC재실행 완료. 배포기록PR 통합후 담당해제. 사용자 사용감 확인은 후속.
 - 제한: 한PC·한배치 전후1회실측; Quest실기기/임의배치 성능보장은 아님; 모의900초는 행동회귀이며 실제15분FPS검사가 아님. 관람동일23회·퇴장1→0으로처리량향상주장없음; 이전진단폴더의미커밋자료는보존;일반사용의체감확인과자동안전수용량조절은후속
 - 원본: [작업 인계](handoffs/CROWD-006.json), 시작 0ea530b / 갱신 2026-10-17
+
+### DECOR-000
+
+심즈식 박물관 내부 꾸미기 아키텍처·위임 명세·첫 스키마와 작업 단계 등록
+
+- 근거: Issue43 담당선점·최신원격 Git Gate PASS; 등록한 fixture15개 JSON Schema 기대값15/15 일치; 의미검사기 미구현; 설계 Markdown 로컬링크·코드펜스 검사 PASS; 개인 사용자경로/이메일 없음 확인; 다음 세션 DECOR-01 작업카드·공통계약을 README/PROJECT_STATUS/TASKS에서 연결; 사용자가 검토한 설계의 Git 등록 요청을 커밋·게시 요청으로 기록
+- 다음: PR 등록·필수검사 확인. 다음 구현 세션은 docs/decor-design/README.md에서 DECOR-01 새 담당선점·Git Gate 후 DTO/참조검사부터 시작.
+- 제한: 문서와 가상 fixture만 변경; 게임 기능/의미 검사기/Unity/Quest 미구현·미검증
+- 원본: [작업 인계](handoffs/DECOR-000.json), 시작 eddb801 / 갱신 2026-10-17
 
 ### OPS-002
 

@@ -1,5 +1,7 @@
 # 가족 VR 박물관
 
+**다음 개발: 내부 꾸미기.** [설계·위임 명세](docs/decor-design/README.md) → [DECOR-01 작업 카드](docs/decor-design/박물관-꾸미기-개발명세/tasks/DECOR-01.md). 독립 이공간·심즈식 배치 우선, 기능 구현은 다음 세션부터.
+
 **누가 작업 중인가:** [공유 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) · [담당 선점·중복 방지](docs/TASK_COORDINATION.md).
 
 **에이전트 시작점:** [AGENTS](AGENTS.md) → [현재 작업·실행 경로](docs/LIVE_STATUS.md). 배포 정본은 [PROJECT_STATE.json](docs/PROJECT_STATE.json), 인계는 [작업별 기록](docs/handoffs). 아래 이전 경로·기능 설명과 충돌하면 이 정본을 따른다.
