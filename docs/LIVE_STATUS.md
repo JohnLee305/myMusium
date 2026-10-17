@@ -25,6 +25,7 @@
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
 | DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/48) |
+| DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -106,6 +107,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: 필수CI 확인 후 통합·활성소스 FF. DECOR-03 신규 선점·Git Gate 후 저장/복구 구현.
 - 제한: geometry/저장/UI/Unity/Quest 미검증; 실제 실행판 미반영; 보관 최근순서는 세션 내 유지, 재실행은 ID순
 - 원본: [작업 인계](handoffs/DECOR-02.json), 시작 6ce28fe / 갱신 2026-10-17
+
+### DECOR-03
+
+OS잠금·원자적 월드저장·백업·복구
+
+- 근거: PR48 Ubuntu/Windows 모든필수검사 PASS·병합251202c·활성소스FF 확인; Issue49 선점·최신원격 Git Gate PASS; 실제 C# 저장62검사 PASS: logs/decor-03-store.log; 최초생성/기존교체 각6지점에서 별도프로세스 실제 강제종료, OS잠금·종료후해제·응답유실재시도 검증; 손상/미지원버전/catalog불일치·backup5개·명시복구/손상본보존·revision/batch경계 검사 PASS; 전체 Node15회귀 + 계약204 + 명령132 + 저장62 검사 PASS: logs/decor-03-local-ci.log; 신규 저장schema/DTO 변경없음, DecorJson에 internal 버전식별 추가; 기존CI실행기에 저장검사 연결; 2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인
+- 다음: 사용자 승인에 따라 커밋·PR·필수CI·통합 후 활성소스FF. 이어서 DECOR-04 통합 검증 및 DECOR-05.
+- 제한: Unity/실제 전원차단 미검증; PR 필수CI 및 통합 진행; 프로세스 종료/IO주입은 검증, 실제 전원차단·네트워크FS·Unity/Quest 미검증; geometry/초안자동저장/실제개인자료이전/UI 제외; backup을 외부에서 삭제/혼합한 저장은 자동복구정합 보장하지 않음
+- 원본: [작업 인계](handoffs/DECOR-03.json), 시작 251202c / 갱신 2026-10-17
 
 ### OPS-002
 
