@@ -853,3 +853,13 @@
 - PR#16 실제Ubuntu15묶음/담당정책 통과, Windows/필수집계 진행 중. ROUTE-002는 통합판 포함, bootstrap은 보존기준판 포함 확인 후 로컬브랜치삭제. 원격소스는 baseline/tycoon/ADMIN-006만 존재, claims는 협업이력으로 유지.
 - PC/관리 바탕화면은 sync-20261016·4186·외부개인Archive를 가리킴, Quest/보존바로가기는 기준판 유지. 사용자개인Archive dirty는 원래자료이며 소스커밋에 포함하지 않음.
 - 다음: 최종커밋CI 성공→PR#16 병합→sync폴더 detached 최신통합/tycoon FF→자료해시보존→담당done/release→ADMIN-006 소스브랜치정리. 실제병합SHA와 CI결과는 PR#16 및 공유Issue#15가정본.
+
+
+## 2026-10-17 / OPS-009 시작
+- 사용자 단일최신판·기본브랜치/실행경로 통일·기준판정리 승인. Issue#17,전용브랜치,82a9f3e owner GatePASS. 기준판 전용변경은 문서/바로가기 기록이며 별도백업 후 은퇴한다. 개인자료/claims는 소스버전과 구분해 유지.
+
+
+## 2026-10-17 / OPS-009 단일 기준 적용·검증
+- 기본브랜치/remoteHEAD=codex/museum-tycoon. 기준판 브랜치/태그는 Git bundle 검증보존 후 은퇴. PC/Quest Link/관리 세 바로가기는 최신 sourceRoot·개인Archive로통일, 옛별칭백업/제거. root옛폴더 AGENTS/STATUS/WORKLOG에은퇴/최신경로안내.
+- 로컬CI15묶음PASS(logs/ops-009/local-ci.log), 정책10사례PASS, 두개인Archive SHA256불변. 최초옛UI명칭기대실패는새명칭반영후전체재통과. 단일판PR필수보호유지. Quest실제기기는미검증.
+- 다음: 전용PR/필수CI통합→활성폴더 tycoon·보조폴더자료보관표시→자료해시/실행경로→담당해제·완료브랜치정리. 과거폴더는삭제하지않으며소스개발/실행용아님.

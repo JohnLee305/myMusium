@@ -2,18 +2,36 @@
   "schemaVersion": 1,
   "repository": "JohnLee305/myMusium",
   "integrationBranch": "codex/museum-tycoon",
-  "protectedRefs": ["codex/museum-baseline", "museum-baseline-20261015"],
+  "protectedRefs": [
+    "codex/museum-tycoon"
+  ],
   "windowsDeployment": {
     "sourceRoot": "C:/Dev/vr-museum-sync-20261016",
     "archiveRoot": "C:/Dev/vr-museum-tycoon/museum-archive",
     "adminPort": 4186,
     "viewerRelativePath": "Builds/Windows/VRMuseum.exe"
   },
-  "limits": {"reactions": 96, "reactionBytes": 65536, "reactionTextUtf16": 72, "roomCells": 30},
+  "limits": {
+    "reactions": 96,
+    "reactionBytes": 65536,
+    "reactionTextUtf16": 72,
+    "roomCells": 30
+  },
   "runtimeVerification": {
     "buildLog": "logs/unity-Build-20261017-114603.log",
     "verifiedDateKst": "2026-10-17",
     "level": "PC; Quest unverified",
     "note": "Historical build verification, not a claim that a process is currently running. Recheck actual processes and shortcuts."
+  },
+  "versionPolicy": {
+    "mode": "single",
+    "defaultBranch": "codex/museum-tycoon",
+    "retiredBranch": "codex/museum-baseline",
+    "coordinationRefs": "codex/claims/* are task ownership records, not application versions",
+    "passiveWindowsRoots": [
+      "C:/Dev/vr-museum",
+      "C:/Dev/vr-museum-tycoon"
+    ],
+    "note": "Only windowsDeployment.sourceRoot is the active development/build/runtime root. Other local folders preserve old files or private data; do not develop or launch there."
   }
 }

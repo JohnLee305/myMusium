@@ -1,5 +1,7 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
+OPS-009: 기본브랜치와 최신판을 codex/museum-tycoon으로 통일. 개발/빌드/실행 sourceRoot는 PROJECT_STATE.json 하나가 기준이다. 예전 폴더/기준판은 은퇴·자료보관용이며 과거 본문보다 [단일 버전 운영](docs/VERSIONING.md)이 우선한다. 검증/통합은 [OPS-009 인계](docs/handoffs/OPS-009.json) 참조.
+
 ADMIN-006: 홈/전시품/전시실/관람객 메뉴와 전시실 공유 방 선택·배치/동선/테마 탭 정돈. 사용자 화면 확인·게시/통합 승인. 검증/통합 정본은 [작업 인계](docs/handoffs/ADMIN-006.json)·[PR#16](https://github.com/JohnLee305/myMusium/pull/16), 사용법은 [관리 화면](docs/ADMIN_WORKSPACE.md).
 
 OPS-004: [실시간 담당목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen)·원자적작업선점·Git/PR담당검사 구현. 검증/통합 상태는 [작업 인계](docs/handoffs/OPS-004.json)·PR#14 참조.

@@ -4,8 +4,8 @@
 >
 > **필수 원칙:** 모든 에이전트는 코드·문서 수정 전 GitHub에서 **최신 원격 상태를 확인·안전하게 동기화**하고, 최신 `TASKS.md`와 `PROJECT_STATUS.md`를 읽는다. **동기화 실패, 충돌, 미커밋 변경이 있으면 구버전 코드에서 새 작업을 강행하지 않는다.** 원본/로컬 작업을 강제 덮어쓰지 않는다.
 >
-> 협업 기준 브랜치: `codex/museum-tycoon` (GitHub 실제 기본 브랜치는 `codex/museum-baseline`일 수 있다. 따라서 브랜치를 생략하지 않는다).
-> 보호 대상: `codex/museum-baseline`, 태그 `museum-baseline-20261015`, 기존 실물 소장품 Archive, 로컬 빌드/사용자 데이터.
+> 협업 기준 브랜치: `codex/museum-tycoon` (GitHub 기본브랜치도 동일한 단일 최신판).
+> 보호 대상: `codex/museum-tycoon`, 기존 실물 소장품 Archive, 로컬 빌드/사용자 데이터. 기준판은 OPS-009에서 사용자 승인으로 은퇴하며 과거 기록은 로컬백업에 보존한다.
 >
 > 이 문서는 **에이전트가 따라야 할 절차**이다. Git hook, CI, 브랜치 보호 설정이 자동으로 설치되었다는 의미는 아니다. 이를 기계적으로 강제할지 여부는 `OPS-002/003` 후속 작업으로 관리한다.
 
@@ -84,4 +84,4 @@ git pull --ff-only origin codex/museum-tycoon
 
 ## 5. Work 시작 지시문 (다른 에이전트에도 재사용)
 
-> `JohnLee305/myMusium`의 **`codex/museum-tycoon`** 최신 원격 기준으로 진행해 줘. 작업 시작 전에 `docs/GIT_MULTI_AGENT_WORKFLOW.md`의 시작 Gate를 반드시 수행해: 로컬 브랜치/HEAD/미커밋 변경을 보호하고, `git fetch --prune origin` 후 안전하게 최신 베이스를 동기화해. 그다음 최신 `AGENTS.md`, `TASKS.md`, `PROJECT_STATUS.md`, `STATUS.md`, `WORKLOG.md`, 관련 설계 문서를 읽고 기존 진행 ID/PR을 확인해. 다른 에이전트와 충돌하지 않게 전용 작업 폴더/기능 브랜치를 사용하고, 작업 완료 후 테스트와 문서를 갱신해 PR로 통합해. 최신화 실패나 충돌이 있으면 기존 변경을 건드리지 말고 보고해 줘. **`codex/museum-baseline`은 수정하지 마.**
+> `JohnLee305/myMusium`의 **`codex/museum-tycoon`** 최신 원격 기준으로 진행해 줘. 작업 시작 전에 `docs/GIT_MULTI_AGENT_WORKFLOW.md`의 시작 Gate를 반드시 수행해: 로컬 브랜치/HEAD/미커밋 변경을 보호하고, `git fetch --prune origin` 후 안전하게 최신 베이스를 동기화해. 그다음 최신 `AGENTS.md`, `TASKS.md`, `PROJECT_STATUS.md`, `STATUS.md`, `WORKLOG.md`, 관련 설계 문서를 읽고 기존 진행 ID/PR을 확인해. 다른 에이전트와 충돌하지 않게 전용 작업 폴더/기능 브랜치를 사용하고, 작업 완료 후 테스트와 문서를 갱신해 PR로 통합해. 최신화 실패나 충돌이 있으면 기존 변경을 건드리지 말고 보고해 줘. **과거 baseline이나 다른 로컬 폴더를 최신 소스로 사용하지 마.**

@@ -1,0 +1,24 @@
+{
+  "taskId": "OPS-009",
+  "owner": "Codex",
+  "branch": "codex/ops-009-single-version-20261017",
+  "baseSha": "82a9f3e9f4b6637e17a899e3e7fc7a52fd0700fc",
+  "updatedDateKst": "2026-10-17",
+  "status": "validated",
+  "summary": "최신판 기본브랜치·단일 실행경로 통일 및 기준판 은퇴",
+  "validation": [
+    "사용자 단일버전 통일·기준판정리 명시승인",
+    "Issue#17 선점·최신원격 owner Gate PASS",
+    "GitHub 기본브랜치/원격HEAD를 codex/museum-tycoon으로 변경 API확인",
+    "기준판 Git bundle 검증·브랜치/태그은퇴·양쪽개인Archive 해시불변",
+    "PC/Quest Link/관리 세 바로가기 동일최신소스·개인자료 연결 확인 및 기존별칭 백업/제거",
+    "로컬 Node CI15묶음 PASS(logs/ops-009/local-ci.log), 단일통합판보호 정책10사례 PASS",
+    "tycoon 필수museum-required/strict/force·delete금지 보호 유지 확인"
+  ],
+  "nextAction": "전용PR 필수CI→통합→활성 sourceRoot에서 tycoon 체크아웃·보조폴더 데이터보관표시·담당완료/해제·임시브랜치정리",
+  "pullRequest": null,
+  "limitations": [
+    "개인 Archive와 과거 Git기록/로컬백업은 보존",
+    "Quest 실제기기 미검증"
+  ]
+}

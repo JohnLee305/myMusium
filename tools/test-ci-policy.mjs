@@ -23,6 +23,10 @@ const record=path.join(fixture,'docs/handoffs/OPS-101.json');const saved=fs.read
 const claim={schemaVersion:1,taskId:'OPS-101',agent:'Codex',account:'fixture',branch:'codex/ops-101',baseSha:'a'.repeat(40),summary:'test',nextAction:'test',status:'review',updatedAt:new Date().toISOString(),tokenHash:'b'.repeat(64),issue:1};
 assert.equal(checkPrOwnership(claim,'OPS-101','codex/ops-101','Codex'),true);assert.throws(()=>checkPrOwnership(claim,'OPS-101','codex/other','Codex'));assert.throws(()=>checkPrOwnership(claim,'OPS-101','codex/ops-101','OtherAgent'));assert.throws(()=>checkPrOwnership({...claim,status:'released'},'OPS-101','codex/ops-101','Codex'));pass('PR ownership must match active task, branch and handoff owner');
 const rendered=renderHandoff(readHandoff(fixture));assert.match(rendered,/OPS-101/);assert.equal(rendered,renderHandoff(readHandoff(fixture)));pass('handoff rendering deterministic');
+// Retiring a baseline must not remove protection from the sole integration branch.
+const policyFile=path.join(fixture,'docs/PROJECT_STATE.json'),singlePolicy=fs.readFileSync(policyFile,'utf8');
+const invalidPolicy=JSON.parse(singlePolicy);invalidPolicy.protectedRefs=[];fs.writeFileSync(policyFile,JSON.stringify(invalidPolicy));
+assert.throws(()=>readHandoff(fixture),/single integration branch/);fs.writeFileSync(policyFile,singlePolicy);assert.equal(readHandoff(fixture).project.integrationBranch,'codex/museum-tycoon');pass('single version still requires integration branch protection');
 // Two real branches: non-overlapping work merges, shared-file edits conflict.
 must(fixture,'init','--initial-branch','codex/museum-tycoon');must(fixture,'config','user.name','CI Fixture');must(fixture,'config','user.email','fixture@example.invalid');must(fixture,'config','commit.gpgsign','false');must(fixture,'config','core.autocrlf','false');must(fixture,'config','core.hooksPath',path.join(fixture,'no-hooks'));
 fs.writeFileSync(path.join(fixture,'shared.txt'),'base\n');must(fixture,'add','.');must(fixture,'commit','-m','base');const base=must(fixture,'rev-parse','HEAD');

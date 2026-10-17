@@ -10,7 +10,7 @@
 - Windows 최신 소스: `C:/Dev/vr-museum-sync-20261016`
 - 개인 자료: `C:/Dev/vr-museum-tycoon/museum-archive` (소스 버전과 분리·공개 Git 제외)
 - 관리: 4186, PC 실행: `Builds/Windows/VRMuseum.exe`
-- 보존 대상: `codex/museum-baseline`, `museum-baseline-20261015`
+- 보존 대상: `codex/museum-tycoon`
 - 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-114603.log`. 현재 실행 여부는 재확인한다.
 
 ## 작업 인계
@@ -22,6 +22,7 @@
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
+| OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | 미게시 |
 
 ### ADMIN-006
 
@@ -67,6 +68,15 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 - 다음: 완료된 작업. 최신통합SHA는 연결PR/원격에서 확인하고 새요청은 별도ID로 시작.
 - 제한: Quest 실기기 미검증; 과거 검증기록이며 현재프로세스 실행을 주장하지 않음
 - 원본: [작업 인계](handoffs/OPS-008.json), 시작 726ee93 / 갱신 2026-10-17
+
+### OPS-009
+
+최신판 기본브랜치·단일 실행경로 통일 및 기준판 은퇴
+
+- 근거: 사용자 단일버전 통일·기준판정리 명시승인; Issue#17 선점·최신원격 owner Gate PASS; GitHub 기본브랜치/원격HEAD를 codex/museum-tycoon으로 변경 API확인; 기준판 Git bundle 검증·브랜치/태그은퇴·양쪽개인Archive 해시불변; PC/Quest Link/관리 세 바로가기 동일최신소스·개인자료 연결 확인 및 기존별칭 백업/제거; 로컬 Node CI15묶음 PASS(logs/ops-009/local-ci.log), 단일통합판보호 정책10사례 PASS; tycoon 필수museum-required/strict/force·delete금지 보호 유지 확인
+- 다음: 전용PR 필수CI→통합→활성 sourceRoot에서 tycoon 체크아웃·보조폴더 데이터보관표시·담당완료/해제·임시브랜치정리
+- 제한: 개인 Archive와 과거 Git기록/로컬백업은 보존; Quest 실제기기 미검증
+- 원본: [작업 인계](handoffs/OPS-009.json), 시작 82a9f3e / 갱신 2026-10-17
 
 validated는 기록된 검증 완료를 뜻한다. 통합 여부·최종 SHA는 각 PR의 실제 병합 상태가 정본이며, 이 문서는 실행 프로세스/승인/병합을 추측하지 않는다.
 
