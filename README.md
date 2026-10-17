@@ -1,6 +1,6 @@
 # 가족 VR 박물관
 
-**다음 개발: 내부 꾸미기.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-04-IMPLEMENTATION.md). DECOR-01/02 통합 완료, DECOR-03 저장·DECOR-04 충돌검사는 각각 로컬 검증·미커밋 검토 대기. 독립 이공간·심즈식 배치 우선.
+**다음 개발: 내부 꾸미기.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-04-IMPLEMENTATION.md). DECOR-01/02 통합 완료, DECOR-03 저장 통합 완료(PR51), DECOR-04 충돌검사 통합 검증 중. 독립 이공간·심즈식 배치 우선.
 
 **누가 작업 중인가:** [공유 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) · [담당 선점·중복 방지](docs/TASK_COORDINATION.md).
 

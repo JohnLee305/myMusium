@@ -1,0 +1,26 @@
+{
+  "taskId": "DECOR-03",
+  "owner": "Codex",
+  "branch": "codex/decor-03-store-20261017",
+  "baseSha": "251202ce72656180116b9ee99244fe1bd8f82ff1",
+  "status": "validated",
+  "updatedDateKst": "2026-10-17",
+  "summary": "OS잠금·원자적 월드저장·백업·복구",
+  "validation": [
+    "PR48 Ubuntu/Windows 모든필수검사 PASS·병합251202c·활성소스FF 확인",
+    "Issue49 선점·최신원격 Git Gate PASS",
+    "실제 C# 저장62검사 PASS: logs/decor-03-store.log",
+    "최초생성/기존교체 각6지점에서 별도프로세스 실제 강제종료, OS잠금·종료후해제·응답유실재시도 검증",
+    "손상/미지원버전/catalog불일치·backup5개·명시복구/손상본보존·revision/batch경계 검사 PASS",
+    "전체 Node15회귀 + 계약204 + 명령132 + 저장62 검사 PASS: logs/decor-03-local-ci.log",
+    "신규 저장schema/DTO 변경없음, DecorJson에 internal 버전식별 추가; 기존CI실행기에 저장검사 연결",
+    "2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인"
+  ],
+  "nextAction": "사용자 승인에 따라 커밋·PR·필수CI·통합 후 활성소스FF. 이어서 DECOR-04 통합 검증 및 DECOR-05.",
+  "pullRequest": null,
+  "limitations": [
+    "Unity/실제 전원차단 미검증; PR 필수CI 및 통합 진행",
+    "프로세스 종료/IO주입은 검증, 실제 전원차단·네트워크FS·Unity/Quest 미검증",
+    "geometry/초안자동저장/실제개인자료이전/UI 제외; backup을 외부에서 삭제/혼합한 저장은 자동복구정합 보장하지 않음"
+  ]
+}

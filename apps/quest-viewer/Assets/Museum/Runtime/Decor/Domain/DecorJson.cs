@@ -43,6 +43,18 @@ namespace FamilyMuseum.Decor
             try { var value = (DecorCatalog)ConvertValue(new Parser(json).Read(), typeof(DecorCatalog), "catalog"); CheckCatalog(value); catalog = value; report = new ValidationReport(new ValidationIssue[0]); return true; }
             catch (InvalidDataException) { report = new ValidationReport(new[] { new ValidationIssue("SCHEMA_INVALID", "catalog") }); return false; }
         }
+        // Inspect only the root version after strict JSON parsing. Storage uses this to avoid overwriting newer formats.
+        internal static bool TryInspectWorldVersion(string json, out string version)
+        {
+            version = null;
+            try
+            {
+                var root = new Parser(json).Read() as Dictionary<string, object>; object value;
+                if (root == null || !root.TryGetValue("schemaVersion", out value) || !(value is string)) return false;
+                version = (string)value; return true;
+            }
+            catch (InvalidDataException) { return false; }
+        }
         public static string WriteWorld(DecorWorld world) { CheckWorld(world); var text = new StringBuilder(); WriteValue(text, world); return text.ToString(); }
         public static string WriteCatalog(DecorCatalog catalog) { CheckCatalog(catalog); var text = new StringBuilder(); WriteValue(text, catalog); return text.ToString(); }
         internal static void Need(bool condition) { if (!condition) throw new InvalidDataException("SCHEMA_INVALID"); }

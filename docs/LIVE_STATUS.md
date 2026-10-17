@@ -25,6 +25,7 @@
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
 | DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/48) |
+| DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | 미게시 |
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
@@ -108,13 +109,22 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 제한: geometry/저장/UI/Unity/Quest 미검증; 실제 실행판 미반영; 보관 최근순서는 세션 내 유지, 재실행은 ID순
 - 원본: [작업 인계](handoffs/DECOR-02.json), 시작 6ce28fe / 갱신 2026-10-17
 
+### DECOR-03
+
+OS잠금·원자적 월드저장·백업·복구
+
+- 근거: PR48 Ubuntu/Windows 모든필수검사 PASS·병합251202c·활성소스FF 확인; Issue49 선점·최신원격 Git Gate PASS; 실제 C# 저장62검사 PASS: logs/decor-03-store.log; 최초생성/기존교체 각6지점에서 별도프로세스 실제 강제종료, OS잠금·종료후해제·응답유실재시도 검증; 손상/미지원버전/catalog불일치·backup5개·명시복구/손상본보존·revision/batch경계 검사 PASS; 전체 Node15회귀 + 계약204 + 명령132 + 저장62 검사 PASS: logs/decor-03-local-ci.log; 신규 저장schema/DTO 변경없음, DecorJson에 internal 버전식별 추가; 기존CI실행기에 저장검사 연결; 2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인
+- 다음: 사용자 승인에 따라 커밋·PR·필수CI·통합 후 활성소스FF. 이어서 DECOR-04 통합 검증 및 DECOR-05.
+- 제한: Unity/실제 전원차단 미검증; PR 필수CI 및 통합 진행; 프로세스 종료/IO주입은 검증, 실제 전원차단·네트워크FS·Unity/Quest 미검증; geometry/초안자동저장/실제개인자료이전/UI 제외; backup을 외부에서 삭제/혼합한 저장은 자동복구정합 보장하지 않음
+- 원본: [작업 인계](handoffs/DECOR-03.json), 시작 251202c / 갱신 2026-10-17
+
 ### DECOR-04
 
 직각 배치·상판 지지·충돌 검사 로컬 검증 완료, 미커밋 검토 대기
 
-- 근거: Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현; production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함; node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log; schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결; 사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정
-- 다음: 승인에 따라 커밋; DECOR-03 통합판을 병합해 CI 실행기에 저장/배치 검사를 모두 유지하고 전체 검증 후 PR 통합. 다음05.
-- 제한: 03 저장작업은 별도 미커밋 검토 상태로 보존; 이번 작업에 포함하지 않음; 실제 길찾기/벽/천장/일반다각형/mesh/화면 제외
+- 근거: Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현; production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함; node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log; schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결; 사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정; PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결
+- 다음: 합쳐진03/04 전체회귀 후 PR 필수CI 통합. 이후05 시험씬.
+- 제한: Unity/실제 길찾기/벽/천장/일반다각형/mesh/화면 미검증
 - 원본: [작업 인계](handoffs/DECOR-04.json), 시작 251202c / 갱신 2026-10-17
 
 ### OPS-002
