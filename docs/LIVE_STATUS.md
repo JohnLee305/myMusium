@@ -24,6 +24,7 @@
 | CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/27) |
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
 | DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
+| DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -96,6 +97,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: PR 필수CI 통과 후 통합·활성소스 FF 확인. DECOR-02 새 작업 선점으로 진행.
 - 제한: 참조 단계1~5만 구현; geometry/동선/저장/UI/Unity/Player/Quest 미검증; 실제 실행파일 미반영; 도메인 소스와 검사만 변경
 - 원본: [작업 인계](handoffs/DECOR-01.json), 시작 9ed0d0b / 갱신 2026-10-17
+
+### DECOR-02
+
+꾸미기 명령·보관함 조회·Undo/Redo와 초안 분리
+
+- 근거: 선행PR46 Ubuntu/Windows204검사 포함 필수CI 전체PASS·병합6ce28fe·활성소스FF 확인; Issue47 담당선점·최신원격 Git Gate PASS; production C#6파일 실제 컴파일·명령132검사 PASS: logs/decor-02-commands.log; 기존 Node회귀15묶음+계약204검사+명령129검사 전체PASS: logs/decor-02-local-ci.log; 이후 재진입/변조3검사 추가132 PASS; 원본/결과 분리·20회Undo/Redo·자손회수·수량/묶음·중복/거절·ID재사용·검사기주입·한도/취소 검사; 기존 CI실행기에 신규명령검사 연결, 저장schema와 DECOR-01 도메인 소스 불변; 사용자 DECOR-02 결과 확인·커밋/통합·검증 후 DECOR-03 진행 명시 승인
+- 다음: 필수CI 확인 후 통합·활성소스 FF. DECOR-03 신규 선점·Git Gate 후 저장/복구 구현.
+- 제한: geometry/저장/UI/Unity/Quest 미검증; 실제 실행판 미반영; 보관 최근순서는 세션 내 유지, 재실행은 ID순
+- 원본: [작업 인계](handoffs/DECOR-02.json), 시작 6ce28fe / 갱신 2026-10-17
 
 ### OPS-002
 
