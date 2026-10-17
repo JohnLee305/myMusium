@@ -3,9 +3,9 @@
   "owner": "Codex",
   "status": "validated",
   "summary": "실제 방 배치12명 정체 수정: 통행로 옆 대기·후속전시 되돌아감 제거·대기자 양보/복구·대기계산 캐시",
-  "pullRequest": null,
+  "pullRequest": "https://github.com/JohnLee305/myMusium/pull/23",
   "branch": "codex/crowd-004-deadlock-20261017",
-  "nextAction": "사용자 기존 반영 승인 및 실제 결함 수정 요청 범위로 PR/필수CI/통합→기존Viewer 정상종료→활성폴더FF/빌드/동일재현조건실행→개인54파일해시/12명설정보존→PC관람 재실행. 배포 기록은 후속 문서PR.",
+  "nextAction": "정체수정PR23 통합·실행판반영·개인자료보존·PC재실행 완료. 배포기록PR검사/통합 후 담당해제. 다음 실제 사용자 사용감 확인 및 자동 안전수용량 후속.",
   "updatedDateKst": "2026-10-17",
   "validation": [
     "사용자 실제 정체 보고 확인; 기존 반영 승인 기능의 결함 수정으로 같은 실행판에 교체 예정",
@@ -15,12 +15,16 @@
     "60Hz간격900초:289관람/43퇴장·후반41/7 PASS; waiting plan1회·yield2회: logs/deadlock-20261017-164120/tour-player-12-20261017-164120.log",
     "30Hz간격360초:108관람/13퇴장·후반41/7 PASS; 화면 확인: logs/deadlock-20261017-164145/tour-player-12-20261017-164145.log 및 .png.queue.png",
     "기존미로6명33관람/7퇴장·인접전시12명122관람/34퇴장 및 후반 진행 PASS: logs/navigation-tests-1792219563504/tour-player-6-20261017-164004.log, logs/queue-compact-20261017-164020/tour-player-12-20261017-164020.log",
-    "개인모델/대사/제목을 복사하지 않고 공개 sample-books와 익명ID로 기하배치만 재현"
+    "개인모델/대사/제목을 복사하지 않고 공개 sample-books와 익명ID로 기하배치만 재현",
+    "기능PR23 필수CI 모두PASS·병합d4c3871df1fa28f169c8f093e7ca250a39965645",
+    "활성실행폴더FF·새빌드exit0: logs/unity-Build-20261017-164751.log",
+    "활성실행파일 동일배치60Hz간격360초:109관람13퇴장·후반41/6 PASS: logs/deadlock-20261017-165021/tour-player-12-20261017-165021.log",
+    "개인54파일SHA256불변·목표12명 유지 확인,기존PC바로가기 대상/인수로 수정판 재실행"
   ],
   "limitations": [
-    "테스트는 실제프레임간격을 사용한 PC 모의시간 행동 검증이며 실제FPS/Quest 성능 보장 아님",
-    "개인자료54파일·목표12명·속도1 보존, 현재 실행중 Viewer는 교체 직전까지 유지",
-    "임의 모든 배치의 수용량을 보증하지 않으며 자동인원/입장량 조절은 후속"
+    "실제프레임간격을 사용한 PC 모의시간 행동 검증이며 실제FPS/Quest 성능보장은 아님",
+    "개인자료54파일·목표12명·속도1 보존. 사용자 실제 장시간 사용감 추가확인 필요",
+    "모든 임의배치 수용량 보장 및 자동입장량조절은 후속"
   ],
   "taskId": "CROWD-004"
 }

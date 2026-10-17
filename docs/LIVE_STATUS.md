@@ -11,7 +11,7 @@
 - 개인 자료: `C:/Dev/vr-museum-tycoon/museum-archive` (소스 버전과 분리·공개 Git 제외)
 - 관리: 4186, PC 실행: `Builds/Windows/VRMuseum.exe`
 - 보존 대상: `codex/museum-tycoon`
-- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-160228.log`. 현재 실행 여부는 재확인한다.
+- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-164751.log`. 현재 실행 여부는 재확인한다.
 
 ## 작업 인계
 
@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | ADMIN-006 | Codex | validated | codex/admin-006-admin-workspace-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/16) |
 | CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/20) |
-| CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | 미게시 |
+| CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -48,9 +48,9 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 
 실제 방 배치12명 정체 수정: 통행로 옆 대기·후속전시 되돌아감 제거·대기자 양보/복구·대기계산 캐시
 
-- 근거: 사용자 실제 정체 보고 확인; 기존 반영 승인 기능의 결함 수정으로 같은 실행판에 교체 예정; 수정 전 익명 동일배치0.1초 간격은 통과했으나60Hz간격360초에14관람/퇴장0·후반0/0 정체 재현: logs/deadlock-20261017-163319/tour-player-12-20261017-163319.log; 수정 Windows 빌드exit0: logs/unity-Build-20261017-163846.log; 동일배치60Hz간격360초:109관람/13퇴장·후반41/6, 실제peak12·FIFO/간격/순서/제거/방전환 PASS: logs/deadlock-20261017-163946/tour-player-12-20261017-163946.log; 60Hz간격900초:289관람/43퇴장·후반41/7 PASS; waiting plan1회·yield2회: logs/deadlock-20261017-164120/tour-player-12-20261017-164120.log; 30Hz간격360초:108관람/13퇴장·후반41/7 PASS; 화면 확인: logs/deadlock-20261017-164145/tour-player-12-20261017-164145.log 및 .png.queue.png; 기존미로6명33관람/7퇴장·인접전시12명122관람/34퇴장 및 후반 진행 PASS: logs/navigation-tests-1792219563504/tour-player-6-20261017-164004.log, logs/queue-compact-20261017-164020/tour-player-12-20261017-164020.log; 개인모델/대사/제목을 복사하지 않고 공개 sample-books와 익명ID로 기하배치만 재현
-- 다음: 사용자 기존 반영 승인 및 실제 결함 수정 요청 범위로 PR/필수CI/통합→기존Viewer 정상종료→활성폴더FF/빌드/동일재현조건실행→개인54파일해시/12명설정보존→PC관람 재실행. 배포 기록은 후속 문서PR.
-- 제한: 테스트는 실제프레임간격을 사용한 PC 모의시간 행동 검증이며 실제FPS/Quest 성능 보장 아님; 개인자료54파일·목표12명·속도1 보존, 현재 실행중 Viewer는 교체 직전까지 유지; 임의 모든 배치의 수용량을 보증하지 않으며 자동인원/입장량 조절은 후속
+- 근거: 사용자 실제 정체 보고 확인; 기존 반영 승인 기능의 결함 수정으로 같은 실행판에 교체 예정; 수정 전 익명 동일배치0.1초 간격은 통과했으나60Hz간격360초에14관람/퇴장0·후반0/0 정체 재현: logs/deadlock-20261017-163319/tour-player-12-20261017-163319.log; 수정 Windows 빌드exit0: logs/unity-Build-20261017-163846.log; 동일배치60Hz간격360초:109관람/13퇴장·후반41/6, 실제peak12·FIFO/간격/순서/제거/방전환 PASS: logs/deadlock-20261017-163946/tour-player-12-20261017-163946.log; 60Hz간격900초:289관람/43퇴장·후반41/7 PASS; waiting plan1회·yield2회: logs/deadlock-20261017-164120/tour-player-12-20261017-164120.log; 30Hz간격360초:108관람/13퇴장·후반41/7 PASS; 화면 확인: logs/deadlock-20261017-164145/tour-player-12-20261017-164145.log 및 .png.queue.png; 기존미로6명33관람/7퇴장·인접전시12명122관람/34퇴장 및 후반 진행 PASS: logs/navigation-tests-1792219563504/tour-player-6-20261017-164004.log, logs/queue-compact-20261017-164020/tour-player-12-20261017-164020.log; 개인모델/대사/제목을 복사하지 않고 공개 sample-books와 익명ID로 기하배치만 재현; 기능PR23 필수CI 모두PASS·병합d4c3871df1fa28f169c8f093e7ca250a39965645; 활성실행폴더FF·새빌드exit0: logs/unity-Build-20261017-164751.log; 활성실행파일 동일배치60Hz간격360초:109관람13퇴장·후반41/6 PASS: logs/deadlock-20261017-165021/tour-player-12-20261017-165021.log; 개인54파일SHA256불변·목표12명 유지 확인,기존PC바로가기 대상/인수로 수정판 재실행
+- 다음: 정체수정PR23 통합·실행판반영·개인자료보존·PC재실행 완료. 배포기록PR검사/통합 후 담당해제. 다음 실제 사용자 사용감 확인 및 자동 안전수용량 후속.
+- 제한: 실제프레임간격을 사용한 PC 모의시간 행동 검증이며 실제FPS/Quest 성능보장은 아님; 개인자료54파일·목표12명·속도1 보존. 사용자 실제 장시간 사용감 추가확인 필요; 모든 임의배치 수용량 보장 및 자동입장량조절은 후속
 - 원본: [작업 인계](handoffs/CROWD-004.json), 시작 5b221ee / 갱신 2026-10-17
 
 ### OPS-002
