@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
-| OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | 미게시 |
+| OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
 
 ### OPS-002
@@ -44,8 +44,8 @@ PR CI·필수검사 보호 및 단일 배포정본·작업별 인계·자동 현
 
 GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 
-- 근거: 로컬 Node14회귀묶음 PASS: logs/ops-004-local-ci.log; 실제두프로세스동시선점·소유권/해제/재선점13사례 PASS: logs/ops-004-coordination-tests.log; Git시작Gate18사례 및 PR담당정합9사례 PASS; 실제GitHub Issue#13 선점/중복거절/소유권보존·Windows상태갱신 확인
-- 다음: 전용PR CI·실제담당검사 확인 후 통합, 완료상태공유·담당해제
+- 근거: 로컬 Node14회귀묶음 PASS: logs/ops-004-local-ci.log; 실제두프로세스동시선점·소유권/해제/재선점13사례 PASS: logs/ops-004-coordination-tests.log; Git시작Gate18사례 및 PR담당정합9사례 PASS; 실제GitHub Issue#13 선점/중복거절/소유권보존·Windows상태갱신 확인; 실제PR#14 Actions39002781936: 공개GitHub담당/인계일치정책·Ubuntu14묶음 PASS, Windows 진행중
+- 다음: PR#14 최종CI 성공 확인→통합→개인자료보존·완료상태 공유→담당해제
 - 제한: 기존도구를 사용하지 않는 에이전트의 편집 자체는 막지 못함; 개인모델/대사/로컬경로는 공개작업기록에 포함하지 않음; GitHub쓰기계정공유에대한보안경계가아닌협조적에이전트의원자적경합방지; 원세션영수증분실시자동takeover없음·사용자확인필요
 - 원본: [작업 인계](handoffs/OPS-004.json), 시작 34ac954 / 갱신 2026-10-17
 

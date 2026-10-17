@@ -1,5 +1,7 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
+OPS-004: [실시간 담당목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen)·원자적작업선점·Git/PR담당검사 구현. 검증/통합 상태는 [작업 인계](docs/handoffs/OPS-004.json)·PR#14 참조.
+
 OPS-003: PR/Linux·Windows 회귀CI와 tycoon 필수검사보호 적용. 인계는 PROJECT_STATE·작업별JSON·생성LIVE_STATUS로 통일. 근거/통합상태는 [OPS-003 인계](docs/handoffs/OPS-003.json)와 PR#12 참조.
 
 > 현재 배포/작업은 docs/LIVE_STATUS.md와 docs/PROJECT_STATE.json·docs/handoffs를 확인한다. 이 파일의 과거 경로/대기상태는 당시 기록이며 최신판을 결정하지 않는다.
