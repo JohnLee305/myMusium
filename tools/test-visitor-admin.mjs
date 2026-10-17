@@ -37,6 +37,9 @@ try{
     for(const count of [6,7,12]){
         value={...value,count};response=await post({revision:state.revision,settings:value});assert.equal(response.status,200,await response.text());state=await get();assert.deepEqual(state.settings,value);pass(`count ${count} accepted and roundtripped`);
     }
+    value={...value,mode:'auto'};response=await post({revision:state.revision,settings:value});assert.equal(response.status,200);state=await get();assert.equal(state.settings.mode,'auto');pass('automatic mode persists with manual fallback count');
+    response=await post({revision:state.revision,settings:{...value,mode:'other'}});assert.equal(response.status,400);assert.equal((await get()).settings.mode,'auto');pass('invalid mode preserves automatic setting');
+    value={...value,mode:'manual'};response=await post({revision:state.revision,settings:value});assert.equal(response.status,200);state=await get();pass('switch back to manual');
     const beforeInvalid=fs.readFileSync(file);
     response=await post({revision:state.revision,settings:{...value,count:13}});assert.equal(response.status,400);assert.deepEqual(fs.readFileSync(file),beforeInvalid);pass('13 rejected without changing valid 12');
     response=await post({revision:'missing',settings:{...value,count:0}});assert.equal(response.status,409);assert.deepEqual((await get()).settings,value);pass('stale tab cannot overwrite');

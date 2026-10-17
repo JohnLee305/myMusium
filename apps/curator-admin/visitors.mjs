@@ -14,12 +14,12 @@ export function validateVisitorCatalog(value){
     return {schemaVersion:'1.0',appearances};
 }
 export function validateVisitorSettings(value,catalog=null){
-    if(!keys(value,['schemaVersion','enabled','count','speed','appearances']) || value.schemaVersion!=='1.0' || typeof value.enabled!=='boolean' || !Number.isInteger(value.count) || value.count<0 || value.count>MAX_VISITORS || !Number.isFinite(value.speed) || value.speed<.5 || value.speed>1.5 || !Array.isArray(value.appearances) || value.appearances.length>256) bad(`관람객은 0~${MAX_VISITORS}명, 이동 속도는 0.5~1.5배로 입력해 주세요.`);
+    if(!keys(value,['schemaVersion','enabled','count','speed','appearances','mode']) || (value.mode!==undefined && !['manual','auto'].includes(value.mode)) || value.schemaVersion!=='1.0' || typeof value.enabled!=='boolean' || !Number.isInteger(value.count) || value.count<0 || value.count>MAX_VISITORS || !Number.isFinite(value.speed) || value.speed<.5 || value.speed>1.5 || !Array.isArray(value.appearances) || value.appearances.length>256) bad(`관람객 설정을 확인해 주세요. 수동 인원은 0~${MAX_VISITORS}명, 이동 속도는 0.5~1.5배입니다.`);
     const seen=new Set();
     const appearances=value.appearances.map(entry=>{
         if(!keys(entry,['id','enabled','weight']) || !idPattern.test(entry.id) || seen.has(entry.id) || typeof entry.enabled!=='boolean' || !Number.isFinite(entry.weight) || entry.weight<0 || entry.weight>100) bad('외형별 사용 여부와 등장 비중(0~100)을 확인해 주세요.');
         if(catalog && !catalog.appearances.some(item=>item.id===entry.id)) bad('현재 실험 앱에 없는 외형입니다. 저장된 설정을 다시 불러와 주세요.');
         seen.add(entry.id); return {id:entry.id,enabled:entry.enabled,weight:entry.weight};
     });
-    return {schemaVersion:'1.0',enabled:value.enabled,count:value.count,speed:value.speed,appearances};
+    return {schemaVersion:'1.0',enabled:value.enabled,count:value.count,speed:value.speed,appearances,...(value.mode===undefined?{}:{mode:value.mode})};
 }

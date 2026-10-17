@@ -12,6 +12,7 @@ namespace FamilyMuseum
         public Vector3 Center, View, Clear;
         public List<Vector3> ClearancePath;
         public List<Vector3> Approach;
+        public List<Vector3> Departure;
         public List<Vector3> Places;
         public long LastViewed;
     }
@@ -68,7 +69,10 @@ namespace FamilyMuseum
                         for (int p = 1; p < approach.Count; p++)
                             if (SegmentDistance(clear, approach[p-1], approach[p]) < .9f) { separated = false; break; }
                         if (!separated) continue;
-                        q = new TourExhibitQueue { Room = roomIndex, First = TourNavigation.Get(TourRooms[roomIndex]).visitOrder[0] == entry, Center = center, View = view, Clear = clear, ClearancePath = departure, Approach = approach };
+                        var onward=paths.Find(clear,TourNavigation.Door(TourNavigation.Get(TourRooms[roomIndex]).exit));
+                        if(onward==null)continue;
+                        onward.Insert(0,clear);
+                        q = new TourExhibitQueue { Room = roomIndex, First = TourNavigation.Get(TourRooms[roomIndex]).visitOrder[0] == entry, Center = center, View = view, Clear = clear, ClearancePath = departure, Approach = approach, Departure = onward };
                         break;
                     }
                     if (q != null) break;
@@ -108,6 +112,8 @@ namespace FamilyMuseum
                 // Park beside circulation routes, never on the route needed by the oldest ticket.
                 for(int i=1;i<other.Approach.Count;i++)
                     if(SegmentDistance(point,other.Approach[i-1],other.Approach[i])<.8f)return false;
+                for(int i=1;i<other.Departure.Count;i++)
+                    if(SegmentDistance(point,other.Departure[i-1],other.Departure[i])<.85f)return false;
                 if ((point - other.View).sqrMagnitude < 1f || (point - other.Clear).sqrMagnitude < 1f) return false;
                 var previous = other.View;
                 foreach (var step in other.ClearancePath)
@@ -186,7 +192,7 @@ namespace FamilyMuseum
             if(yieldingGuests.TryGetValue(guest.TourRoom,out var active) && active!=null && active!=guest)return false;
             // Older guests and guests already vacating a viewing place have priority.
             MuseumGuest priority=null;
-            foreach(var other in guests)
+            foreach(var other in GuestsInRoom(guest.TourRoom))
                 if(other!=guest && other.TourRoom==guest.TourRoom &&
                     (other.transform.position-guest.transform.position).sqrMagnitude<1.8f*1.8f &&
                     other.TourStalled && (other.Sequence<guest.Sequence || other.State==GuestState.Clearing))
@@ -239,6 +245,8 @@ namespace FamilyMuseum
 
         public void RemoveTourQueueGuest(MuseumGuest guest)
         {
+            GuestsInRoom(guest.TourRoom).Remove(guest);
+            deferredRoutes.Remove(guest);
             FinishTourYield(guest);
             foreach (var q in tourQueues.Values)
             {

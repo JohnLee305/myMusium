@@ -35,6 +35,7 @@ function render(data){
     current=data;page=0;
     drafts=new Map(data.catalog.map(entry=>{const saved=data.settings.appearances.find(value=>value.id===entry.id);return [entry.id,{id:entry.id,enabled:entry.available && (saved?.enabled??true),weight:saved?.weight??entry.weight}];}));
     $('visitor-enabled').checked=data.settings.enabled;$('visitor-count').value=data.settings.count;$('visitor-speed').value=data.settings.speed;
+    $('visitor-mode').value=data.settings.mode??'manual';$('visitor-count').disabled=$('visitor-mode').value==='auto';
     $('visitor-removed-note').hidden=!data.settings.appearances.some(item=>!data.catalog.some(entry=>entry.id===item.id));
     $('visitor-controls').disabled=false;renderRows();
 }
@@ -45,12 +46,13 @@ async function reload(){
 }
 $('visitor-form').addEventListener('submit',async event=>{
     event.preventDefault();if(busy || !current || !token)return;
-    const settings={schemaVersion:'1.0',enabled:$('visitor-enabled').checked,count:Number($('visitor-count').value),speed:Number($('visitor-speed').value),appearances:[...drafts.values()]};
+    const settings={schemaVersion:'1.0',enabled:$('visitor-enabled').checked,count:Number($('visitor-count').value),speed:Number($('visitor-speed').value),appearances:[...drafts.values()],mode:$('visitor-mode').value};
     busy=true;$('visitor-controls').disabled=true;notice('관람객 설정을 저장하고 있습니다.');
     try{const response=await fetch('/api/visitors',{method:'POST',headers:{'Content-Type':'application/json','X-Museum-Token':token},body:JSON.stringify({revision:current.revision,settings})});const data=await response.json();if(!response.ok)throw Error(data.error);render(data);notice('저장했습니다. 실행 중인 최신 관람 앱에 약 1초 안에 반영되며, 다시 실행해도 유지됩니다.');}
     catch(error){notice(error.message||'저장하지 못했습니다. 입력값은 유지됩니다.',true);}finally{busy=false;$('visitor-controls').disabled=false;}
 });
 $('visitor-reload').addEventListener('click',reload);
+$('visitor-mode').addEventListener('change',()=>{$('visitor-count').disabled=$('visitor-mode').value==='auto';});
 $('visitor-speed').addEventListener('input',()=>{if(current)ratios();});
 $('visitor-search').addEventListener('input',()=>{if(current){page=0;renderRows();}});
 $('visitor-previous').addEventListener('click',()=>{if(page>0){page--;renderRows();}});

@@ -20,8 +20,13 @@ export function checkPrOwnership(claim,taskId,headBranch,owner){
  validateClaim(claim);assert.equal(claim.taskId,taskId);assert.equal(claim.branch,headBranch);assert.equal(claim.agent,owner);assert.ok(['in_progress','blocked','review'].includes(claim.status),'PR must have an active claimed owner');return true;
 }
 async function publicClaim(taskId){
- const get=async endpoint=>{const res=await fetch('https://api.github.com/repos/JohnLee305/myMusium/'+endpoint,{headers:{Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(15000)});assert.ok(res.ok,'Cannot verify shared task owner: '+res.status);return res.json();};
- const ref=await get('git/ref/heads/'+claimRef(taskId)),commit=await get('git/commits/'+ref.object.sha);assert.ok(commit.message.startsWith('MUSEUM_TASK_CLAIM\n'));return JSON.parse(commit.message.slice('MUSEUM_TASK_CLAIM\n'.length));
+ // Read the same ownership ref through public Git transport: shared CI runner IPs
+ // can exhaust the anonymous REST quota. No credentials or workflow write scope needed.
+ const result=spawnSync('git',['fetch','--no-tags','https://github.com/JohnLee305/myMusium.git','refs/heads/'+claimRef(taskId)],{encoding:'utf8',windowsHide:true,timeout:45000});
+ assert.equal(result.status,0,'Cannot fetch shared task owner');
+ const commit=spawnSync('git',['show','-s','--format=%B','FETCH_HEAD'],{encoding:'utf8',windowsHide:true});
+ assert.equal(commit.status,0);assert.ok(commit.stdout.startsWith('MUSEUM_TASK_CLAIM\n'));
+ return JSON.parse(commit.stdout.slice('MUSEUM_TASK_CLAIM\n'.length));
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
  const root=process.cwd(),state=readHandoff(root);
