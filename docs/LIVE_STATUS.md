@@ -25,8 +25,9 @@
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
 | DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/48) |
-| DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | 미게시 |
-| DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | 미게시 |
+| DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/51) |
+| DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
+| DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -113,19 +114,28 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 
 OS잠금·원자적 월드저장·백업·복구
 
-- 근거: PR48 Ubuntu/Windows 모든필수검사 PASS·병합251202c·활성소스FF 확인; Issue49 선점·최신원격 Git Gate PASS; 실제 C# 저장62검사 PASS: logs/decor-03-store.log; 최초생성/기존교체 각6지점에서 별도프로세스 실제 강제종료, OS잠금·종료후해제·응답유실재시도 검증; 손상/미지원버전/catalog불일치·backup5개·명시복구/손상본보존·revision/batch경계 검사 PASS; 전체 Node15회귀 + 계약204 + 명령132 + 저장62 검사 PASS: logs/decor-03-local-ci.log; 신규 저장schema/DTO 변경없음, DecorJson에 internal 버전식별 추가; 기존CI실행기에 저장검사 연결; 2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인
-- 다음: 사용자 승인에 따라 커밋·PR·필수CI·통합 후 활성소스FF. 이어서 DECOR-04 통합 검증 및 DECOR-05.
-- 제한: Unity/실제 전원차단 미검증; PR 필수CI 및 통합 진행; 프로세스 종료/IO주입은 검증, 실제 전원차단·네트워크FS·Unity/Quest 미검증; geometry/초안자동저장/실제개인자료이전/UI 제외; backup을 외부에서 삭제/혼합한 저장은 자동복구정합 보장하지 않음
+- 근거: PR48 Ubuntu/Windows 모든필수검사 PASS·병합251202c·활성소스FF 확인; Issue49 선점·최신원격 Git Gate PASS; 실제 C# 저장62검사 PASS: logs/decor-03-store.log; 최초생성/기존교체 각6지점에서 별도프로세스 실제 강제종료, OS잠금·종료후해제·응답유실재시도 검증; 손상/미지원버전/catalog불일치·backup5개·명시복구/손상본보존·revision/batch경계 검사 PASS; 전체 Node15회귀 + 계약204 + 명령132 + 저장62 검사 PASS: logs/decor-03-local-ci.log; 신규 저장schema/DTO 변경없음, DecorJson에 internal 버전식별 추가; 기존CI실행기에 저장검사 연결; 2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인; 사용자명시승인 PR51 Ubuntu/Windows/정책/필수검사 전체PASS·병합5090c0f4c5a588b6ea664eae6e7abce4f4151ffa·활성소스FF 확인. 개인55파일 SHA256 불변.
+- 다음: 통합 완료. 후속 DECOR-05 시험씬·카메라·화면의 사용자 검토 진행.
+- 제한: 실제 전원차단·네트워크FS·Quest 미검증; 초안자동저장·UI·실제개인자료 이전 제외
 - 원본: [작업 인계](handoffs/DECOR-03.json), 시작 251202c / 갱신 2026-10-17
 
 ### DECOR-04
 
 직각 배치·상판 지지·충돌 검사 로컬 검증 완료, 미커밋 검토 대기
 
-- 근거: Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현; production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함; node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log; schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결; 사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정; PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결; 03 통합 후 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+배치127; logs/decor-04-combined-ci.log
-- 다음: 합쳐진03/04 전체회귀 후 PR 필수CI 통합. 이후05 시험씬.
+- 근거: Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현; production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함; node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log; schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결; 사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정; PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결; 03 통합 후 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+배치127; logs/decor-04-combined-ci.log; 사용자명시승인 PR52 Ubuntu/Windows/정책/필수검사 전체PASS·병합668fe67d37863b4d945c32bd69c21ca517b64c6d·활성소스FF 확인. 개인55파일 SHA256 불변.
+- 다음: 통합 완료. 후속 DECOR-05 시험씬·카메라·화면의 사용자 검토 진행.
 - 제한: Unity/실제 길찾기/벽/천장/일반다각형/mesh/화면 미검증
 - 원본: [작업 인계](handoffs/DECOR-04.json), 시작 251202c / 갱신 2026-10-17
+
+### DECOR-05
+
+분리된 꾸미기 시험씬·카메라·UI Toolkit 화면 구현, PC Player63검사 완료·사용자 통합 승인
+
+- 근거: 사용자03/04 통합 후05 진행 승인; PR51/52 필수CI 전체PASS·병합 및 활성소스FF 확인; 개인자료55파일 SHA256 불변; Issue53 선점 및 최신원격 Git Gate PASS; Unity 6000.3.23f1 Windows Development Player build exit0: logs/decor-05-build-reviewed.log; 기존 관람씬·EditorBuildSettings 불변 및 관람씬 편집입력 컴포넌트 없음 확인; 실제 표시 창의 PC Player63검사 PASS: logs/decor-ui-20261017-233303/results.txt 및 player.log; 1280x800/1920x1080/1024x720, UI배율125/150% 포함6조합; 주요영역/버튼/한국어2줄/카드설명 스크롤바 경계/실제GPU 비어있지 않은 캡처 확인; Input System 가상 키보드·마우스 이벤트로 검색포커스·UI클릭/휠차단·목록스크롤·보관함수량·방선택·중/우드래그·WASD·휠·F·받침대선택 및 모델불변 확인; 최종1280선택물/1024x720 150%/초기화면 캡처 직접 검토. 초기 형식이름충돌·설정참조·작은창/카드설명가림·숨김첫렌더·시험입력장치경합 조건을 로그와 함께 수정/분리; CI 정책10검사·diff --check PASS; 개인55파일 SHA256/파일수 및 바탕화면 박물관바로가기2개 불변. 방명록6235150326 게시/재조회 일치.; 사용자가 화면 확인 후 DECOR-05 커밋·통합을 명시 승인. 최신 원격과 HEAD 일치, 기존 검증 이후 기능소스 변경 없음.
+- 다음: 승인에 따라 커밋·PR 필수CI·통합 후 활성소스FF 및 통합판 시험씬 빌드/검사. 다음 구현은 DECOR-06(별도 요청 시).
+- 제한: 사용자 통합 승인 후 PR 필수CI 진행. 기존 관람 실행파일과 개인Archive 변경 없음.; 배치/저장/실제소장품/경제/Quest 연결 제외; 사람의 사용성 검토와 Windows OS배율·모니터 간 이동 미검증; 125/150%는 실제Player의 UI Toolkit 논리배율 검사이며 Windows 자체 배율 변경 시험은 아님; OpenXR 패키지의 기기미연결 네이티브 진단이 있을 수 있음. Quest 착용/연결 또는 VR 렌더 검증으로 주장하지 않음
+- 원본: [작업 인계](handoffs/DECOR-05.json), 시작 668fe67 / 갱신 2026-10-17
 
 ### OPS-002
 

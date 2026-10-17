@@ -217,8 +217,8 @@ SEC-001 초기 파일 목록/GLB 해시·동봉 라이선스 점검 수행. [결
 - [x] DECOR-01 공통 DTO·엄격 JSON 경계·형식/참조 단계1~5 구현, production C# 204검사 PASS. PR46 필수검사 전체PASS·통합6ce28fe·활성소스 반영 완료. [구현 인계](docs/decor-design/DECOR-01-IMPLEMENTATION.md). 다음 구현은 DECOR-02.
 - [x] DECOR-02 편집 명령·보관함 조회·Undo/Redo 로컬 구현. 실제 C#132검사 PASS, PR48 필수CI 통과·통합 및 활성소스 반영 완료. [구현 인계](docs/decor-design/DECOR-02-IMPLEMENTATION.md).
 - [x] DECOR-03 단일 작성자 WorldStore·저장·복구 62검사 및 필수CI PASS, PR51 통합 완료.
-- [x] DECOR-04 직각 배치·상판 지지·충돌 검사 로컬 구현·127검사 및 전체 회귀 PASS. 미커밋 검토 대기. [구현 인계](docs/decor-design/DECOR-04-IMPLEMENTATION.md).
-- [ ] DECOR-05 시험 씬·편집 카메라·화면 골격.
+- [x] DECOR-04 직각 배치·상판 지지·충돌 검사 로컬 구현·127검사 및 전체 회귀 PASS. PR52 필수CI PASS·통합 및 활성소스 반영 완료. [구현 인계](docs/decor-design/DECOR-04-IMPLEMENTATION.md).
+- [x] DECOR-05 시험 씬·편집 카메라·화면 골격 로컬 구현. 실제 Windows Player63검사 및 캡처 직접확인 PASS. 사용자 통합 승인·필수CI 진행. [구현 인계](docs/decor-design/DECOR-05-IMPLEMENTATION.md).
 - [ ] DECOR-06 놓기·상판 소품·회수의 UI 연결.
 - [ ] DECOR-07 가상 한 방 시험판·저장 재실행·사용자 체감.
 - [ ] DECOR-08 실제 자료·관람객·실행 앱 연결 설계 Gate.

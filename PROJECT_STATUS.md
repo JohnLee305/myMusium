@@ -1,6 +1,6 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
-**다음 개발: 내부 꾸미기.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-04-IMPLEMENTATION.md). DECOR-01/02 통합 완료, DECOR-03 저장 통합 완료(PR51), DECOR-04 충돌검사 통합 검증 중. 독립 이공간·심즈식 배치 우선.
+**현재 개발: DECOR-05 시험 공간과 편집 화면.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-05-IMPLEMENTATION.md). DECOR-01~04 통합 완료(PR46/48/51/52). DECOR-05는 Player63검사 완료·사용자 통합 승인이며 다음은 DECOR-06 배치 조작 연결.
 
 OPS-009: 기본브랜치와 최신판을 codex/museum-tycoon으로 통일. 개발/빌드/실행 sourceRoot는 PROJECT_STATE.json 하나가 기준이다. 예전 폴더/기준판은 은퇴·자료보관용이며 과거 본문보다 [단일 버전 운영](docs/VERSIONING.md)이 우선한다. 검증/통합은 [OPS-009 인계](docs/handoffs/OPS-009.json) 참조.
 
