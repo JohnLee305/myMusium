@@ -4,7 +4,7 @@ import {spawnSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 
 export const INTEGRATION_BRANCH='codex/museum-tycoon';
-export const REQUIRED_DOCS=['AGENTS.md','docs/GIT_MULTI_AGENT_WORKFLOW.md','docs/LIVE_STATUS.md','PROJECT_STATUS.md','TASKS.md','STATUS.md','WORKLOG.md','docs/WORK_HANDOFF.md'];
+export const REQUIRED_DOCS=['AGENTS.md','docs/GIT_MULTI_AGENT_WORKFLOW.md','docs/LIVE_STATUS.md','docs/PROJECT_STATE.json','PROJECT_STATUS.md','TASKS.md','STATUS.md','WORKLOG.md','docs/WORK_HANDOFF.md'];
 const execute=(command,args,cwd)=>{
  const r=spawnSync(command,args,{cwd,encoding:'utf8',windowsHide:true,timeout:60000,maxBuffer:2*1024*1024});
  if(r.error||r.status!==0)throw Error(`${command} failed (${r.error?.code??r.status})`);

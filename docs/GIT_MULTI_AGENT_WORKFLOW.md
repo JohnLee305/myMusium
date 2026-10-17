@@ -21,7 +21,7 @@
 2. **미커밋 파일 보호.** `git status --short`, 현재 브랜치, 로컬 HEAD, `git remote -v`를 기록한다. 다른 세션의 변경, 미추적 개인 데이터, 빌드 실행 중 리소스를 확인한다.
 3. **원격 최신 커밋 가져오기.** `git fetch --prune origin`을 실행한다. 원격 `origin/codex/museum-tycoon`과 로컬 HEAD의 선후·분기를 확인한다. GitHub 접근 불가/인증 실패/원격 부재 시 진행 불가로 보고하고 수정하지 않는다.
 4. **안전하게 최신화.** 깨끗한 공유 실험 브랜치에서만 `git pull --ff-only origin codex/museum-tycoon`으로 최신화한다. 기존 작업 브랜치에서는 현재 변경사항을 보존한 채 원격 기준 커밋과의 차이를 확인하고, **안전하게 통합 가능한 경우에만** 반영한다. `--ff-only` 실패·히스토리 분기·수정 충돌 시 멈추고 이유와 선택지를 보고한다. `reset --hard`, `clean -fd`, 자동 `stash`/discard, 무분별한 `force push` 금지.
-5. **최신 기획·작업 읽기.** 동기화한 실험 브랜치의 `AGENTS.md` → `docs/LIVE_STATUS.md`의 최신 날짜/담당 블록 → `PROJECT_STATUS.md` → `TASKS.md` → `STATUS.md` → `WORKLOG.md` → `docs/WORK_HANDOFF.md` → 해당 기능 설계/ADR 순서로 읽는다. Work가 구현 파일을 열기 **전** 이 단계를 완료한다. `STATUS/WORKLOG`에는 과거 실행 상태가 있으므로 실제 프로세스·브랜치 상태와 교차검증한다.
+5. **최신 기획·작업 읽기.** 최신 AGENTS → LIVE_STATUS → PROJECT_STATE → 작업별 handoff → TASKS 해당ID·관련설계 순서. 과거 STATUS/WORKLOG 전체를 매번 읽지 않으며 해당ID 근거가 필요할 때 검색한다. 현재상태 중복복사를 하지 않는다. [인계정본 운영](WORK_HANDOFF.md).
 6. **진행 중 작업 중복 확인.** 대상 TODO ID/선행 항목, 현재 진행 중 상태, 공개된 같은 ID의 작업 브랜치/PR, 서로 수정할 파일의 겹침을 확인한다. 이미 다른 에이전트가 동일 항목을 담당하면 임의로 중복 구현하지 말고 역할을 나누거나 보고한다.
 7. **작업 범위 선언.** 작업 ID, 목표·비범위, 작업자(Work/Codex 등), 시작 기준 SHA, 브랜치, 예상 변경 파일, 검증 계획을 작업 기록 또는 PR에 명시한 뒤 착수한다.
 

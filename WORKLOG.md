@@ -1,5 +1,7 @@
 # 작업 로그
 
+> 현재 배포/작업은 docs/LIVE_STATUS.md와 docs/PROJECT_STATE.json·docs/handoffs를 확인한다. 이 파일의 과거 경로/대기상태는 당시 기록이며 최신판을 결정하지 않는다.
+
 시간대: Asia/Seoul. 과거 기록은 유지하고 새 작업 결과를 아래에 추가한다.
 
 ## 2026-09-10 / 개발환경 구축 시작
@@ -792,3 +794,8 @@
 - 사용자 명시승인 후 구현커밋5b7b32d, 전용브랜치push, PR#11 생성. 실제Windows CLI clean Gate ok=true/blockers0, HEAD변경없음. 격리17사례 결과 유지.
 - 통합 정본: https://github.com/JohnLee305/myMusium/pull/11 병합SHA. 종료Gate에서 최신원격확인·두실험폴더FF·개인자료해시·완료브랜치정리 후 최종응답에 SHA 기록.
 - 다음: 새 작업 요청 시 정확한루트/전용브랜치에서 git-preflight 실행 후 LIVE_STATUS/TASKS/설계를 읽는다. OPS-003 CI·브랜치 보호는 아직 미구현. 런타임·Archive·4186 변경 없음.
+
+## 2026-10-17 / OPS-003 시작
+- 사용자: PR/CI 보호 진행 및 버전 분산·인수인계 비용 개선 요청. 시작26e3056, Codex 전용 codex/ops-003-ci-handoff-20261017, 시작Gate PASS·열린PR없음.
+- GitHub admin권한 확인,Actions enabled·기존workflow없음·tycoon보호없음. 범위: 읽기전용토큰 Linux/Windows 회귀CI, 인계기록/배포정본·생성현황판, 검증후 PR/필수검사 보호. 기준판/태그/개인Archive/앱 변경금지.
+- CI의 원격 동작 검증에는 전용브랜치 커밋/push·PR이 필요하며 이 사용자 요청의 실행 범위로 진행. 실패는 수정하며 미검증 항목은 완료표시하지 않음.

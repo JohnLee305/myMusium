@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "repository": "JohnLee305/myMusium",
+  "integrationBranch": "codex/museum-tycoon",
+  "protectedRefs": ["codex/museum-baseline", "museum-baseline-20261015"],
+  "windowsDeployment": {
+    "sourceRoot": "C:/Dev/vr-museum-sync-20261016",
+    "archiveRoot": "C:/Dev/vr-museum-tycoon/museum-archive",
+    "adminPort": 4186,
+    "viewerRelativePath": "Builds/Windows/VRMuseum.exe"
+  },
+  "limits": {"reactions": 96, "reactionBytes": 65536, "reactionTextUtf16": 72, "roomCells": 30},
+  "runtimeVerification": {
+    "buildLog": "logs/unity-Build-20261017-114603.log",
+    "verifiedDateKst": "2026-10-17",
+    "level": "PC; Quest unverified",
+    "note": "Historical build verification, not a claim that a process is currently running. Recheck actual processes and shortcuts."
+  }
+}
