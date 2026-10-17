@@ -53,7 +53,7 @@ namespace FamilyMuseum
         public float TourPace(MuseumGuest current,Vector3 direction)
         {
             float pace=1;
-            foreach(var guest in guests)
+            foreach(var guest in GuestsInRoom(current.TourRoom))
             {
                 if(guest==current || guest.TourRoom!=current.TourRoom)continue;
                 var offset=guest.transform.position-current.transform.position;

@@ -24,10 +24,10 @@ namespace FamilyMuseum
             if(tourArtifacts.TryGetValue(entry,out var item))return item;
             try{var archive=new LocalArchive(LocalArchive.FindRoot());var loaded=archive.ReadArtifact(entry);archive.Resolve(loaded.model);return tourArtifacts[entry]=loaded;}catch(Exception){tourArtifacts[entry]=null;return null;}
         }
-        public bool CanEnterTourRoom(MuseumGuest current,int index) {var p=TourNavigation.Door(TourNavigation.Get(TourRooms[index]).entrance);return guests.All(g=>g==current||g.TourRoom!=index||(g.transform.position-p).sqrMagnitude>.8f*.8f);}
+        public bool CanEnterTourRoom(MuseumGuest current,int index) {var p=TourNavigation.Door(TourNavigation.Get(TourRooms[index]).entrance);return HasRoomCapacity(index) && GuestsInRoom(index).All(g=>g==current||(g.transform.position-p).sqrMagnitude>.8f*.8f);}
         void PrepareTours()
         {
-            if(TourRooms==null){TourRooms=new LocalArchive(LocalArchive.FindRoot()).ReadRooms();tourPaths.Clear();tourArtifacts.Clear();}
+            if(TourRooms==null){TourRooms=new LocalArchive(LocalArchive.FindRoot()).ReadRooms();tourPaths.Clear();tourArtifacts.Clear();ApplyPopulation();}
             exhibits ??= Array.Empty<ArtifactDisplay>();room=gallery.CurrentRoom;Paths=TourPath(room);
         }
         public IEnumerator RunTourSmoke()

@@ -74,7 +74,7 @@ namespace FamilyMuseum
         }
         public void TickLocomotion(float speedRatio,float dt,float movementSpeed=1)
         {
-            if(!graph.IsValid()) return;
+            if(!graph.IsValid() || !gameObject.activeInHierarchy) return;
             speedRatio=Mathf.Clamp01(speedRatio);
             blend=Mathf.MoveTowards(blend,speedRatio,dt*4);
             mixer.SetInputWeight(0,1-blend); mixer.SetInputWeight(1,blend);

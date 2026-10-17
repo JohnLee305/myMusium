@@ -17,6 +17,7 @@ namespace FamilyMuseum
         public long QueueTicket { get; internal set; }
         bool tourYielding;
         internal MuseumGuest YieldPriority {get;set;}
+        internal bool RouteDeferred {get;set;}
         float yieldPause,yieldCooldown,yieldAge;
         internal bool FollowingQueuePoint(Vector3 point)=>path!=null && path.Count>0 && waypoint<path.Count && (path[path.Count-1]-point).sqrMagnitude<.0001f;
         internal bool TourStalled=>State!=GuestState.Viewing && State!=GuestState.Finished && !tourYielding &&
@@ -65,6 +66,7 @@ namespace FamilyMuseum
             if(TourRoom+1>=museum.TourRooms.Length){State=GuestState.Finished;return;}
             if(!museum.CanEnterTourRoom(this,TourRoom+1))return;
             TourRoom++;tourIndex=0;tourLeaving=false;tourTarget=null;
+            museum.ChangeGuestRoom(this,TourRoom-1);
             var nav=TourNavigation.Get(museum.TourRooms[TourRoom]);
             transform.position=TourNavigation.Door(nav.entrance);State=GuestState.Entering;
             SetPath(transform.position+TourNavigation.Inward(nav.entrance)*.5f);
@@ -72,6 +74,7 @@ namespace FamilyMuseum
         void TickTour(float dt)
         {
             if(State==GuestState.Finished)return;
+            RouteDeferred=false;
             gameObject.SetActive(TourRoom==museum.VisibleRoom);
             bool moving=false;
             var motionStart=transform.position;
@@ -157,6 +160,7 @@ namespace FamilyMuseum
             if(!moving && (path==null || waypoint>=path.Count || State==GuestState.Viewing))motionSpeed=Mathf.MoveTowards(motionSpeed,0,dt*3);
             float actualSpeed=Vector3.Distance(motionStart,transform.position)/Mathf.Max(.0001f,dt);
             Visual.TickLocomotion(actualSpeed/Mathf.Max(.1f,Visual.Appearance.walkSpeed*museum.SpeedMultiplier),dt,museum.SpeedMultiplier);UpdateThoughtVisibility();
+            if(RouteDeferred)retry=0; // Budget deferral retries next frame, not the blocked-path timer.
         }
     }
 }
