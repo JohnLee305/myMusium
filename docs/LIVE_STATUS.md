@@ -11,7 +11,7 @@
 - 개인 자료: `C:/Dev/vr-museum-tycoon/museum-archive` (소스 버전과 분리·공개 Git 제외)
 - 관리: 4186, PC 실행: `Builds/Windows/VRMuseum.exe`
 - 보존 대상: `codex/museum-tycoon`
-- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-164751.log`. 현재 실행 여부는 재확인한다.
+- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-172219.log`. 현재 실행 여부는 재확인한다.
 
 ## 작업 인계
 
@@ -20,7 +20,7 @@
 | ADMIN-006 | Codex | validated | codex/admin-006-admin-workspace-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/16) |
 | CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/20) |
 | CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
-| CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | 미게시 |
+| CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/27) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -58,9 +58,9 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 
 현재맵12명 보행 가감속·속도애니메이션·통행우선순위 및 양보반복 보정
 
-- 근거: Windows 빌드 exit0: logs/unity-Build-20261017-171332.log; 개인 저장맵 12명 실제120초: 이동의도 연속정지 최대16.01→0.37초, 양보12→0, 관람23→23회; frameP95 6.99→6.97ms. logs/motion-20261017-171726/summary.txt; 개인54파일SHA256불변; 동일 익명배치12명60Hz간격900초:276관람41퇴장·후반39/6 PASS. logs/deadlock-20261017-171544/; 별도미로6명/인접전시12명/실제FIFO18검사 PASS; docs/CROWD_MOTION_SMOOTHING.md; Node 전체15묶음 PASS: logs/crowd-006-local-ci-retry.log
-- 다음: 사용자 기존 반영승인과 이번 보정요청에 따라 PR/필수CI 통합 후 활성 PC 실행판 빌드·개인자료 보존·재실행 검증
-- 제한: 한PC·한배치의 전후1회실측이며 임의배치/Quest 성능보장은 아님; 모의900초는 행동회귀이며 실제15분FPS검사가 아님; 120초관람동일23회이나퇴장1→0으로처리량향상주장없음; 활성실행판교체는다음단계;개인맵/목표12/속도1보존
+- 근거: Windows 빌드 exit0: logs/unity-Build-20261017-171332.log; 개인 저장맵 12명 실제120초: 이동의도 연속정지 최대16.01→0.37초, 양보12→0, 관람23→23회; frameP95 6.99→6.97ms. logs/motion-20261017-171726/summary.txt; 개인54파일SHA256불변; 동일 익명배치12명60Hz간격900초:276관람41퇴장·후반39/6 PASS. logs/deadlock-20261017-171544/; 별도미로6명/인접전시12명/실제FIFO18검사 PASS; docs/CROWD_MOTION_SMOOTHING.md; Node 전체15묶음 PASS: logs/crowd-006-local-ci-retry.log; 기능PR27 필수검사 모두PASS·병합49cfc5a1d7cda06989c14376ecb8cb10caa8bfce; 활성 실행폴더FF·빌드 exit0: logs/unity-Build-20261017-172219.log; 활성 실행파일 동일배치60Hz간격12명360초:102관람12퇴장·후반39/6 PASS. logs/deadlock-20261017-172303/tour-player-12-20261017-172304.log; 개인54파일SHA256·관람객12/속도1·바탕화면3개 불변; 기존PC바로가기 인수로1개화면 재실행·12초후동작확인
+- 다음: PR27통합·활성실행판교체/검증·개인자료보존·PC재실행 완료. 배포기록PR 통합후 담당해제. 사용자 사용감 확인은 후속.
+- 제한: 한PC·한배치 전후1회실측; Quest실기기/임의배치 성능보장은 아님; 모의900초는 행동회귀이며 실제15분FPS검사가 아님. 관람동일23회·퇴장1→0으로처리량향상주장없음; 이전진단폴더의미커밋자료는보존;일반사용의체감확인과자동안전수용량조절은후속
 - 원본: [작업 인계](handoffs/CROWD-006.json), 시작 0ea530b / 갱신 2026-10-17
 
 ### OPS-002
