@@ -16,6 +16,7 @@ namespace FamilyMuseum
         TourExhibitQueue tourQueue;
         public long QueueTicket { get; internal set; }
         bool tourYielding;
+        internal MuseumGuest YieldPriority {get;set;}
         float yieldPause,yieldCooldown,yieldAge;
         internal bool FollowingQueuePoint(Vector3 point)=>path!=null && path.Count>0 && waypoint<path.Count && (path[path.Count-1]-point).sqrMagnitude<.0001f;
         internal bool TourStalled=>State!=GuestState.Viewing && State!=GuestState.Finished && !tourYielding &&
@@ -29,6 +30,7 @@ namespace FamilyMuseum
         }
         bool SetQueuePath(Vector3 destination)
         {
+            AuditRoute();
             path=museum.QueueRoute(this,destination);waypoint=0;blockedFor=0;
             return path!=null;
         }
@@ -72,20 +74,23 @@ namespace FamilyMuseum
             if(State==GuestState.Finished)return;
             gameObject.SetActive(TourRoom==museum.VisibleRoom);
             bool moving=false;
+            var motionStart=transform.position;
             yieldCooldown-=dt;
             if(tourYielding)
             {
                 yieldAge+=dt;
-                if(yieldAge>=4)
+                if(yieldAge>=8)
                 {
-                    museum.FinishTourYield(this);tourYielding=false;SetQueuePath(resumeDestination);retry=1;
+                    museum.FinishTourYield(this);tourYielding=false;motionSpeed=0;SetQueuePath(resumeDestination);retry=1;
                     Visual.Tick(false,dt,museum.SpeedMultiplier);return;
                 }
             }
             if(tourYielding && (path==null || waypoint>=path.Count))
             {
                 yieldPause-=dt;
-                if(yieldPause<=0){museum.FinishTourYield(this);tourYielding=false;SetQueuePath(resumeDestination);retry=1;}
+                bool passed=YieldPriority==null || YieldPriority.State==GuestState.Finished || YieldPriority.TourRoom!=TourRoom ||
+                    Vector3.Distance(YieldPriority.transform.position,resumeDestination)>1.8f;
+                if(yieldPause<=0 && passed){museum.FinishTourYield(this);tourYielding=false;motionSpeed=0;SetQueuePath(resumeDestination);retry=1;}
                 Visual.Tick(false,dt,museum.SpeedMultiplier);UpdateThoughtVisibility();return;
             }
             if(!tourYielding && State==GuestState.Waiting && retry<=0)
@@ -147,26 +152,11 @@ namespace FamilyMuseum
             }
             else
             {
-                var next=Vector3.MoveTowards(transform.position,path[waypoint],Visual.Appearance.walkSpeed*museum.SpeedMultiplier*dt);
-                if(!museum.CanMove(this,next))
-                {
-                    blockedFor+=dt;
-                    if(blockedFor>=2)
-                    {
-                        var destination=path[path.Count-1];
-                        if(!tourYielding && TryYield(destination)){Visual.Tick(false,dt,museum.SpeedMultiplier);return;}
-                        bool found=tourQueue!=null?SetQueuePath(destination):SetPath(destination);
-                        if(!found){path=null;retry=1;}blockedFor=0;
-                    }
-                }
-                else
-                {
-                    blockedFor=0;var direction=next-transform.position;moving=direction.sqrMagnitude>.000001f;
-                    if(moving)transform.rotation=Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(direction),dt*210);
-                    transform.position=next;if(Vector3.Distance(next,path[waypoint])<.01f)waypoint++;
-                }
+                moving=MoveTour(dt);
             }
-            Visual.Tick(moving,dt,museum.SpeedMultiplier);UpdateThoughtVisibility();
+            if(!moving && (path==null || waypoint>=path.Count || State==GuestState.Viewing))motionSpeed=Mathf.MoveTowards(motionSpeed,0,dt*3);
+            float actualSpeed=Vector3.Distance(motionStart,transform.position)/Mathf.Max(.0001f,dt);
+            Visual.TickLocomotion(actualSpeed/Mathf.Max(.1f,Visual.Appearance.walkSpeed*museum.SpeedMultiplier),dt,museum.SpeedMultiplier);UpdateThoughtVisibility();
         }
     }
 }

@@ -1,0 +1,23 @@
+{
+  "summary": "현재맵12명 보행 가감속·속도애니메이션·통행우선순위 및 양보반복 보정",
+  "nextAction": "사용자 기존 반영승인과 이번 보정요청에 따라 PR/필수CI 통합 후 활성 PC 실행판 빌드·개인자료 보존·재실행 검증",
+  "validation": [
+    "Windows 빌드 exit0: logs/unity-Build-20261017-171332.log",
+    "개인 저장맵 12명 실제120초: 이동의도 연속정지 최대16.01→0.37초, 양보12→0, 관람23→23회; frameP95 6.99→6.97ms. logs/motion-20261017-171726/summary.txt; 개인54파일SHA256불변",
+    "동일 익명배치12명60Hz간격900초:276관람41퇴장·후반39/6 PASS. logs/deadlock-20261017-171544/",
+    "별도미로6명/인접전시12명/실제FIFO18검사 PASS; docs/CROWD_MOTION_SMOOTHING.md",
+    "Node 전체15묶음 PASS: logs/crowd-006-local-ci-retry.log"
+  ],
+  "limitations": [
+    "한PC·한배치의 전후1회실측이며 임의배치/Quest 성능보장은 아님",
+    "모의900초는 행동회귀이며 실제15분FPS검사가 아님; 120초관람동일23회이나퇴장1→0으로처리량향상주장없음",
+    "활성실행판교체는다음단계;개인맵/목표12/속도1보존"
+  ],
+  "status": "validated",
+  "baseSha": "0ea530b65e7f92b184800c985d6840b4e8683704",
+  "owner": "Codex",
+  "pullRequest": null,
+  "taskId": "CROWD-006",
+  "branch": "codex/crowd-006-smooth-motion-20261017",
+  "updatedDateKst": "2026-10-17"
+}

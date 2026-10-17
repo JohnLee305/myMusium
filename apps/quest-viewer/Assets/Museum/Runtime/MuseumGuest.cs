@@ -91,6 +91,7 @@ namespace FamilyMuseum
         }
         bool SetPath(Vector3 destination)
         {
+            AuditRoute();
             path=museum.FindPath(this,destination); waypoint=0; blockedFor=0;
             return path!=null;
         }

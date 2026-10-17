@@ -48,6 +48,7 @@ namespace FamilyMuseum
         }
         void Awake()
         {
+            BeginAudit();
             catalog=Resources.Load<VisitorCatalog>("VisitorCatalog");
             session=GetComponent<MuseumSession>();
             font=Font.CreateDynamicFontFromOSFont(new[]{"Malgun Gothic","Arial"},48);
@@ -64,7 +65,9 @@ namespace FamilyMuseum
             gallery ??=GetComponent<GalleryDisplay>();
             if(gallery==null || !gallery.IsFinished || gallery.IsLoading) return;
             if(room!=gallery.CurrentRoom) PrepareRoom();
+            var auditTimer=auditing?System.Diagnostics.Stopwatch.StartNew():null;
             Tick(Mathf.Min(.1f,Time.deltaTime));
+            if(auditTimer!=null){auditTimer.Stop();AuditMotion((float)auditTimer.Elapsed.TotalMilliseconds);}
         }
         void PrepareRoom()
         {
