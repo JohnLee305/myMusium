@@ -11,10 +11,11 @@
     "등록한 fixture15개 JSON Schema 기대값15/15 일치; 의미검사기 미구현",
     "설계 Markdown 로컬링크·코드펜스 검사 PASS; 개인 사용자경로/이메일 없음 확인",
     "다음 세션 DECOR-01 작업카드·공통계약을 README/PROJECT_STATUS/TASKS에서 연결",
-    "사용자가 검토한 설계의 Git 등록 요청을 커밋·게시 요청으로 기록"
+    "사용자가 검토한 설계의 Git 등록 요청을 커밋·게시 요청으로 기록",
+    "설계 47파일 최초 커밋·GitHub 전용브랜치 게시·PR44 생성 완료; 게임코드/개인자료 변경 없음"
   ],
-  "nextAction": "PR 등록·필수검사 확인. 다음 구현 세션은 docs/decor-design/README.md에서 DECOR-01 새 담당선점·Git Gate 후 DTO/참조검사부터 시작.",
-  "pullRequest": null,
+  "nextAction": "PR44 필수검사 확인 후 사용자 병합 승인 시 통합. 다음 구현 세션은 설계 README의 DECOR-01부터 새 담당선점·Git Gate 후 진행.",
+  "pullRequest": "https://github.com/JohnLee305/myMusium/pull/44",
   "limitations": [
     "문서와 가상 fixture만 변경; 게임 기능/의미 검사기/Unity/Quest 미구현·미검증"
   ]
