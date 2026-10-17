@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
+import {checkOwnership,CLAIM_PREFIX} from './task-coordination.mjs';
 
 export const INTEGRATION_BRANCH='codex/museum-tycoon';
 export const REQUIRED_DOCS=['AGENTS.md','docs/GIT_MULTI_AGENT_WORKFLOW.md','docs/LIVE_STATUS.md','docs/PROJECT_STATE.json','PROJECT_STATUS.md','TASKS.md','STATUS.md','WORKLOG.md','docs/WORK_HANDOFF.md'];
@@ -20,7 +21,7 @@ export function githubPullRequests(root){
  if(!Array.isArray(value)||value.length>=1000)throw Error('PR inventory incomplete');
  return value;
 }
-export function preflight({root=process.cwd(),taskId,update=false,expectedOrigin,queryPullRequests=githubPullRequests}={}){
+export function preflight({root=process.cwd(),taskId,update=false,expectedOrigin,queryPullRequests=githubPullRequests,queryOwnership=checkOwnership}={}){
  const report={ok:false,taskId,root:path.resolve(root),branch:null,head:null,remoteHead:null,ahead:null,behind:null,updated:false,changes:[],stashes:[],worktrees:'',pullRequests:[],blockers:[]};
  const block=(code,message)=>report.blockers.push({code,message});
  const git=(...args)=>execute('git',args,report.root);
@@ -49,8 +50,9 @@ export function preflight({root=process.cwd(),taskId,update=false,expectedOrigin
    const other=report.pullRequests.filter(p=>id.test(p.title+' '+p.headRefName)&&p.headRefName!==report.branch);
    if(other.length)block('DUPLICATE_TASK_PR','같은 작업 ID의 다른 브랜치 PR이 열려 있습니다. 담당을 먼저 확인해 주세요.');
   }catch{block('PR_CHECK_FAILED','열린 PR을 확인하지 못했습니다. 인증·연결을 확인하고 다시 실행해 주세요.');}
+  try{report.taskOwner=queryOwnership(report.root,taskId,report.branch);if(!report.taskOwner.ok)block(report.taskOwner.code,report.taskOwner.message);}catch{block('TASK_OWNER_CHECK_FAILED','GitHub 담당 정보를 확인하지 못했습니다. 새 작업을 시작하지 않습니다.');}
   const taskPattern=new RegExp(`\\b${taskId}\\b`,'i');
-  report.taskBranches=git('for-each-ref','--format=%(refname:short)','refs/heads','refs/remotes/origin').split('\n').filter(ref=>taskPattern.test(ref));
+  report.taskBranches=git('for-each-ref','--format=%(refname:short)','refs/heads','refs/remotes/origin').split('\n').filter(ref=>!ref.replace(/^origin\//,'').startsWith(CLAIM_PREFIX)&&taskPattern.test(ref));
   if(report.taskBranches.some(ref=>ref.replace(/^origin\//,'')!==report.branch))block('DUPLICATE_TASK_BRANCH','같은 작업 ID의 다른 로컬/원격 브랜치가 있습니다. 담당·완료 여부를 확인해 주세요.');
   if(report.behind>0&&report.ahead>0)block('DIVERGED','로컬과 통합 브랜치가 분기됐습니다. 자동 병합하지 않습니다.');
   else if(report.behind>0&&!(update&&report.branch===INTEGRATION_BRANCH))block('BEHIND_REMOTE','최신 통합 커밋이 없습니다. 깨끗한 통합 브랜치에서만 --update로 FF할 수 있습니다.');

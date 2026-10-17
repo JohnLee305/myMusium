@@ -1,5 +1,7 @@
 # 가족 VR 박물관
 
+**누가 작업 중인가:** [공유 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) · [담당 선점·중복 방지](docs/TASK_COORDINATION.md).
+
 **에이전트 시작점:** [AGENTS](AGENTS.md) → [현재 작업·실행 경로](docs/LIVE_STATUS.md). 배포 정본은 [PROJECT_STATE.json](docs/PROJECT_STATE.json), 인계는 [작업별 기록](docs/handoffs). 아래 이전 경로·기능 설명과 충돌하면 이 정본을 따른다.
 
 가족의 소중한 물건과 이야기를 3D로 보존하고 관람하는 확장형 개인 박물관.

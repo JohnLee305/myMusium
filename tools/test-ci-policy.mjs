@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import assert from 'node:assert/strict';
-import {checkChangePolicy} from './ci-policy.mjs';
+import {checkChangePolicy,checkPrOwnership} from './ci-policy.mjs';
 import {readHandoff,renderHandoff} from './handoff-state.mjs';
 const fixture=path.resolve('logs','ci-policy-tests-'+Date.now());fs.mkdirSync(fixture,{recursive:true});
 const git=(dir,...args)=>spawnSync('git',args,{cwd:dir,encoding:'utf8',windowsHide:true});
@@ -20,6 +20,8 @@ assert.throws(()=>checkChangePolicy({...options,files:options.files.filter(f=>f!
 assert.throws(()=>checkChangePolicy({...options,files:['tools/example.mjs','TASKS.md']}));pass('missing handoff evidence fails');
 assert.throws(()=>checkChangePolicy({...options,headBranch:'codex/other'}));pass('wrong handoff branch fails');
 const record=path.join(fixture,'docs/handoffs/OPS-101.json');const saved=fs.readFileSync(record,'utf8');const pending=JSON.parse(saved);pending.status='in_progress';fs.writeFileSync(record,JSON.stringify(pending));assert.throws(()=>checkChangePolicy(options));fs.writeFileSync(record,saved);pass('unvalidated work fails');
+const claim={schemaVersion:1,taskId:'OPS-101',agent:'Codex',account:'fixture',branch:'codex/ops-101',baseSha:'a'.repeat(40),summary:'test',nextAction:'test',status:'review',updatedAt:new Date().toISOString(),tokenHash:'b'.repeat(64),issue:1};
+assert.equal(checkPrOwnership(claim,'OPS-101','codex/ops-101','Codex'),true);assert.throws(()=>checkPrOwnership(claim,'OPS-101','codex/other','Codex'));assert.throws(()=>checkPrOwnership(claim,'OPS-101','codex/ops-101','OtherAgent'));assert.throws(()=>checkPrOwnership({...claim,status:'released'},'OPS-101','codex/ops-101','Codex'));pass('PR ownership must match active task, branch and handoff owner');
 const rendered=renderHandoff(readHandoff(fixture));assert.match(rendered,/OPS-101/);assert.equal(rendered,renderHandoff(readHandoff(fixture)));pass('handoff rendering deterministic');
 // Two real branches: non-overlapping work merges, shared-file edits conflict.
 must(fixture,'init','--initial-branch','codex/museum-tycoon');must(fixture,'config','user.name','CI Fixture');must(fixture,'config','user.email','fixture@example.invalid');must(fixture,'config','commit.gpgsign','false');must(fixture,'config','core.autocrlf','false');must(fixture,'config','core.hooksPath',path.join(fixture,'no-hooks'));

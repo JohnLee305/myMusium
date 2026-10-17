@@ -13,6 +13,8 @@
 
 [Git 사전 점검 CLI](GIT_PREFLIGHT.md)를 제공한다. Windows 실행기는 Node가 PATH에 없으면 Codex 번들을 탐색한다. 기본은 원격참조만 fetch하고, `--update`는 깨끗한 통합브랜치에서만 FF한다. dirty/stash/분기/원격실패/중복PR·브랜치는 중단하며 아래 수동 문서·담당 확인을 대체하지 않는다. 자동 Git hook/CI/브랜치 보호(OPS-003)는 미구현이다.
 
+담당선점은 [OPS-004 공유작업](TASK_COORDINATION.md)의 list→claim→Git Gate를 따른다. codex/claims/*는 담당메타데이터로서 소스작업브랜치/병합/빌드 대상과 구분한다.
+
 ## 1. 매 작업 시작·재개 필수 Gate (코드 수정 전)
 
 **새 작업, 기존 작업 재개, 다른 에이전트가 이어받는 작업 모두 동일하게 적용한다.**

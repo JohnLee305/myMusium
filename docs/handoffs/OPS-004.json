@@ -1,0 +1,23 @@
+{
+  "taskId": "OPS-004",
+  "owner": "Codex",
+  "branch": "codex/ops-004-task-coordination-20261017",
+  "baseSha": "34ac954aa28a0a833d38b41b1861d52bf7018927",
+  "updatedDateKst": "2026-10-17",
+  "status": "validated",
+  "summary": "GitHub 작업담당 현황·동시선점 방지·시작Gate 연동",
+  "validation": [
+    "로컬 Node14회귀묶음 PASS: logs/ops-004-local-ci.log",
+    "실제두프로세스동시선점·소유권/해제/재선점13사례 PASS: logs/ops-004-coordination-tests.log",
+    "Git시작Gate18사례 및 PR담당정합9사례 PASS",
+    "실제GitHub Issue#13 선점/중복거절/소유권보존·Windows상태갱신 확인"
+  ],
+  "nextAction": "전용PR CI·실제담당검사 확인 후 통합, 완료상태공유·담당해제",
+  "pullRequest": null,
+  "limitations": [
+    "기존도구를 사용하지 않는 에이전트의 편집 자체는 막지 못함",
+    "개인모델/대사/로컬경로는 공개작업기록에 포함하지 않음",
+    "GitHub쓰기계정공유에대한보안경계가아닌협조적에이전트의원자적경합방지",
+    "원세션영수증분실시자동takeover없음·사용자확인필요"
+  ]
+}

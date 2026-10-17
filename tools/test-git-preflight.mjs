@@ -18,7 +18,7 @@ for(const doc of REQUIRED_DOCS){const p=path.join(seed,doc);fs.mkdirSync(path.di
 git(seed,'add','.');git(seed,'commit','-m','initial');git(seed,'remote','add','origin',origin);git(seed,'push','-u','origin',INTEGRATION_BRANCH);
 let n=0,passed=0;
 const clone=()=>{const d=path.join(fixture,'clone-'+(++n));git(fixture,'clone','--branch',INTEGRATION_BRANCH,origin,d);configure(d);return d;};
-const check=(dir,options={})=>preflight({root:dir,taskId:'OPS-002',expectedOrigin:origin,queryPullRequests:()=>[],...options});
+const check=(dir,options={})=>preflight({root:dir,taskId:'OPS-002',expectedOrigin:origin,queryPullRequests:()=>[],queryOwnership:()=>({ok:true}),...options});
 const fail=(r,code)=>{assert.equal(r.ok,false);assert.ok(r.blockers.some(b=>b.code===code),JSON.stringify(r));};
 const pass=name=>{passed++;console.log('PASS '+name);};
 const commit=(d,name)=>{fs.writeFileSync(path.join(d,name),name);git(d,'add',name);git(d,'commit','-m',name);};
@@ -40,5 +40,6 @@ d=clone();fail(check(d,{expectedOrigin:'different'}),'WRONG_ORIGIN');fail(check(
 d=clone();fs.unlinkSync(path.join(d,'AGENTS.md'));git(d,'add','.');git(d,'commit','-m','missing doc');git(d,'switch','-c','codex/ops-002-no-doc');fail(check(d),'MISSING_DOCUMENT');pass('missing required document blocks');
 d=clone();git(d,'branch','codex/ops-002-other');fail(check(d),'DUPLICATE_TASK_BRANCH');pass('same task branch without a PR blocks');
 d=clone();const other=path.join(fixture,'worktree');git(d,'worktree','add','-b','codex/other-fixture',other);git(d,'switch','-c','codex/ops-002-multi');result=check(d);assert.equal(result.ok,true);assert.ok(result.worktrees.includes('codex/other-fixture'));assert.equal(check(other,{taskId:'OPS-003'}).ok,true);assert.equal(git(other,'branch','--show-current'),'codex/other-fixture');pass('multiple worktrees inspected without switching other checkout');
+d=clone();fail(check(d,{queryOwnership:()=>({ok:false,code:'TASK_UNCLAIMED',message:'claim first'})}),'TASK_UNCLAIMED');fail(check(d,{queryOwnership:()=>({ok:false,code:'TASK_OWNED_BY_ANOTHER_SESSION',message:'other agent'})}),'TASK_OWNED_BY_ANOTHER_SESSION');fail(check(d,{queryOwnership:()=>{throw Error('offline');}}),'TASK_OWNER_CHECK_FAILED');pass('start gate blocks unclaimed, other-owner and unverifiable task');
 d=clone();git(seed,'push','origin','--delete',INTEGRATION_BRANCH);fail(check(d),'MISSING_REMOTE_BRANCH');pass('missing remote integration branch blocks');
 console.log(`GIT_PREFLIGHT_TESTS_PASS: ${passed} cases | ${fixture}`);

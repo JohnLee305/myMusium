@@ -1,5 +1,7 @@
 # 다른 에이전트에게 작업 인계하기
 
+**실시간 담당은 [GitHub 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) / `node tools/task-coordination.mjs list`로 확인한다.** [OPS-004 선점/갱신/해제](TASK_COORDINATION.md)는 코드 수정 전 필수이며 인계JSON의 과거 상태만으로 현재 담당을 추측하지 않는다.
+
 ## 먼저 찾을 세 가지
 
 1. **최신 코드:** origin/codex/museum-tycoon와 실제 PR 병합SHA. GitHub 기본브랜치는 보존판이다.
