@@ -1,6 +1,6 @@
 # 박물관 내부 꾸미기 설계
 
-현재 DECOR-01은 PR46으로 통합했고, DECOR-02는 로컬 구현·검증 후 사용자 검토 대기다. [DECOR-02 구현 인계](DECOR-02-IMPLEMENTATION.md)를 확인한다. 이후 DECOR-03 저장 기반 작업은 DECOR-02 검토/통합 뒤 실제 담당 목록과 Git Gate를 확인하고 새 브랜치에서 시작한다. 원래 작업 카드는 설계 기준으로 보존한다.
+현재 DECOR-01은 PR46, DECOR-02는 PR48로 통합했다. DECOR-03은 로컬 저장·복구 구현과 검증 후 사용자 검토 대기다. [DECOR-03 구현 인계](DECOR-03-IMPLEMENTATION.md)를 확인한다. 다음 DECOR-04는 실제 geometry이며, 03 결과 확인·통합 후 새 담당선점·Git Gate를 수행한다. 원래 작업 카드는 설계 기준으로 보존한다.
 
 - [구현 위임 명세 시작점](박물관-꾸미기-개발명세/README.md)
 - [첫 작업 카드 DECOR-01](박물관-꾸미기-개발명세/tasks/DECOR-01.md)
