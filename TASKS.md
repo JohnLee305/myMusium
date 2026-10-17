@@ -214,8 +214,8 @@ SEC-001 초기 파일 목록/GLB 해시·동봉 라이선스 점검 수행. [결
 사용자 결정: 관람객의 추가 기능보다 박물관의 공간·전시 완성도 우선. 웹은 에셋 등록, 내부는 심즈식 배치·보관. 방은 독립된 이공간이며 연결 건물은 필요하지 않다. [설계 정본](docs/decor-design/README.md).
 
 - [x] DECOR-000 아키텍처·기본 조작·아이템 관리·첫 계약·위임 카드 작성 및 문서 검사. 통합 여부는 해당 PR 확인.
-- [x] DECOR-01 공통 DTO·엄격 JSON 경계·형식/참조 단계1~5 구현, production C# 204검사 PASS. 사용자 통합 승인, PR 검사 후 통합 진행. [구현 인계](docs/decor-design/DECOR-01-IMPLEMENTATION.md). 다음 구현은 DECOR-02.
-- [ ] DECOR-02 편집 명령·보관·Undo/Redo.
+- [x] DECOR-01 공통 DTO·엄격 JSON 경계·형식/참조 단계1~5 구현, production C# 204검사 PASS. PR46 필수검사 전체PASS·통합6ce28fe·활성소스 반영 완료. [구현 인계](docs/decor-design/DECOR-01-IMPLEMENTATION.md). 다음 구현은 DECOR-02.
+- [x] DECOR-02 편집 명령·보관함 조회·Undo/Redo 로컬 구현. 실제 C#132검사 PASS, 사용자 검토·커밋/통합 전. [구현 인계](docs/decor-design/DECOR-02-IMPLEMENTATION.md).
 - [ ] DECOR-03 단일 작성자 WorldStore·저장·복구.
 - [ ] DECOR-04 직각 배치·상판 지지·충돌 검사.
 - [ ] DECOR-05 시험 씬·편집 카메라·화면 골격.

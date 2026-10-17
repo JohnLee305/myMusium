@@ -842,3 +842,13 @@ PR37필수CI통과/통합·활성FF·게시판지침실제적용. 회고35고정
 - 사용자 결과 검토 후 커밋·게시·통합 대기. 다음은 DECOR-02 명령·보관·Undo. docs/decor-design/DECOR-01-IMPLEMENTATION.md 참조.
 
 - DECOR-01 최종 보강: 모든 JSON 객체에서 필수필드 제거/추가필드 거절을 schema와 C# 대조. 최종204검사 PASS(기존107 포함), CI정책 회귀10 PASS. 직접 검사한 소스만 변경하며 형식/참조와 geometry 범위를 분리.
+
+## 2026-10-17 / DECOR-01 통합 후 DECOR-02 구현 시작
+- 사용자 DECOR-01 커밋/통합·검증 후 DECOR-02 진행 명시 요청. PR46 모든필수CI PASS, 병합6ce28fe·활성소스FF 확인.
+- DECOR-02 Issue47·전용작업폴더·Git Gate PASS. 초안·명령·보관·Undo 구현 및 검증. geometry/저장/UI 제외.
+
+
+## 2026-10-17 / DECOR-02 로컬 구현·검증 완료
+- 명령5종·깊은복사 편집초안·Undo/Redo/Cancel·보관함 수량/묶음/회수순서·중복요청/ID재사용 방지 구현.
+- 실제 C# 명령132검사 PASS. 기존Node15묶음+계약204+명령129 전체PASS 후 재진입/입력변조3검사 추가 통과. schema/01소스 불변.
+- geometry/저장/UI/Unity/Quest·원격CI 미검증. 사용자 결과확인 뒤 커밋/통합 대기. 다음 DECOR-03, 구현 인계 문서 참조.
