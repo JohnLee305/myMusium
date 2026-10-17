@@ -6,7 +6,7 @@
 > 갱신 시각은 KST 기준이다.
 
 ## Codex / OPS-008 / 2026-10-17 최신 체크포인트
-- 상태: PR#9 병합a28b4aa·양쪽실험소스FF 완료. 최종대조에서 반응JSON Schema96/성향ID 누락 보정 중. 통합 이력은 [PR#9](https://github.com/JohnLee305/myMusium/pull/9)와 GitHub 병합 상태 참조. 기준726ee93, codex/ops-008-integration-review-20261017, 소스/빌드 sync-20261016.
+- 상태: PR#9 병합a28b4aa·양쪽실험소스FF 완료. 반응JSON Schema96/성향ID 후속 보정·계약80 PASS. 후속 이력 [PR#10](https://github.com/JohnLee305/myMusium/pull/10) 병합 상태 참조. 통합 이력은 [PR#9](https://github.com/JohnLee305/myMusium/pull/9)와 GitHub 병합 상태 참조. 기준726ee93, codex/ops-008-integration-review-20261017, 소스/빌드 sync-20261016.
 - 아래 opencode 블록은 당시 기록으로 보존. ROUTE-002 PR#8·REACT-014/015·ROUTE-003은 이미 통합 완료. 삭제된 완료 작업브랜치로 돌아가지 않는다.
 - 테마34개 이관, 기준판 세 파일 복원·clean 확인. 전체 Git bundle/기준판 patch: logs/ops-008-preservation-20261017. 개인 Archive51파일 해시 동일,6전시품416승인 유지.
 - 최신 관리4186 실행, 구4181 정리 완료. 브라우저34프리셋/동선 안내/error0 확인, PC 바로가기 최신 빌드 실행. 스킬 원본/설치본96개 기준 동일.

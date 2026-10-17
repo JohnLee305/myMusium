@@ -40,3 +40,5 @@
 ## 통합 후 최종 대조
 - PR#9 통합 a28b4aa에서 두 실험 작업폴더를 최신화. 이때 반응 스키마 누락을 발견해 OPS-008 후속으로 보정한다. 개인 콘텐츠/설정/모델/대사는 보존됐고, 원래 Archive51파일 중 변경·추가는 추적된 schemas/manifest.schema.json 및 schemas/reactions.schema.json뿐이다.
 - 기준판clean, 최신소스clean(후속 작업 완료 후 재확인), Git bundle/patch 보존. 보호태그/기준SHA 동일. 이전 완료 원격9개+OPS-008 원격1개, 로컬11개+OPS-008 로컬1개 정리. bootstrap/ROUTE-002 기록용 브랜치 보존.
+
+- 스키마 후속 PR#10: 반응 계약80 PASS(logs/reaction-tests-1792205555643). 정상96개·97개초과·확장persona·잘못된ID 제약 정합화. 런타임 소스 변경 없음. 최종 Git SHA는 PR#10 병합커밋이 정본이며 다음 기능 작업은 최신fetch/Gate 후 시작한다.
