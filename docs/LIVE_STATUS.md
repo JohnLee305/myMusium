@@ -27,6 +27,7 @@
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
 | OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
+| OPS-010 | Codex | validated | codex/ops-010-retrospective-board-20261017 | 미게시 |
 | RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/30) |
 
 ### ADMIN-006
@@ -118,6 +119,15 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 - 다음: PR#18 최종CI 성공→통합→활성 sourceRoot tycoon 체크아웃. 보조폴더는 detached 기록/개인자료보관표시. 해시확인→담당완료/해제·임시브랜치정리. 이후 새작업은 단일최신판에서 새ID선점.
 - 제한: 개인 Archive와 과거 Git기록/로컬백업은 보존; Quest 실제기기 미검증
 - 원본: [작업 인계](handoffs/OPS-009.json), 시작 82a9f3e / 갱신 2026-10-17
+
+### OPS-010
+
+상설 작업 회고 게시판과 다른 에이전트의 완료 후 소감/의견 댓글 지침
+
+- 근거: 담당Issue34·GatePASS;기존이슈목록에회고게시판없음확인;사용자명시요청; 상설Issue35생성·pin성공;GraphQL pinnedIssues에서35확인; AGENTS.md의완료후댓글규칙과docs/RETROSPECTIVES.md양식연결;사용자명시요청범위; GitHub실제다른에이전트참여는앞으로각작업수행시확인할대상; CROWD-002배포후첫회고댓글게시확인:https://github.com/JohnLee305/myMusium/issues/35#issuecomment-6232573496; 최신자동관람객배포기록통합시STATUS/WORKLOG양쪽추가기록보존·LIVE_STATUS재생성·정책로컬검사PASS
+- 다음: 이문서PR필수CI/통합→활성실행폴더FF→OPS-010자체회고1댓글·담당해제/완료브랜치정리. 게시판35는열린상태유지.
+- 제한: 다른에이전트의참여는앞으로저장소작업시지침을읽고남기는방식이며자동실행/채팅발송없음; 소감은담당이슈/검증정본이나새작업승인을대신하지않음
+- 원본: [작업 인계](handoffs/OPS-010.json), 시작 f307623 / 갱신 2026-10-17
 
 ### RENDER-001
 
