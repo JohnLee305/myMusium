@@ -1,10 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const fixture = path.join(root, 'logs', `admin-tests-${Date.now()}`);
+// Keep rapid atomic-rename fixtures outside cloud-synced checkouts on Windows.
+const fixture = fs.mkdtempSync(path.join(os.tmpdir(), 'museum-admin-'));
 fs.cpSync(path.join(root, 'museum-archive'), fixture, { recursive: true, filter: source => path.basename(source) !== '.admin-backups' });
 const fixtureManifestPath=path.join(fixture,'manifest.json');
 const fixtureManifest=JSON.parse(fs.readFileSync(fixtureManifestPath,'utf8').replace(/^\uFEFF/,''));

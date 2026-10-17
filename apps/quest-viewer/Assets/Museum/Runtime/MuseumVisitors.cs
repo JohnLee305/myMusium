@@ -38,7 +38,17 @@ namespace FamilyMuseum
             if(Camera.main==null)return false;
             var camera=Camera.main;var point=guest.transform.position+Vector3.up*1.9f;
             if(Vector3.Distance(camera.transform.position,point)>7f || Vector3.Dot(camera.transform.forward,point-camera.transform.position)<=0)return false;
-            return guests.Where(g=>g!=null&&g.gameObject.activeInHierarchy&&g.State==GuestState.Viewing&&!string.IsNullOrEmpty(g.ReactionText)&&Vector3.Distance(camera.transform.position,g.transform.position+Vector3.up*1.9f)<=7f&&Vector3.Dot(camera.transform.forward,g.transform.position+Vector3.up*1.9f-camera.transform.position)>0).OrderBy(g=>(g.transform.position-camera.transform.position).sqrMagnitude).Take(2).Contains(guest);
+            int closer=0;float distance=(guest.transform.position-camera.transform.position).sqrMagnitude;
+            foreach(var other in OrderedTours?GuestsInRoom(VisibleRoom):guests)
+            {
+                if(other==guest || !other.gameObject.activeInHierarchy || other.State!=GuestState.Viewing || string.IsNullOrEmpty(other.ReactionText))continue;
+                var delta=other.transform.position+Vector3.up*1.9f-camera.transform.position;
+                if(delta.sqrMagnitude<=49 && Vector3.Dot(camera.transform.forward,delta)>0 &&
+                    ((other.transform.position-camera.transform.position).sqrMagnitude<distance ||
+                    ((other.transform.position-camera.transform.position).sqrMagnitude==distance && other.Sequence<guest.Sequence)))
+                    if(++closer>=2)return false;
+            }
+            return true;
         }
         public bool BlocksPointer(Vector2 screenPoint)
         {
@@ -65,6 +75,8 @@ namespace FamilyMuseum
             gallery ??=GetComponent<GalleryDisplay>();
             if(gallery==null || !gallery.IsFinished || gallery.IsLoading) return;
             if(room!=gallery.CurrentRoom) PrepareRoom();
+            SeedCrowdLoad();
+            ObserveFrame(Time.unscaledDeltaTime);
             var auditTimer=auditing?System.Diagnostics.Stopwatch.StartNew():null;
             Tick(Mathf.Min(.1f,Time.deltaTime));
             if(auditTimer!=null){auditTimer.Stop();AuditMotion((float)auditTimer.Elapsed.TotalMilliseconds);}
@@ -80,28 +92,32 @@ namespace FamilyMuseum
         }
         public void SetCount(int count)
         {
-            TargetCount=Mathf.Clamp(count,0,VisitorPreferences.MaxCount);
-            while(guests.Count>TargetCount) { var last=guests[guests.Count-1]; guests.RemoveAt(guests.Count-1); last.Close(); }
+            AutomaticPopulation=false;SetTarget(count);
         }
         void Tick(float dt)
         {
             if(Paths==null) return;
+            pathsRemaining=2;limitPaths=true;
             spawnWait-=dt;
-            if(guests.Count<TargetCount && spawnWait<=0)
+            if(guests.Count<TargetCount && spawnWait<=0 && (!AutomaticPopulation || (!AdmissionPaused && HasRoomCapacity(0))))
             {
                 Vector3 entrance=OrderedTours?TourNavigation.Door(TourNavigation.Get(TourRooms[0]).entrance):new Vector3(-1.8f,0,-4.1f);
-                if(guests.Where(g=>!OrderedTours||g.TourRoom==0).All(g=>(g.transform.position-entrance).sqrMagnitude>.8f*.8f))
+                if((OrderedTours?GuestsInRoom(0):guests).All(g=>(g.transform.position-entrance).sqrMagnitude>.8f*.8f))
                 {
                     Spawn(entrance); spawnWait=2.5f;
                 }
             }
-            for(int i=guests.Count-1;i>=0;i--)
+            int tickCount=guests.Count;guests.CopyTo(tickGuests);
+            tickComparer??=Comparer<MuseumGuest>.Create(CompareUpdates);
+            System.Array.Sort(tickGuests,0,tickCount,tickComparer);
+            for(int i=0;i<tickCount;i++)
             {
-                var guest=guests[i]; guest.Tick(dt);
+                var guest=tickGuests[i]; guest.Tick(dt);
                 if(guest.State!=GuestState.Finished) continue;
                 if(guest.Aborted) Aborted++; else Exited++;
-                guest.Close(); guests.RemoveAt(i);
+                guest.Close(); guests.Remove(guest);
             }
+            PeakPathSearches=Mathf.Max(PeakPathSearches,2-pathsRemaining);limitPaths=false;
         }
         MuseumGuest Spawn(Vector3 position,VisitorAppearance selected=null)
         {
@@ -111,7 +127,7 @@ namespace FamilyMuseum
             var guest=root.AddComponent<MuseumGuest>();
             if(!guest.Initialize(this,appearance,exhibits,font,sequence))
             { guest.Close(); Debug.LogWarning("VISITOR_APPEARANCE_FAILED: "+appearance.id); return null; }
-            guests.Add(guest); Entered++; return guest;
+            guests.Add(guest); GuestsInRoom(guest.TourRoom).Add(guest); Entered++; return guest;
         }
         bool AppearanceEnabled(VisitorAppearance appearance)
         {
@@ -142,16 +158,26 @@ namespace FamilyMuseum
             preferences=next; settingsFingerprint=fingerprint;
             for(int i=guests.Count-1;i>=0;i--) if(!AppearanceEnabled(guests[i].Visual.Appearance))
             {guests[i].Close();guests.RemoveAt(i);}
-            SetCount(next.enabled?next.count:0);
+            ApplyPopulation();
             Debug.Log($"VISITOR_SETTINGS_APPLIED: enabled={next.enabled} count={TargetCount} speed={SpeedMultiplier}");
         }
         public void RecordView() { Views++; }
         IEnumerable<Vector3> Bodies(MuseumGuest current)
         {
-            foreach(var guest in guests) if(guest!=current && (!OrderedTours||guest.TourRoom==current.TourRoom)) yield return guest.transform.position;
+            foreach(var guest in OrderedTours?GuestsInRoom(current.TourRoom):guests) if(guest!=current) yield return guest.transform.position;
             if(Camera.main!=null && !(gallery?.IsOutside??false) && (!OrderedTours||current.TourRoom==VisibleRoom)) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
         }
-        public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)=>(OrderedTours?TourPath(guest.TourRoom):Paths).Find(guest.transform.position,destination,Bodies(guest));
+        public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)
+        {
+            if(limitPaths && pathsRemaining<=0)
+            {
+                if(!deferredRoutes.ContainsKey(guest))deferredRoutes[guest]=++routeOrder;
+                guest.RouteDeferred=true;return null;
+            }
+            if(limitPaths)pathsRemaining--;
+            deferredRoutes.Remove(guest);
+            return (OrderedTours?TourPath(guest.TourRoom):Paths).Find(guest.transform.position,destination,Bodies(guest));
+        }
         public bool CanMove(MuseumGuest current,Vector3 next)
         {
             if(!(OrderedTours?TourPath(current.TourRoom):Paths).Clear(next)) return false;
@@ -161,7 +187,7 @@ namespace FamilyMuseum
         }
         public void ClearRoom()
         {
-            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); tourQueues.Clear(); yieldingGuests.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
+            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); roomGuests.Clear(); deferredRoutes.Clear(); tourQueues.Clear(); yieldingGuests.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
         }
         void OnGUI()
         {
@@ -170,14 +196,14 @@ namespace FamilyMuseum
             var button=new GUIStyle(GUI.skin.button){font=font,fontSize=15};
             float x=Mathf.Max(20,Screen.width-280);
             GUI.Box(new Rect(x,120,260,185),"");
-            GUI.Label(new Rect(x+5,124,250,25),"관람객 · 타이쿤 실험",style);
+            GUI.Label(new Rect(x+5,124,250,25),AutomaticPopulation?"관람객 · 방 수에 맞춰 자동":"관람객 · 직접 정하기",style);
             if(GUI.Button(new Rect(x+15,157,42,30),"−",button)) SetCount(TargetCount-1);
             GUI.Label(new Rect(x+60,157,135,30),$"{guests.Count(g=>g.gameObject.activeInHierarchy)}명 · 전체 {ActiveCount}/{TargetCount}",style);
             if(GUI.Button(new Rect(x+203,157,42,30),"+",button)) SetCount(TargetCount+1);
             if(GUI.Button(new Rect(x+15,201,90,28),TargetCount==0?"켜기":"모두 끄기",button)) SetCount(TargetCount==0?1:0);
             GUI.Label(new Rect(x+110,200,140,30),$"관람 {Views} · 퇴장 {Exited}",style);
             ShowReactions=GUI.Toggle(new Rect(x+15,271,230,25),ShowReactions,"감상 반응 표시",button);
-            GUI.Label(new Rect(x+5,237,250,28),"앱 버튼은 임시 · 저장은 관리페이지",new GUIStyle(style){fontSize=12});
+            if(GUI.Button(new Rect(x+5,237,250,28),AutomaticPopulation?(AdmissionPaused?"입장 잠시 대기 · 혼잡 완화 중":"자동 목표 · 혼잡한 방은 입장 대기"):"자동 인원으로 전환",button)){preferences.mode="auto";ApplyPopulation();}
         }
         void OnDestroy() { ClearRoom(); if(font!=null) { Destroy(font.material); Destroy(font); } }
 
