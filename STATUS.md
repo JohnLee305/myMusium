@@ -642,3 +642,5 @@
 - 사용자4186 최신 실행, 브라우저34프리셋·동선 안내·error0, 개인6전시품416승인 enabled/stale/API 정상. 원본 Archive51파일 SHA256 동일.
 - 기준판 세 파일을 보존 backup/patch 후 HEAD로 복원, Git clean. 모든 참조 Git bundle verify 완료. 병합된 PR#1~7 원격7개, REACT-015/ROUTE-003 원격2개 정리. 로컬 완료브랜치11개 정리. bootstrap 및 ROUTE-002 기록용 브랜치는 보존.
 - 전체 평가 docs/INTEGRATION_REVIEW_20261017.md. 최신 스킬 quick_validate 원본/설치본 PASS·해시 동일, 현행문서96개로 보정. 현재 사용자가 통합·Git 정리를 명시 승인했으므로 PR 통합 진행; Quest/사용자 수동시험 새 완료 기록 없음.
+
+- OPS-008 코드40e810a, 통합 이력 PR#9. 새 빌드 출구경계 single2/four-directions8 PASS(logs/exit-boundary-tests-1792205347834). 구4181 서버 소유 확인 후 종료, 최신4186 유지. 병합/최종SHA·개인자료 보존 확인은 종료 Gate에서 보고.
