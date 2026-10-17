@@ -11,7 +11,7 @@
 - 개인 자료: `C:/Dev/vr-museum-tycoon/museum-archive` (소스 버전과 분리·공개 Git 제외)
 - 관리: 4186, PC 실행: `Builds/Windows/VRMuseum.exe`
 - 보존 대상: `codex/museum-tycoon`
-- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-172219.log`. 현재 실행 여부는 재확인한다.
+- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-175452.log`. 현재 실행 여부는 재확인한다.
 
 ## 작업 인계
 
@@ -26,7 +26,7 @@
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
 | OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
-| RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | 미게시 |
+| RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/30) |
 
 ### ADMIN-006
 
@@ -113,9 +113,9 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 
 시작 화면에서 박물관 제목/부제가 벽을 관통하는 글자 가림 보정
 
-- 근거: 수정전실제GPU: Museum title/subtitle 각각정상615픽셀·벽뒤607픽셀관통 FAIL. logs/text-occlusion-20261017-174910; 수정후실제GPU: 각각정상615픽셀·벽뒤0픽셀 PASS. logs/text-occlusion-20261017-175026; Windows빌드exit0: logs/unity-Build-20261017-174950.log; 동일익명맵 표시화면·방전환/테마검사 PASS: logs/text-room-visual-20261017-175114; 현재개인맵기하배치가익명회귀배치와같음확인;개인모델외부전송없음
-- 다음: 기존반영승인범위의표시결함수정으로PR/필수CI후활성PC실행판교체·개인자료보존확인
-- 제한: PC Direct3D11검증;Quest실기기미검증; 활성실행판교체는다음단계;기존맵/글꼴/배치/12명설정유지
+- 근거: 수정전실제GPU: Museum title/subtitle 각각정상615픽셀·벽뒤607픽셀관통 FAIL. logs/text-occlusion-20261017-174910; 수정후실제GPU: 각각정상615픽셀·벽뒤0픽셀 PASS. logs/text-occlusion-20261017-175026; Windows빌드exit0: logs/unity-Build-20261017-174950.log; 동일익명맵 표시화면·방전환/테마검사 PASS: logs/text-room-visual-20261017-175114; 현재개인맵기하배치가익명회귀배치와같음확인;개인모델외부전송없음; 동일익명배치시작화면전후직접확인:수정전FAMILY ARCHIVE/부제가벽을뚫고떠있고수정후가려짐. logs/text-before-start-20261017/start.png 및 logs/text-room-visual-20261017-175114/start.png; PR30필수검사전체PASS·병합6664b9c6bf3aa7d30ca4403b4cf68fbb8b54fc78; 활성실행폴더FF/build175452exit0;실제실행파일GPU가림검사175526 제목/부제각각정상627픽셀·벽뒤0픽셀 PASS; 개인54파일SHA256·관람객12/속도1·바탕화면3개불변;기존PC바로가기수정판1개재실행/12초후예외없음확인
+- 다음: 기능PR30통합·실행판교체/검증·자료보존·PC재실행완료. 배포기록PR통합후담당해제. 다음사용자시작화면확인.
+- 제한: PC Direct3D11실제렌더검증;Quest실기기미검증; 전시관3D글자가림수정;화면조작용메뉴는기존대로표시
 - 원본: [작업 인계](handoffs/RENDER-001.json), 시작 f8579a3 / 갱신 2026-10-17
 
 validated는 기록된 검증 완료를 뜻한다. 통합 여부·최종 SHA는 각 PR의 실제 병합 상태가 정본이며, 이 문서는 실행 프로세스/승인/병합을 추측하지 않는다.
