@@ -86,7 +86,7 @@ export function main(args=process.argv.slice(2)){
  const action=args.shift(),options={};
  for(let i=0;i<args.length;i++){assert.ok(args[i].startsWith('--')&&args[i+1]);options[args[i].slice(2)]=args[++i];}
  const root=localRoot(path.resolve(options.root??process.cwd())),backend=githubBackend(root);
- if(action==='list'){console.log(JSON.stringify(listClaims(backend).map(({tokenHash,...c})=>c),null,2));return;}
+ if(action==='list'){console.log(JSON.stringify(listClaims(backend).filter(c=>options.all==='true'||c.status!=='released').map(({tokenHash,...c})=>c),null,2));return;}
  const task=options.task;claimRef(task);const file=receiptPath(root,task);
  if(action==='claim'){
   const savedReceipt=fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):null;

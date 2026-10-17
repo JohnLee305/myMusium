@@ -1,6 +1,7 @@
 [CmdletBinding()]
-param([ValidateSet('list','claim','update','release')][string]$Action='list',[string]$TaskId,[string]$Agent,[string]$Summary,[string]$Status,[string]$Next,[string]$Root=(Split-Path $PSScriptRoot -Parent))
+param([ValidateSet('list','claim','update','release')][string]$Action='list',[string]$TaskId,[string]$Agent,[string]$Summary,[string]$Status,[string]$Next,[string]$Root)
 $ErrorActionPreference='Stop'
+if([string]::IsNullOrWhiteSpace($Root)){$Root=Split-Path $PSScriptRoot -Parent}
 $command=Get-Command node -ErrorAction SilentlyContinue
 $node=if($command){$command.Source}else{Join-Path $env:USERPROFILE '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe'}
 if(-not(Test-Path -LiteralPath $node)){throw 'Node.js is required.'}

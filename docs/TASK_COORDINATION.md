@@ -1,6 +1,6 @@
 # OPS-004 에이전트 담당 현황과 중복 작업 방지
 
-**실시간 목록:** [진행 중 GitHub 작업](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen). 담당·상태·브랜치·시작SHA·갱신시간·다음행동을 Issue에서 본다. 제목의 작업ID와 담당으로 찾는다. [OPS-004 실제 작업](https://github.com/JohnLee305/myMusium/issues/13).
+**실시간 목록:** [진행 중 GitHub 작업](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen). 담당·상태·브랜치·시작SHA·갱신시간·다음행동을 Issue에서 본다. list는현재담당작업만표시해완료이력으로목록이붐비지않게한다. 해제이력까지필요하면 `list --all true`를사용한다. 제목의 작업ID와 담당으로 찾는다. [OPS-004 실제 작업](https://github.com/JohnLee305/myMusium/issues/13).
 
 GitHub Issue만 먼저 검색하고 작성하면 동시요청 둘 다 성공할 수 있다. 그래서 담당 선점의 정본은 작업별 `codex/claims/소문자ID` ref다. GitHub ref의 원자적 생성과 non-fast-forward 거절을 이용해 동일ID에는 한 세션만 성공한다. 이 ref는 소스버전이 아니며 코드에 합치거나 체크아웃/빌드하지 않는다. 담당정보는 커밋메시지의 작은 JSON이고 tree는 기존소스 그대로다. 완료후에는 released 이력을 남겨, 삭제/재생성 경합 없이 안전하게 다음 선점을 허용한다.
 
@@ -52,3 +52,7 @@ release는 기존담당의 영수증과done을 요구하고 Issue를 닫은 뒤 
 - Git시작Gate에도미선점/타담당/조회불가중단회귀. CI회귀는격리원격을쓰며실제GitHub담당을선점하지않는다. 실제PR정책검사는공개GitHub담당정본을조회해task/branch/agent가인계JSON과맞는지확인한다. 담당조회가실패하면통합을중단한다.
 - 도구를쓰지않는사람/에이전트의파일편집을OS수준에서막지는않는다. AGENTS필수절차·PR·CI와함께사용한다.
 - 공개Issue에는개인모델/대사/경로/자격정보를쓰지않는다. 작업목적·개발브랜치등공개개발정보만허용한다.
+
+## 배포 검증 근거
+
+[PR#14](https://github.com/JohnLee305/myMusium/pull/14)의검사/병합상태가정본이다. [실제Actions39002847939](https://github.com/JohnLee305/myMusium/actions/runs/39002847939)에서Ubuntu/Windows14회귀묶음·공유담당정책·필수집계모두통과했다. [Issue#13](https://github.com/JohnLee305/myMusium/issues/13)에서실제선점/진행갱신을확인하고다른세션중복거절·담당SHA불변을검증했다. WindowsPowerShell5.1/번들pwsh 실행기조회/갱신/Gate도확인했다.
