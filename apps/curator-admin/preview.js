@@ -15,7 +15,7 @@ function setup(){
  scene.add(new THREE.HemisphereLight(0xffffff,0x455346,2.5));const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(3,5,4);scene.add(light);
  controls=new OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.addEventListener('change',draw);
  box=new THREE.Box3Helper(new THREE.Box3(new THREE.Vector3(-.475,0,-.475),new THREE.Vector3(.475,1.8,.475)),0x8c6d38);box.visible=$('preview-bounds').checked;scene.add(box);
- const resize=()=>{const w=$('preview-canvas').clientWidth;renderer.setSize(Math.max(1,w),300);camera.aspect=w/300;camera.updateProjectionMatrix();draw();};new ResizeObserver(resize).observe($('preview-canvas'));resize();
+ const resize=()=>{const w=Math.max(1,$('preview-canvas').clientWidth);renderer.setSize(Math.max(1,w),300);camera.aspect=w/300;camera.updateProjectionMatrix();draw();};new ResizeObserver(resize).observe($('preview-canvas'));resize();
  renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();loaded=false;note('3D 표시가 중단됐습니다. 페이지를 새로고침해 주세요.',true);});
 }
 function resetCamera(){if(!model)return;const b=new THREE.Box3().setFromObject(model,true);if($('preview-bounds').checked)b.union(box.box);const center=b.getCenter(new THREE.Vector3()),radius=Math.max(b.getSize(new THREE.Vector3()).length()/2,.05);const distance=radius/Math.sin(THREE.MathUtils.degToRad(camera.fov/2))/Math.min(1,camera.aspect)*1.15;controls.target.copy(center);camera.position.copy(center).add(new THREE.Vector3(1,.65,1.7).normalize().multiplyScalar(distance));camera.near=Math.max(.00001,distance/10000);camera.far=Math.max(100,distance*10);camera.updateProjectionMatrix();controls.minDistance=distance*.05;controls.maxDistance=distance*5;controls.update();draw();}

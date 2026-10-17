@@ -1,5 +1,7 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
+ADMIN-006: 홈/전시품/전시실/관람객 메뉴와 전시실 공유 방 선택·배치/동선/테마 탭 정돈. 사용자 화면 확인·게시/통합 승인. 검증/통합 정본은 [작업 인계](docs/handoffs/ADMIN-006.json)·[PR#16](https://github.com/JohnLee305/myMusium/pull/16), 사용법은 [관리 화면](docs/ADMIN_WORKSPACE.md).
+
 OPS-004: [실시간 담당목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen)·원자적작업선점·Git/PR담당검사 구현. 검증/통합 상태는 [작업 인계](docs/handoffs/OPS-004.json)·PR#14 참조.
 
 OPS-003: PR/Linux·Windows 회귀CI와 tycoon 필수검사보호 적용. 인계는 PROJECT_STATE·작업별JSON·생성LIVE_STATUS로 통일. 근거/통합상태는 [OPS-003 인계](docs/handoffs/OPS-003.json)와 PR#12 참조.

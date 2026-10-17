@@ -1,9 +1,12 @@
-import { initLayoutEditor, syncLayoutEditor, selectLayoutItem } from './layout-editor.js';
-import { initThemeEditor, syncThemeEditor } from './theme-editor.js';
+import {createWorkspace} from './admin-workspace.js';
+import { initLayoutEditor, syncLayoutEditor, selectLayoutItem,layoutWorkspaceState,selectLayoutRoom } from './layout-editor.js';
+import { initThemeEditor, syncThemeEditor,themeWorkspaceState,selectThemeRoom } from './theme-editor.js';
 import './visitor-editor.js';
-import {initNavigationEditor,syncNavigationEditor} from './navigation-editor.js';
+import {initNavigationEditor,syncNavigationEditor,navigationWorkspaceState,selectNavigationRoom} from './navigation-editor.js';
 const $ = id => document.getElementById(id);
 let token = '', saving = false, cached = null;
+const workspace=createWorkspace({layout:{state:layoutWorkspaceState,select:selectLayoutRoom},route:{state:navigationWorkspaceState,select:selectNavigationRoom},theme:{state:themeWorkspaceState,select:selectThemeRoom}});
+workspace.init();
 function message(text, error = false) {
     $('message').hidden = false;
     $('message').classList.toggle('error', error);
@@ -33,6 +36,7 @@ async function refresh() {
         syncThemeEditor(data);
         syncLayoutEditor(data);
         syncNavigationEditor(data);
+        workspace.sync(data);
         $('capacity-text').textContent = `${data.rooms.length}개 전시실 · 총 ${data.artifacts.length}개 전시품 · 방당 ${data.capacity}개`;
         for (const [selectId,firstValue,firstTitle] of [['target-room','auto','자동 배정 · 가득 차면 새 방 생성'],['room-filter','all','전체 전시실']]) {
             const select=$(selectId), previous=select.value;
@@ -74,8 +78,8 @@ function renderArtifacts() {
             meta.append(badge, size); content.append(heading, description, meta); card.append(icon, content); $('artifacts').append(card);
             if (!item.error) {
                 const controls=document.createElement('div'); controls.className='card-move';
-                const edit=document.createElement('button');edit.type='button';edit.className='secondary';edit.textContent='배치·수정';edit.onclick=()=>selectLayoutItem(item);
-                const preview=document.createElement('button');preview.type='button';preview.className='secondary';preview.textContent='3D 보기';preview.onclick=()=>document.dispatchEvent(new CustomEvent('preview-artifact',{detail:item}));
+                const edit=document.createElement('button');edit.type='button';edit.className='secondary';edit.textContent='배치·수정';edit.onclick=()=>{if(workspace.openRoom(item.roomId,'layout'))selectLayoutItem(item);};
+                const preview=document.createElement('button');preview.type='button';preview.className='secondary';preview.textContent='3D 보기';preview.onclick=()=>{workspace.show('#artifacts-add',true);document.dispatchEvent(new CustomEvent('preview-artifact',{detail:item}));};
                 controls.append(edit,preview); content.append(controls);
             }
         });

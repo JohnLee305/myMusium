@@ -827,3 +827,29 @@
 - Actions39002847939 Ubuntu/Windows14회귀·담당정책·museum-required 모두success. WindowsPS5.1 실행기기본Root가비던문제는param후계산으로두실행기보정,목록/담당Gate실행확인. 기본공유목록은현재담당만표시.
 - 통합정본PR#14,사용자OPS-004진행요청범위내구현·검증. 종료Gate: 최종커밋CI→보호규칙통합→양쪽실험소스FF/개인자료해시→Issue13 done·release·현재담당없음확인. 담당ref는소스브랜치정리와구분해보존.
 - 재개동작: 최신fetch후PR#14병합상태부터확인,완료된구현/테스트를반복하지않음. 새업무는공유list→claim→Git Gate. 소스/빌드/개인자료경로는PROJECT_STATE정본유지.
+
+## 2026-10-17 / ADMIN-006 시작
+- 사용자: 관리메뉴분리·전시실정돈·기존기능보존 요청. Codex,d5255c6,전용 codex/admin-006-admin-workspace-20261017,Issue#15 선점·GatePASS.
+- 범위: 4메뉴·전시실3탭·공유방선택·편집상태보존·원래해시링크호환. API/Archive/Unity변경없음. 검증후4186적용·사용자확인대기.
+
+
+## 2026-10-17 / ADMIN-006 구현·검증·화면 확인 대기
+- 홈/전시품/전시실/관람객 메뉴, 전시실 공유 방 선택 및 배치/동선/색상 탭 적용. 새 방 생성·세부 색상은 펼쳐서 사용. 기존 입력 DOM 보존, 미저장 방/작업 전환 보호, 기존 해시 링크 호환.
+- 로컬 Node CI15묶음 PASS, 새 실제편집모듈 DOM14사례 PASS, 기존 ID128개 유지·개인Archive52파일 SHA256 불변. logs/admin-006-verification.txt 참조.
+- 공식 종료/시작 도구로 실제4186 반영, 정적화면/모듈8개 및 기존 목록 확인. 브라우저 직접 조작 비활성으로 실제 시각 QA 미검증; Unity 변경/재빌드 없음.
+- 중단점: 미커밋 codex/admin-006-admin-workspace-20261017·Issue#15 review 담당 유지. 사용자 화면 확인 후 커밋/PR/CI/통합, 그 전 자동 통합 금지. 사용법 docs/ADMIN_WORKSPACE.md.
+
+
+## 2026-10-17 / ADMIN-006 사용자 확인·커밋 승인
+- 사용자가 실제 관리 화면 정상 동작 확인 후 커밋 요청. 원격 기준과 HEAD 차이 없음, 본인 담당 Issue#15 review 확인. 승인된 UI·회귀 검사·사용법·인계 문서를 로컬 커밋한다.
+- 기존15회귀묶음/DOM14사례 결과 유지, 개인 Archive52파일 해시 재확인. 다음: 전용브랜치 원격 게시·PR·CI·통합; 아직 원격 게시/통합 완료 아님.
+
+
+## 2026-10-17 / ADMIN-006 게시·통합 승인
+- 사용자 GitHub 게시·통합·브랜치정리 요청. clean owner Gate PASS, 최신베이스 차이 없음. 구현23251d0 게시·PR#16 생성. 다음: 필수CI 성공→PR통합→두 실험폴더 FF/자료보존→완료담당해제→병합확인브랜치정리. 기준판/태그/claims 메타데이터 보존.
+
+
+## 2026-10-17 / ADMIN-006 통합 전 정리·인계
+- PR#16 실제Ubuntu15묶음/담당정책 통과, Windows/필수집계 진행 중. ROUTE-002는 통합판 포함, bootstrap은 보존기준판 포함 확인 후 로컬브랜치삭제. 원격소스는 baseline/tycoon/ADMIN-006만 존재, claims는 협업이력으로 유지.
+- PC/관리 바탕화면은 sync-20261016·4186·외부개인Archive를 가리킴, Quest/보존바로가기는 기준판 유지. 사용자개인Archive dirty는 원래자료이며 소스커밋에 포함하지 않음.
+- 다음: 최종커밋CI 성공→PR#16 병합→sync폴더 detached 최신통합/tycoon FF→자료해시보존→담당done/release→ADMIN-006 소스브랜치정리. 실제병합SHA와 CI결과는 PR#16 및 공유Issue#15가정본.
