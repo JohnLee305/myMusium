@@ -5,6 +5,13 @@
 > 남의 블록을 수정하지 않는다. 이 파일을 안 읽고 시작한 작업은 무효로 간주한다.
 > 갱신 시각은 KST 기준이다.
 
+## Codex / OPS-002 / 2026-10-17
+- 상태: 사용자 승인·구현/검증 완료. 통합 이력 [PR#11](https://github.com/JohnLee305/myMusium/pull/11)의 병합 상태와 SHA가 정본. 시작270760f, 구현커밋5b7b32d, sync-20261016.
+- 작업: Git점검CLI/Windows실행기/가이드, 안전한 선택적FF. [사용법](GIT_PREFLIGHT.md). 격리Git17사례 PASS(logs/git-preflight-tests-1792208465009).
+- 실제Windows CLI: dirty중단·GitHubPR조회 확인, 커밋 후clean Gate ok=true/blockers0(logs/git-preflight-clean-20261017.json). 내PR은 허용, 다른동일작업은 중단.
+- 기존Unity/개인Archive/4186 변경 없음. 이전OPS-008 PR#9/#10 통합 완료. 완료작업브랜치는 병합확인 후 정리한다.
+- 종료 Gate: PR#11 병합SHA/두실험폴더FF·개인자료해시 확인 후 보고. 다음 후보 OPS-003 CI/PR 보호이며 별도 작업 요청 시 시작한다.
+
 ## Codex / OPS-008 / 2026-10-17 최신 체크포인트
 - 상태: PR#9 병합a28b4aa·양쪽실험소스FF 완료. 반응JSON Schema96/성향ID 후속 보정·계약80 PASS. 후속 이력 [PR#10](https://github.com/JohnLee305/myMusium/pull/10) 병합 상태 참조. 통합 이력은 [PR#9](https://github.com/JohnLee305/myMusium/pull/9)와 GitHub 병합 상태 참조. 기준726ee93, codex/ops-008-integration-review-20261017, 소스/빌드 sync-20261016.
 - 아래 opencode 블록은 당시 기록으로 보존. ROUTE-002 PR#8·REACT-014/015·ROUTE-003은 이미 통합 완료. 삭제된 완료 작업브랜치로 돌아가지 않는다.

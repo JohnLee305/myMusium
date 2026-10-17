@@ -650,3 +650,22 @@
 - 전체 개인콘텐츠 해시 동일(소스FF로 schema파일만 갱신), 기준판clean·태그보존. 최신4186·PC관람 유지. 다음: 반응계약 재검증 후 후속PR통합·최종원격일치.
 
 - 스키마 후속 PR#10, 계약80 PASS(logs/reaction-tests-1792205555643). 종료점: 통합PR#9/#10의 병합커밋이 최신 정본, 개인자료 보존. 다음 동작은 새 기능 요청 시 fetch→LIVE_STATUS→TASKS 확인 후 전용브랜치 착수.
+
+## 2026-10-17 / OPS-002 시작
+- 사용자: 이전 수정 커밋 후 수정 시작 요청. OPS-008은270760f까지 통합 완료·clean. 다음 우선과제 OPS-002 Git 사전점검 자동화 착수.
+- Codex, 시작270760f, codex/ops-002-git-preflight-20261017, 열린PR 없음. Node CLI/격리Git fixture/운영 가이드 범위. 개인Archive·빌드·관리서버 변경 없음.
+- 검증 계획: 새clone/FF갱신/dirty·untracked·stash/앞섬·분기/원격실패/기준판·detached/중복PR/다중worktree. 자동stash/reset/force 금지.
+
+## 2026-10-17 / OPS-002 구현·검증 완료, 검토 대기
+- tools/git-preflight.mjs + Windows 실행기, docs/GIT_PREFLIGHT.md 및 AGENTS/협업문서 연결. 원격참조fetch/필수문서/중복PR·브랜치/상태검사, 명시적통합브랜치FF만 지원.
+- 격리Git17사례 PASS: logs/git-preflight-tests-1792208465009. 실제Windows실행기 logs/git-preflight-live-20261017.json: GitHubPR조회 성공,현재dirty만 차단,HEAD변경없음.
+- 새clone·갱신·dirty/untracked/stash·앞섬/분기·기준판/detached·PR확인실패/중복작업·원격실패/부재·다중worktree·필수문서 검증. 다중worktree시험 초기 동일ID 오배정으로 실패한 fixture는 서로 다른 작업ID로 보정 후 재통과.
+- 중단점: codex/ops-002-git-preflight-20261017, 소스 미커밋 보존. 사용자 검토 후 커밋/push/PR 통합. 이전OPS-008은270760f로 이미 통합 완료. 다음: 사용자확인→fetch/최신차이→커밋→점검실제PASS→PR·통합. Unity/Archive/4186 변경 없음.
+
+## 2026-10-17 / OPS-002 통합 승인
+- 사용자 "응 통합해"로 새도구 커밋·push·PR통합 명시승인. 최신fetch,기준270760f변동없음·다른열린PR없음. 커밋 후 실제clean Gate를 확인하고 통합한다.
+
+## 2026-10-17 / OPS-002 승인·검증·PR 인계
+- 사용자 명시승인 후 구현커밋5b7b32d, 전용브랜치push, PR#11 생성. 실제Windows CLI clean Gate ok=true/blockers0, HEAD변경없음. 격리17사례 결과 유지.
+- 통합 정본: https://github.com/JohnLee305/myMusium/pull/11 병합SHA. 종료Gate에서 최신원격확인·두실험폴더FF·개인자료해시·완료브랜치정리 후 최종응답에 SHA 기록.
+- 다음: 새 작업 요청 시 정확한루트/전용브랜치에서 git-preflight 실행 후 LIVE_STATUS/TASKS/설계를 읽는다. OPS-003 CI·브랜치 보호는 아직 미구현. 런타임·Archive·4186 변경 없음.

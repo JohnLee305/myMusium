@@ -4,6 +4,8 @@
 
 최종 갱신: 2026-10-17 (한국 시간)
 
+OPS-002: [Git 사전 점검 도구](docs/GIT_PREFLIGHT.md) 구현·격리회귀 검증, 사용자 승인·격리Git17사례 및 실제 clean Gate 통과. 통합 이력 [PR#11](https://github.com/JohnLee305/myMusium/pull/11). 기존 앱/개인자료 변경 없음.
+
 최신 진행상황의 기준 문서는 **타이쿤 실험 브랜치의 이 파일**입니다.
 [GitHub에서 최신 진행상황 보기](https://github.com/JohnLee305/myMusium/blob/codex/museum-tycoon/PROJECT_STATUS.md)
 
