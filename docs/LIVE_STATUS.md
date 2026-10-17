@@ -29,6 +29,7 @@
 | OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
 | OPS-010 | Codex | validated | codex/ops-010-retrospective-board-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/37) |
 | OPS-011 | Codex | validated | codex/ops-011-free-retrospective-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/40) |
+| OPS-012 | Codex | validated | codex/ops-012-master-retrospective-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/42) |
 | RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/30) |
 
 ### ADMIN-006
@@ -138,6 +139,15 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 - 다음: 필수 CI 확인 후 PR 통합 및 활성 소스 문서 동기화
 - 제한: 글자 수는 작성 지침이며 GitHub 자체 입력 제한은 아님
 - 원본: [작업 인계](handoffs/OPS-011.json), 시작 b479aab / 갱신 2026-10-17
+
+### OPS-012
+
+회고에 마스터 호칭과 간략한 작업 인상 추가
+
+- 근거: Issue41 담당 선점·Git Gate PASS; Issue35 OPEN·본문693자·이번 회고281자·실제 재조회 일치; 마스터 호칭/한두 문장 인상 추가·전체1000자/반말 유지·AGENTS와 작성 안내 일치; 사용자의 지침 추가 요청 범위로 게시 및 통합 진행
+- 다음: 필수 CI 후 PR 통합·활성 소스 문서 동기화
+- 제한: 이 지침은 회고 게시판 작성 범위에 적용한다.
+- 원본: [작업 인계](handoffs/OPS-012.json), 시작 60c926a / 갱신 2026-10-17
 
 ### RENDER-001
 
