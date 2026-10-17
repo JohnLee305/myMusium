@@ -1,0 +1,29 @@
+#decor-root { flex-grow: 1; }
+.surface { border-radius: 10px; padding: 10px; }
+.row { flex-direction: row; flex-wrap: wrap; align-items: center; }
+Button { min-height: 34px; margin: 3px; padding-left: 12px; padding-right: 12px; border-radius: 6px; border-width: 1px; border-color: rgb(195,202,190); background-color: rgb(231,235,223); }
+Button:hover { border-color: rgb(40,92,75); }
+Button:focus { border-width: 2px; border-color: rgb(169,131,66); }
+Button:disabled { opacity: .48; }
+.brand { -unity-font-style: bold; margin-right: 14px; }
+.heading { -unity-font-style: bold; font-size: 20px; white-space: normal; margin-bottom: 12px; }
+.paragraph { white-space: normal; margin-top: 8px; margin-bottom: 8px; }
+.caption { margin-left: 8px; }
+#toolbar { flex-shrink: 0; margin: 10px 12px 0 12px; }
+#viewport { flex-grow: 1; min-height: 120px; position: relative; }
+#room-caption { position: absolute; left: 22px; top: 16px; color: rgb(235,238,224); background-color: rgba(30,50,43,.85); padding: 8px 14px; border-radius: 6px; }
+#details { position: absolute; right: 12px; top: 12px; padding: 18px; max-height: 95%; }
+#help-text { position: absolute; left: 22px; bottom: 12px; display: none; max-width: 440px; }
+#catalog { flex-shrink: 0; margin: 0 12px; }
+#tabs { flex-shrink: 0; }
+#search { flex-grow: 1; min-width: 160px; margin: 4px 8px; }
+#search .unity-text-field__input { min-width: 96px; min-height: 30px; padding: 4px; }
+#filters { flex-shrink: 0; }
+#cards { flex-grow: 1; min-height: 128px; }
+#cards .unity-scroll-view__content-container { flex-direction: row; }
+.card { flex-shrink: 0; align-items: flex-start; justify-content: flex-start; padding: 10px; margin: 4px; background-color: rgb(250,249,242); }
+.card-name { white-space: normal; height: 44px; flex-shrink: 0; -unity-text-align: upper-left; }
+.card-thumbnail { width: 32px; height: 24px; border-radius: 4px; margin-bottom: 5px; }
+.card-subtitle { font-size: 14px; margin-top: 5px; }
+.swatch { width: 26px; height: 26px; margin: 4px; border-radius: 13px; }
+#status { padding: 8px 22px; white-space: normal; flex-shrink: 0; background-color: rgb(31,55,45); color: rgb(243,241,233); }

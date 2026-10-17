@@ -1,0 +1,29 @@
+{
+  "taskId": "DECOR-05",
+  "owner": "Codex",
+  "branch": "codex/decor-05-prototype-20261017",
+  "baseSha": "668fe67d37863b4d945c32bd69c21ca517b64c6d",
+  "status": "validated",
+  "updatedDateKst": "2026-10-17",
+  "summary": "분리된 꾸미기 시험씬·카메라·UI Toolkit 화면 구현, PC Player63검사 완료·사용자 통합 승인",
+  "validation": [
+    "사용자03/04 통합 후05 진행 승인",
+    "PR51/52 필수CI 전체PASS·병합 및 활성소스FF 확인; 개인자료55파일 SHA256 불변",
+    "Issue53 선점 및 최신원격 Git Gate PASS",
+    "Unity 6000.3.23f1 Windows Development Player build exit0: logs/decor-05-build-reviewed.log; 기존 관람씬·EditorBuildSettings 불변 및 관람씬 편집입력 컴포넌트 없음 확인",
+    "실제 표시 창의 PC Player63검사 PASS: logs/decor-ui-20261017-233303/results.txt 및 player.log",
+    "1280x800/1920x1080/1024x720, UI배율125/150% 포함6조합; 주요영역/버튼/한국어2줄/카드설명 스크롤바 경계/실제GPU 비어있지 않은 캡처 확인",
+    "Input System 가상 키보드·마우스 이벤트로 검색포커스·UI클릭/휠차단·목록스크롤·보관함수량·방선택·중/우드래그·WASD·휠·F·받침대선택 및 모델불변 확인",
+    "최종1280선택물/1024x720 150%/초기화면 캡처 직접 검토. 초기 형식이름충돌·설정참조·작은창/카드설명가림·숨김첫렌더·시험입력장치경합 조건을 로그와 함께 수정/분리",
+    "CI 정책10검사·diff --check PASS; 개인55파일 SHA256/파일수 및 바탕화면 박물관바로가기2개 불변. 방명록6235150326 게시/재조회 일치.",
+    "사용자가 화면 확인 후 DECOR-05 커밋·통합을 명시 승인. 최신 원격과 HEAD 일치, 기존 검증 이후 기능소스 변경 없음."
+  ],
+  "nextAction": "승인에 따라 커밋·PR 필수CI·통합 후 활성소스FF 및 통합판 시험씬 빌드/검사. 다음 구현은 DECOR-06(별도 요청 시).",
+  "pullRequest": "https://github.com/JohnLee305/myMusium/pull/54",
+  "limitations": [
+    "사용자 통합 승인 후 PR 필수CI 진행. 기존 관람 실행파일과 개인Archive 변경 없음.",
+    "배치/저장/실제소장품/경제/Quest 연결 제외; 사람의 사용성 검토와 Windows OS배율·모니터 간 이동 미검증",
+    "125/150%는 실제Player의 UI Toolkit 논리배율 검사이며 Windows 자체 배율 변경 시험은 아님",
+    "OpenXR 패키지의 기기미연결 네이티브 진단이 있을 수 있음. Quest 착용/연결 또는 VR 렌더 검증으로 주장하지 않음"
+  ]
+}

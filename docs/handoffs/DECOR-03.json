@@ -14,13 +14,13 @@
     "손상/미지원버전/catalog불일치·backup5개·명시복구/손상본보존·revision/batch경계 검사 PASS",
     "전체 Node15회귀 + 계약204 + 명령132 + 저장62 검사 PASS: logs/decor-03-local-ci.log",
     "신규 저장schema/DTO 변경없음, DecorJson에 internal 버전식별 추가; 기존CI실행기에 저장검사 연결",
-    "2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인"
+    "2026-10-17 사용자 DECOR-03/04 커밋·통합 명시 승인; 최신 원격과 시작SHA 일치 확인",
+    "사용자명시승인 PR51 Ubuntu/Windows/정책/필수검사 전체PASS·병합5090c0f4c5a588b6ea664eae6e7abce4f4151ffa·활성소스FF 확인. 개인55파일 SHA256 불변."
   ],
-  "nextAction": "사용자 승인에 따라 커밋·PR·필수CI·통합 후 활성소스FF. 이어서 DECOR-04 통합 검증 및 DECOR-05.",
-  "pullRequest": null,
+  "nextAction": "통합 완료. 후속 DECOR-05 시험씬·카메라·화면의 사용자 검토 진행.",
+  "pullRequest": "https://github.com/JohnLee305/myMusium/pull/51",
   "limitations": [
-    "Unity/실제 전원차단 미검증; PR 필수CI 및 통합 진행",
-    "프로세스 종료/IO주입은 검증, 실제 전원차단·네트워크FS·Unity/Quest 미검증",
-    "geometry/초안자동저장/실제개인자료이전/UI 제외; backup을 외부에서 삭제/혼합한 저장은 자동복구정합 보장하지 않음"
+    "실제 전원차단·네트워크FS·Quest 미검증",
+    "초안자동저장·UI·실제개인자료 이전 제외"
   ]
 }

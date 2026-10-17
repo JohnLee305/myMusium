@@ -1,0 +1,562 @@
+{
+  "catalog": {
+    "revision": "catalog.sample-1",
+    "items": [
+      {
+        "id": "core.plinth.small",
+        "version": 1,
+        "name": "작은 소품을 위한 전시대",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      },
+      {
+        "id": "decor.vase.small",
+        "version": 1,
+        "name": "작은 꽃병",
+        "kind": "surfaceDecor",
+        "dimensionsM": [
+          0.12,
+          0.18,
+          0.12
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.09,
+            0
+          ],
+          "sizeM": [
+            0.12,
+            0.18,
+            0.12
+          ]
+        },
+        "supports": [],
+        "snapM": 0.05,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          }
+        ]
+      },
+      {
+        "id": "sample.furniture.1",
+        "version": 1,
+        "name": "낮고 넓은 전시대",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          2,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            2,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      },
+      {
+        "id": "sample.furniture.2",
+        "version": 1,
+        "name": "긴 벤치형 받침대",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      },
+      {
+        "id": "sample.furniture.3",
+        "version": 1,
+        "name": "정사각 전시 블록",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      },
+      {
+        "id": "sample.furniture.4",
+        "version": 1,
+        "name": "높은 전시 기둥",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      },
+      {
+        "id": "sample.furniture.5",
+        "version": 1,
+        "name": "좁은 코너 전시대",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      },
+      {
+        "id": "sample.furniture.6",
+        "version": 1,
+        "name": "넓은 중앙 전시대",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          },
+          {
+            "id": "charcoal",
+            "label": "짙은 회색",
+            "colorHex": "#383F3C"
+          }
+        ]
+      }
+    ]
+  },
+  "world": {
+    "schemaVersion": "decor-slice-1",
+    "id": "world.test",
+    "revision": 0,
+    "catalogRevision": "catalog.sample-1",
+    "lastCommandBatchId": null,
+    "rooms": [
+      {
+        "id": "room.a",
+        "name": "시험 전시실",
+        "bounds": {
+          "centerM": [
+            0,
+            2,
+            0
+          ],
+          "sizeM": [
+            20,
+            4,
+            16
+          ]
+        },
+        "reservedZones": [
+          {
+            "centerM": [
+              0,
+              1,
+              -7.5
+            ],
+            "sizeM": [
+              1.5,
+              2,
+              1
+            ]
+          },
+          {
+            "centerM": [
+              0,
+              1,
+              7.5
+            ],
+            "sizeM": [
+              1.5,
+              2,
+              1
+            ]
+          }
+        ]
+      }
+    ],
+    "instances": [
+      {
+        "id": "plinth.001",
+        "definition": {
+          "id": "core.plinth.small",
+          "version": 1
+        },
+        "variantId": "green",
+        "location": {
+          "kind": "room",
+          "roomId": "room.a",
+          "positionM": [
+            -1.4,
+            0,
+            0
+          ],
+          "yawDeg": 0
+        }
+      },
+      {
+        "id": "vase.001",
+        "definition": {
+          "id": "decor.vase.small",
+          "version": 1
+        },
+        "variantId": "ivory",
+        "location": {
+          "kind": "parent",
+          "parentId": "plinth.001",
+          "surfaceId": "top",
+          "localPositionM": [
+            0.15,
+            1,
+            0
+          ],
+          "yawDeg": 0
+        }
+      },
+      {
+        "id": "bench.001",
+        "definition": {
+          "id": "sample.furniture.1",
+          "version": 1
+        },
+        "variantId": "ivory",
+        "location": {
+          "kind": "room",
+          "roomId": "room.a",
+          "positionM": [
+            2,
+            0,
+            1.5
+          ],
+          "yawDeg": 0
+        }
+      },
+      {
+        "id": "plinth.stored",
+        "definition": {
+          "id": "core.plinth.small",
+          "version": 1
+        },
+        "variantId": "green",
+        "location": {
+          "kind": "storage"
+        }
+      },
+      {
+        "id": "vase.stored",
+        "definition": {
+          "id": "decor.vase.small",
+          "version": 1
+        },
+        "variantId": "ivory",
+        "location": {
+          "kind": "parent",
+          "parentId": "plinth.stored",
+          "surfaceId": "top",
+          "localPositionM": [
+            0.15,
+            1,
+            0
+          ],
+          "yawDeg": 0
+        }
+      }
+    ]
+  }
+}

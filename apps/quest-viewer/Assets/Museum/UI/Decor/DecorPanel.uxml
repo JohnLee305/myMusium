@@ -1,0 +1,41 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+  <ui:VisualElement name="decor-root">
+    <ui:VisualElement name="toolbar" class="surface row">
+      <ui:Label text="꾸미기 시험실" class="brand" />
+      <ui:Button name="room-frame" text="방 전체" />
+      <ui:Button name="focus" text="선택 맞춤 · F" />
+      <ui:Button name="walls" text="벽: 단면" />
+      <ui:Button name="grid-toggle" text="눈금 켜짐 · G" />
+      <ui:Button name="details-toggle" text="정보" />
+      <ui:Button name="help" text="조작 안내" />
+    </ui:VisualElement>
+    <ui:VisualElement name="viewport">
+      <ui:Label text="시험 전시실  /  20 × 16 m" name="room-caption" />
+      <ui:ScrollView name="details" class="surface" horizontal-scroller-visibility="Hidden">
+        <ui:Label text="물건을 선택해 보세요" name="selection-title" class="heading" />
+        <ui:Label text="방 안의 물건을 클릭하거나 아래 목록을 선택하세요." name="selection-body" class="paragraph" />
+        <ui:VisualElement name="swatches" class="row" />
+        <ui:Button name="parent" text="받침대 선택" />
+        <ui:Label text="놓기·이동·회전은 다음 단계에서 연결됩니다." class="caption paragraph" />
+      </ui:ScrollView>
+      <ui:Label name="help-text" text="WASD·방향키 이동  /  가운데 드래그 이동&#10;오른쪽 드래그 회전  /  휠 확대·축소&#10;F 선택·방 맞춤  /  G 눈금 전환&#10;검색 중에는 카메라 단축키가 멈춥니다." class="surface paragraph" />
+    </ui:VisualElement>
+    <ui:VisualElement name="catalog" class="surface">
+      <ui:VisualElement name="tabs" class="row">
+        <ui:Button name="catalog-tab" text="카탈로그" />
+        <ui:Button name="inventory-tab" text="보관함" />
+        <ui:Button name="collection-tab" text="소장품 · 준비 중" />
+        <ui:Button name="space-tab" text="공간·마감 · 준비 중" />
+        <ui:TextField name="search" label="검색" max-length="80" />
+      </ui:VisualElement>
+      <ui:VisualElement name="filters" class="row">
+        <ui:Button name="all-filter" text="전체" />
+        <ui:Button name="furniture-filter" text="가구" />
+        <ui:Button name="decor-filter" text="소품" />
+        <ui:Label name="list-hint" text="목록 선택은 정보 보기입니다." class="caption" />
+      </ui:VisualElement>
+      <ui:ScrollView name="cards" mode="Horizontal" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Hidden" />
+    </ui:VisualElement>
+    <ui:Label name="status" text="시험 공간 · 변경 사항은 저장하지 않습니다." />
+  </ui:VisualElement>
+</ui:UXML>
