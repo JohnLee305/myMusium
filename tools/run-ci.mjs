@@ -5,4 +5,7 @@ for(const file of tests){
  const r=spawnSync(process.execPath,['tools/'+file],{stdio:'inherit',windowsHide:true,timeout:180000});
  if(r.status!==0||r.error){console.error('CI_TEST_FAILED: '+file);process.exit(1);}
 }
-console.log('MUSEUM_NODE_CI_PASS: '+tests.length+' suites');
+console.log('\nCI_TEST: test-decor-contract.ps1');
+const decor=spawnSync('pwsh',['-NoProfile','-File','tools/test-decor-contract.ps1'],{stdio:'inherit',windowsHide:true,timeout:180000});
+if(decor.status!==0||decor.error){console.error('CI_TEST_FAILED: test-decor-contract.ps1');process.exit(1);}
+console.log('MUSEUM_NODE_CI_PASS: '+tests.length+' node suites + decor C# contract');

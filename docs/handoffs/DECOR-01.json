@@ -1,0 +1,24 @@
+{
+  "taskId": "DECOR-01",
+  "owner": "Codex",
+  "branch": "codex/decor-01-contract-20261017",
+  "baseSha": "9ed0d0bfa242f29e75c083bd94607b9914d37e85",
+  "status": "validated",
+  "updatedDateKst": "2026-10-17",
+  "summary": "꾸미기 공통 DTO와 엄격 형식·참조 검사",
+  "validation": [
+    "Issue45 선점·최신원격 Git Gate PASS",
+    "production C# DTO/codec/reference validator 실제 Add-Type 컴파일·204검사 PASS: logs/decor-01-contract.log",
+    "fixture15개 schema와 C# 형식 판정 일치; 좌표/ID/locale/Unicode/512cycle/오류정렬 검사 PASS",
+    "검사에 geometry5종 미구현을 명시, 기존 ArchiveData/씬/개인자료 변경 없음",
+    "Ubuntu/Windows Actions에 동일 pwsh 검사 추가; 원격CI는 커밋/게시 후 검증 대상",
+    "사용자 구현 확인·커밋/통합 및 검증 후 DECOR-02 진행 명시 승인",
+    "GitHub workflow 권한 제한으로 직접 workflow 수정 대신 기존 tools/run-ci.mjs에 pwsh C#검사 연결; 동일 Ubuntu/Windows 실행 경로 유지"
+  ],
+  "nextAction": "PR 필수CI 통과 후 통합·활성소스 FF 확인. DECOR-02 새 작업 선점으로 진행.",
+  "pullRequest": null,
+  "limitations": [
+    "참조 단계1~5만 구현; geometry/동선/저장/UI/Unity/Player/Quest 미검증",
+    "실제 실행파일 미반영; 도메인 소스와 검사만 변경"
+  ]
+}

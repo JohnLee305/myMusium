@@ -830,3 +830,15 @@ PR37필수CI통과/통합·활성FF·게시판지침실제적용. 회고35고정
 - docs/decor-design에 아키텍처·초안·제품결정·조작·공통계약·12작업카드·15fixture 등록. README/PROJECT_STATUS/TASKS 및 작업 인계 연결.
 - 실제 검사: JSON Schema 기대값15/15 일치, 문서 로컬링크/코드펜스/개인 사용자경로 검사 PASS. 의미검사기·Unity·Quest 기능시험 미실행.
 - 사용자 Git 등록 요청 범위에서 커밋·게시 진행. 다음 구현은 DECOR-01; 이번 작업에서 기능 구현을 시작하지 않음.
+
+## 2026-10-17 / DECOR-01 첫 구현 시작
+- 범위: 순수 C# DTO·엄격 JSON 경계·형식/참조 검사 단계1~5 및 가상 fixture 검증. geometry는 DECOR-04.
+- 별도 작업폴더·Issue45·Git Gate PASS. 개인 Archive와 실행판 변경 없음.
+
+
+## 2026-10-17 / DECOR-01 구현·순수 C# 검증 완료
+- DTO/엄격 JSON codec/참조 검사1~5, 구현용 schema/fixture, pwsh 검사 및 Actions 연결 작성.
+- production C# 실제 컴파일 107검사 PASS. geometry/UI/Player/Quest 미검증; 실제 Archive/실행판 변경 없음.
+- 사용자 결과 검토 후 커밋·게시·통합 대기. 다음은 DECOR-02 명령·보관·Undo. docs/decor-design/DECOR-01-IMPLEMENTATION.md 참조.
+
+- DECOR-01 최종 보강: 모든 JSON 객체에서 필수필드 제거/추가필드 거절을 schema와 C# 대조. 최종204검사 PASS(기존107 포함), CI정책 회귀10 PASS. 직접 검사한 소스만 변경하며 형식/참조와 geometry 범위를 분리.
