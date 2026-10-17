@@ -22,7 +22,7 @@ export function checkPrOwnership(claim,taskId,headBranch,owner){
 async function publicClaim(taskId){
  // Read the same ownership ref through public Git transport: shared CI runner IPs
  // can exhaust the anonymous REST quota. No credentials or workflow write scope needed.
- const result=spawnSync('git',['fetch','--no-tags','--depth=1','https://github.com/JohnLee305/myMusium.git','refs/heads/'+claimRef(taskId)],{encoding:'utf8',windowsHide:true,timeout:45000});
+ const result=spawnSync('git',['fetch','--no-tags','https://github.com/JohnLee305/myMusium.git','refs/heads/'+claimRef(taskId)],{encoding:'utf8',windowsHide:true,timeout:45000});
  assert.equal(result.status,0,'Cannot fetch shared task owner');
  const commit=spawnSync('git',['show','-s','--format=%B','FETCH_HEAD'],{encoding:'utf8',windowsHide:true});
  assert.equal(commit.status,0);assert.ok(commit.stdout.startsWith('MUSEUM_TASK_CLAIM\n'));

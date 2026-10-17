@@ -16,13 +16,14 @@
     "reactionBytes": 65536,
     "reactionTextUtf16": 72,
     "roomCells": 30,
-    "visitors": 12
+    "visitors": 12,
+    "automaticVisitors": 120
   },
   "runtimeVerification": {
-    "buildLog": "logs/unity-Build-20261017-175452.log",
+    "buildLog": "logs/unity-Build-20261017-185515.log",
     "verifiedDateKst": "2026-10-17",
     "level": "PC; Quest unverified",
-    "note": "RENDER-001 deployed: PC GPU check confirms gallery title/subtitle visible normally and zero text pixels through an opaque wall; anonymized saved-layout startup visual and room/theme regression passed. Archive54files/target12/speed1/three shortcuts preserved; PC viewer relaunched. Historical verification; recheck processes."
+    "note": "CROWD-002 deployed: automatic room-based population enabled; personal3-room target18. Actual120s run entered15/viewed23, frameP95 6.97ms, longest movement-intent stop .37s. Existing manual12/speed1/appearances preserved; original settings backed up; other53files unchanged; one PC viewer relaunched. Historical verification; recheck processes."
   },
   "versionPolicy": {
     "mode": "single",
