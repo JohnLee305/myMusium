@@ -724,3 +724,9 @@
 
 ## 2026-10-17 / ADMIN-006 게시·통합 승인
 - 사용자 GitHub 게시·통합·브랜치정리 요청. clean owner Gate PASS, 최신베이스 차이 없음. 구현23251d0 게시·PR#16 생성. 다음: 필수CI 성공→PR통합→두 실험폴더 FF/자료보존→완료담당해제→병합확인브랜치정리. 기준판/태그/claims 메타데이터 보존.
+
+
+## 2026-10-17 / ADMIN-006 통합 전 정리·인계
+- PR#16 실제Ubuntu15묶음/담당정책 통과, Windows/필수집계 진행 중. ROUTE-002는 통합판 포함, bootstrap은 보존기준판 포함 확인 후 로컬브랜치삭제. 원격소스는 baseline/tycoon/ADMIN-006만 존재, claims는 협업이력으로 유지.
+- PC/관리 바탕화면은 sync-20261016·4186·외부개인Archive를 가리킴, Quest/보존바로가기는 기준판 유지. 사용자개인Archive dirty는 원래자료이며 소스커밋에 포함하지 않음.
+- 다음: 최종커밋CI 성공→PR#16 병합→sync폴더 detached 최신통합/tycoon FF→자료해시보존→담당done/release→ADMIN-006 소스브랜치정리. 실제병합SHA와 CI결과는 PR#16 및 공유Issue#15가정본.
