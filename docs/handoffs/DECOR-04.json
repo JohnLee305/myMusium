@@ -1,0 +1,23 @@
+{
+  "taskId": "DECOR-04",
+  "owner": "Codex",
+  "branch": "codex/decor-04-placement-20261017",
+  "baseSha": "251202ce72656180116b9ee99244fe1bd8f82ff1",
+  "status": "validated",
+  "updatedDateKst": "2026-10-17",
+  "summary": "직각 배치·상판 지지·충돌 검사 로컬 검증 완료, 미커밋 검토 대기",
+  "validation": [
+    "Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현",
+    "production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함",
+    "node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log",
+    "schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결",
+    "사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정",
+    "PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결",
+    "03 통합 후 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+배치127; logs/decor-04-combined-ci.log"
+  ],
+  "nextAction": "합쳐진03/04 전체회귀 후 PR 필수CI 통합. 이후05 시험씬.",
+  "pullRequest": null,
+  "limitations": [
+    "Unity/실제 길찾기/벽/천장/일반다각형/mesh/화면 미검증"
+  ]
+}

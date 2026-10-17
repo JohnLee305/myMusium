@@ -26,6 +26,7 @@
 | DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/48) |
 | DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | 미게시 |
+| DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -116,6 +117,15 @@ OS잠금·원자적 월드저장·백업·복구
 - 다음: 사용자 승인에 따라 커밋·PR·필수CI·통합 후 활성소스FF. 이어서 DECOR-04 통합 검증 및 DECOR-05.
 - 제한: Unity/실제 전원차단 미검증; PR 필수CI 및 통합 진행; 프로세스 종료/IO주입은 검증, 실제 전원차단·네트워크FS·Unity/Quest 미검증; geometry/초안자동저장/실제개인자료이전/UI 제외; backup을 외부에서 삭제/혼합한 저장은 자동복구정합 보장하지 않음
 - 원본: [작업 인계](handoffs/DECOR-03.json), 시작 251202c / 갱신 2026-10-17
+
+### DECOR-04
+
+직각 배치·상판 지지·충돌 검사 로컬 검증 완료, 미커밋 검토 대기
+
+- 근거: Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현; production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함; node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log; schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결; 사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정; PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결; 03 통합 후 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+배치127; logs/decor-04-combined-ci.log
+- 다음: 합쳐진03/04 전체회귀 후 PR 필수CI 통합. 이후05 시험씬.
+- 제한: Unity/실제 길찾기/벽/천장/일반다각형/mesh/화면 미검증
+- 원본: [작업 인계](handoffs/DECOR-04.json), 시작 251202c / 갱신 2026-10-17
 
 ### OPS-002
 
