@@ -25,6 +25,7 @@
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
 | DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/48) |
+| DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -106,6 +107,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: 필수CI 확인 후 통합·활성소스 FF. DECOR-03 신규 선점·Git Gate 후 저장/복구 구현.
 - 제한: geometry/저장/UI/Unity/Quest 미검증; 실제 실행판 미반영; 보관 최근순서는 세션 내 유지, 재실행은 ID순
 - 원본: [작업 인계](handoffs/DECOR-02.json), 시작 6ce28fe / 갱신 2026-10-17
+
+### DECOR-04
+
+직각 배치·상판 지지·충돌 검사 로컬 검증 완료, 미커밋 검토 대기
+
+- 근거: Issue50 담당·전용브랜치·Git Gate PASS; DECOR-01/02 통합판에서 독립 구현; production C# 배치127검사 PASS; 15fixture, 별도 8꼭짓점 oracle 40조합, 1mm 경계, 얇은 완전포함 충돌, 저장묶음, 문, 명령 원자성 포함; node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log; schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결; 사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정
+- 다음: 승인에 따라 커밋; DECOR-03 통합판을 병합해 CI 실행기에 저장/배치 검사를 모두 유지하고 전체 검증 후 PR 통합. 다음05.
+- 제한: 03 저장작업은 별도 미커밋 검토 상태로 보존; 이번 작업에 포함하지 않음; 실제 길찾기/벽/천장/일반다각형/mesh/화면 제외
+- 원본: [작업 인계](handoffs/DECOR-04.json), 시작 251202c / 갱신 2026-10-17
 
 ### OPS-002
 
