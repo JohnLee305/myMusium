@@ -15,16 +15,36 @@
 
 | ID | 담당 | 기록 상태 | 작업 브랜치 | 통합 이력 |
 |---|---|---|---|---|
-| OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | 미게시 |
+| OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
+| OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
+| OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
+
+### OPS-002
+
+Git 사전점검·선택적FF 완료
+
+- 근거: 격리Git17사례 PASS; 실제clean/dirty·본인PR Gate PASS
+- 다음: 완료된 작업. 최신통합SHA는 연결PR/원격에서 확인하고 새요청은 별도ID로 시작.
+- 제한: Quest 실기기 미검증; 과거 검증기록이며 현재프로세스 실행을 주장하지 않음
+- 원본: [작업 인계](handoffs/OPS-002.json), 시작 270760f / 갱신 2026-10-17
 
 ### OPS-003
 
 PR CI·필수검사 보호 및 단일 배포정본·작업별 인계·자동 현황판
 
-- 근거: 로컬 Node CI 13묶음 PASS: logs/ops-003-local-ci.log; 인계 누락/미검증 거절 및 실제 병렬Git 충돌/비충돌 8사례 PASS; 실제 GitHub Actions 및 보호 설정 검증은 PR에서 이어서 수행
+- 근거: 로컬 Node CI 13묶음 PASS: logs/ops-003-local-ci.log; 인계 누락/미검증 거절 및 실제 병렬Git 충돌/비충돌 8사례 PASS; 실제 GitHub Actions 및 보호 설정 검증은 PR에서 이어서 수행; 첫 실제Actions: 인계정책 PASS, Linux 제어시험의 C:/Dev 기준판 하드코딩 발견→저장소 상대경로+격리Archive로 수정
 - 다음: 전용PR에서 Actions 확인→필수검사 보호→병합SHA/실행폴더 확인
 - 제한: Unity 빌드와 Quest 실기기 검사는 CI 범위 밖; 미게시 별도 Clone 작업은 자동 감지 불가; validated는 로컬검증 근거이며 원격CI/보호가 적용됐다는 뜻이 아님
 - 원본: [작업 인계](handoffs/OPS-003.json), 시작 26e3056 / 갱신 2026-10-17
+
+### OPS-008
+
+테마34·동선/반응계약 보정·Git정리 완료
+
+- 근거: PR#9/#10 병합 확인; 테마52·동선39·반응80/등록9·PC빌드/순차관람/출구 PASS
+- 다음: 완료된 작업. 최신통합SHA는 연결PR/원격에서 확인하고 새요청은 별도ID로 시작.
+- 제한: Quest 실기기 미검증; 과거 검증기록이며 현재프로세스 실행을 주장하지 않음
+- 원본: [작업 인계](handoffs/OPS-008.json), 시작 726ee93 / 갱신 2026-10-17
 
 validated는 기록된 검증 완료를 뜻한다. 통합 여부·최종 SHA는 각 PR의 실제 병합 상태가 정본이며, 이 문서는 실행 프로세스/승인/병합을 추측하지 않는다.
 

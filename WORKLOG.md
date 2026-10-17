@@ -799,3 +799,7 @@
 - 사용자: PR/CI 보호 진행 및 버전 분산·인수인계 비용 개선 요청. 시작26e3056, Codex 전용 codex/ops-003-ci-handoff-20261017, 시작Gate PASS·열린PR없음.
 - GitHub admin권한 확인,Actions enabled·기존workflow없음·tycoon보호없음. 범위: 읽기전용토큰 Linux/Windows 회귀CI, 인계기록/배포정본·생성현황판, 검증후 PR/필수검사 보호. 기준판/태그/개인Archive/앱 변경금지.
 - CI의 원격 동작 검증에는 전용브랜치 커밋/push·PR이 필요하며 이 사용자 요청의 실행 범위로 진행. 실패는 수정하며 미검증 항목은 완료표시하지 않음.
+
+## 2026-10-17 / OPS-003 실제 CI 검증
+- PR#12 생성, 최초Actions39000864161 인계정책PASS·Linux 제어시험실패. test-control.mjs가 C:/Dev/vr-museum 기준판을 고정참조한 원인으로 실제루트+빈격리Archive 사용 및 조기서버종료 감지로 수정. 기존로컬검사가 기준판을 테스트했다는 한계도 바로잡음.
+- GitHub CLI에workflow쓰기scope가 없어 최초push거절. 미게시커밋bundle보존 후 소스와workflow업로드를 분리, 이미연결된GitHub커넥터로workflow생성·동일내용fetch확인. 새계정권한추가 없음.
