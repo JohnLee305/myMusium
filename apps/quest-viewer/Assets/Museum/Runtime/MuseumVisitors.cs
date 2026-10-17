@@ -77,7 +77,7 @@ namespace FamilyMuseum
         }
         public void SetCount(int count)
         {
-            TargetCount=Mathf.Clamp(count,0,6);
+            TargetCount=Mathf.Clamp(count,0,VisitorPreferences.MaxCount);
             while(guests.Count>TargetCount) { var last=guests[guests.Count-1]; guests.RemoveAt(guests.Count-1); last.Close(); }
         }
         void Tick(float dt)
@@ -146,6 +146,7 @@ namespace FamilyMuseum
         IEnumerable<Vector3> Bodies(MuseumGuest current)
         {
             foreach(var guest in guests) if(guest!=current && (!OrderedTours||guest.TourRoom==current.TourRoom)) yield return guest.transform.position;
+            if(OrderedTours) foreach(var point in QueueBodies(current)) yield return point;
             if(Camera.main!=null && !(gallery?.IsOutside??false) && (!OrderedTours||current.TourRoom==VisibleRoom)) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
         }
         public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)=>(OrderedTours?TourPath(guest.TourRoom):Paths).Find(guest.transform.position,destination,Bodies(guest));
@@ -158,7 +159,7 @@ namespace FamilyMuseum
         }
         public void ClearRoom()
         {
-            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
+            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); tourQueues.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
         }
         void OnGUI()
         {
@@ -246,6 +247,11 @@ namespace FamilyMuseum
                 Save(next); SmokePassed &= TargetCount==3 && Mathf.Abs(SpeedMultiplier-.7f)<.001f;
                 Tick(.1f); SmokePassed &= ActiveCount==1;
                 SetCount(6); ReloadPreferences(); SmokePassed &= TargetCount==6; // Temporary app adjustment remains until the saved file changes.
+                next.count=12; Save(next); SmokePassed &= TargetCount==12;
+                next.count=13; Save(next); SmokePassed &= TargetCount==12;
+                SetCount(999); SmokePassed &= TargetCount==12;
+                SetCount(-1); SmokePassed &= TargetCount==0;
+                next.count=3; Save(next);
                 System.IO.File.WriteAllText(file,JsonUtility.ToJson(next));
                 System.IO.File.SetLastWriteTimeUtc(file,System.DateTime.UtcNow.AddSeconds(1)); ReloadPreferences();
                 SmokePassed &= TargetCount==3; // Saving identical values must still override a temporary adjustment.

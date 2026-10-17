@@ -3,6 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {MAX_VISITORS} from '../apps/curator-admin/visitors.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const fixture=path.join(root,'logs','visitor-admin-'+Date.now());fs.mkdirSync(fixture,{recursive:true});
 const file=path.join(fixture,'visitors.json'),catalogFile=path.join(fixture,'catalog.json');
@@ -27,12 +28,17 @@ try{
     let value={...state.settings,count:4,speed:1.2,appearances:[{id:'quaternius-casual2',enabled:true,weight:1},{id:'second-appearance',enabled:true,weight:3}]};
     for(const [name,settings,headers,status] of [
         ['token required',value,{'X-Museum-Token':''},403],['foreign origin',value,{Origin:'http://example.invalid'},403],['wrong content type',value,{'Content-Type':'text/plain'},415],
-        ['count upper bound',{...value,count:7},{},400],['fractional count',{...value,count:1.5},{},400],['string count',{...value,count:'2'},{},400],['negative count',{...value,count:-1},{},400],
+        ['count upper bound',{...value,count:13},{},400],['fractional count',{...value,count:1.5},{},400],['string count',{...value,count:'2'},{},400],['negative count',{...value,count:-1},{},400],
         ['speed lower bound',{...value,speed:.4},{},400],['speed upper bound',{...value,speed:1.6},{},400],['enabled type',{...value,enabled:'yes'},{},400],['schema version',{...value,schemaVersion:'2.0'},{},400],
         ['unknown field',{...value,script:'oops'},{},400],['unknown appearance',{...value,appearances:[{id:'missing',enabled:true,weight:1}]},{},400],['duplicate appearance',{...value,appearances:[value.appearances[0],value.appearances[0]]},{},400],
         ['invalid appearance id',{...value,appearances:[{id:'../x',enabled:true,weight:1}]},{},400],['negative weight',{...value,appearances:[{id:'quaternius-casual2',enabled:true,weight:-1}]},{},400],['weight upper bound',{...value,appearances:[{id:'quaternius-casual2',enabled:true,weight:101}]},{},400],['appearance enabled type',{...value,appearances:[{id:'quaternius-casual2',enabled:1,weight:1}]},{},400]
     ]){const response=await post({revision:state.revision,settings},headers);assert.equal(response.status,status,await response.text());assert.ok(!fs.existsSync(file));pass(name+' / no writes');}
     let response=await post({revision:state.revision,settings:value});assert.equal(response.status,200,await response.text());state=await get();assert.deepEqual(state.settings,value);assert.equal(JSON.parse(fs.readFileSync(path.join(fixture,'manifest.json'))).artifacts.length,0);pass('save roundtrip leaves exhibitions unchanged');
+    for(const count of [6,7,12]){
+        value={...value,count};response=await post({revision:state.revision,settings:value});assert.equal(response.status,200,await response.text());state=await get();assert.deepEqual(state.settings,value);pass(`count ${count} accepted and roundtripped`);
+    }
+    const beforeInvalid=fs.readFileSync(file);
+    response=await post({revision:state.revision,settings:{...value,count:13}});assert.equal(response.status,400);assert.deepEqual(fs.readFileSync(file),beforeInvalid);pass('13 rejected without changing valid 12');
     response=await post({revision:'missing',settings:{...value,count:0}});assert.equal(response.status,409);assert.deepEqual((await get()).settings,value);pass('stale tab cannot overwrite');
     let saved=fs.readFileSync(file);
     await stop();await start();state=await get();assert.deepEqual(state.settings,value);assert.deepEqual(fs.readFileSync(file),saved);pass('settings persist across server restart');
@@ -46,5 +52,6 @@ try{
     fs.writeFileSync(catalogFile,JSON.stringify(catalog));
     for(const asset of ['/visitor-editor.js','/visitor-style.css'])assert.equal((await fetch(url+asset)).status,200);
     const html=await(await fetch(url)).text();assert.ok(html.includes('visitors-heading')&&html.includes('박물관 관리'));pass('management UI and assets served');
+    assert.equal(MAX_VISITORS,12);assert.match(html,/<input id="visitor-count"[^>]*max="12"/);assert.match(fs.readFileSync(path.join(root,'apps/quest-viewer/Assets/Museum/Runtime/VisitorPreferences.cs'),'utf8'),/const int MaxCount\s*=\s*12;/);pass('HTML/API/Unity count limits agree at 12');
     console.log(`VISITOR_ADMIN_TESTS_PASS: ${passed} cases | ${fixture}`);
 }finally{if(child && child.exitCode===null)child.kill();}

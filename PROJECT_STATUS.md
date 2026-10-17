@@ -342,3 +342,5 @@ GitHub에는 소스·설정·문서·전시 모델/설명을 저장합니다. Un
 - 상한 48→96개 확장(Node/Unity/에디터/테스트 동시, 64KiB 유지). persona 신규값 저장·검토 가능, 표시는 guest 성향 부여 후속. [ADR-0007](docs/decisions/0007-reaction-96-cap.md).
 - 테스트권총에 새 48개 draft 저장, 기존 48승인 보존. 개인Archive 총96개=승인48+초안48, stale false, 백업 존재. 개인 문구 Git 제외.
 - 검증: 계약79·등록9 통과. Unity 빌드·플레이어 회귀 진행 후 커밋·push 예정. Quest 미검증 유지.
+## 2026-10-17 / CROWD-001 A/B/C 시험판
+전시물 선착순 대기·자리 비움 후 해제·혼잡 양보 이동과 수동 전체0~12명 계약을 구현·PC 검증했습니다. 통합 실행판에는 아직 미반영입니다. 실제 검증 근거/한계는 docs/handoffs/CROWD-001.json, 다음 자동 수용량·방 연동 목표와 성능 작업은 docs/CROWD_PLAN.md를 따릅니다.

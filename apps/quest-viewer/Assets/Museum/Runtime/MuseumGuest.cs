@@ -3,13 +3,14 @@ using UnityEngine;
 
 namespace FamilyMuseum
 {
-    public enum GuestState { Entering, Walking, Viewing, Leaving, Finished }
+    public enum GuestState { Entering, Walking, Viewing, Leaving, Finished, Waiting, Clearing }
     public sealed partial class MuseumGuest : MonoBehaviour
     {
         public GuestState State { get; private set; }
         public VisitorVisual Visual { get; private set; }
         public int Viewed { get; private set; }
         public bool Aborted { get; private set; }
+        public int Sequence { get; private set; }
         MuseumVisitors museum;
         readonly List<ArtifactDisplay> targets=new List<ArtifactDisplay>();
         List<Vector3> path;
@@ -59,6 +60,7 @@ namespace FamilyMuseum
         public bool Initialize(MuseumVisitors owner,VisitorAppearance appearance,ArtifactDisplay[] exhibits,Font font,int sequence)
         {
             museum=owner; Persona=owner.NextPersona();
+            Sequence=sequence;
             Visual=gameObject.AddComponent<VisitorVisual>();
             if(!Visual.Initialize(appearance)) return false;
             foreach(var exhibit in exhibits) if(exhibit.Loaded) targets.Add(exhibit);
@@ -164,6 +166,6 @@ namespace FamilyMuseum
             Visual.Tick(moving,dt,museum.SpeedMultiplier);
             UpdateThoughtVisibility();
         }
-        public void Close() { if(this==null) return; if(Visual!=null) Visual.Close(); if(thoughtBackground!=null) Destroy(thoughtBackground); gameObject.SetActive(false); Destroy(gameObject); }
+        public void Close() { if(this==null) return; museum?.RemoveTourQueueGuest(this); if(Visual!=null) Visual.Close(); if(thoughtBackground!=null) Destroy(thoughtBackground); gameObject.SetActive(false); Destroy(gameObject); }
     }
 }
