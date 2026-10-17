@@ -19,6 +19,7 @@
 |---|---|---|---|---|
 | ADMIN-006 | Codex | validated | codex/admin-006-admin-workspace-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/16) |
 | CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/20) |
+| CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -42,6 +43,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: 사용자 승인 기능PR20 통합·실행판/관리 반영 완료. 배포 기록 문서PR CI/통합 후 실행폴더 문서FF, 담당done/release. 다음 기능은 별도ID CROWD-002 자동 안전 수용량/목표·입장대기, 이후003 성능.
 - 제한: PC 행동 회귀이며 실시간 FPS/Quest 실기기 성능 보장이 아님; Quest는 미검증; 기존 개인 목표4명을 유지했으며 관리화면에서 최대12명으로 조절 가능; 방 수 자동 연동·안전 수용량/입장량 조절·문 통과 예약은 후속; 안전한 관람/퇴장 공간이 없는 모든 배치를 보증하지 않음; 바탕화면의 기존PC/Quest/관리 바로가기를 그대로 사용; 실제 기기 연결은 별도
 - 원본: [작업 인계](handoffs/CROWD-001.json), 시작 f0aa996 / 갱신 2026-10-17
+
+### CROWD-004
+
+실제 방 배치12명 정체 수정: 통행로 옆 대기·후속전시 되돌아감 제거·대기자 양보/복구·대기계산 캐시
+
+- 근거: 사용자 실제 정체 보고 확인; 기존 반영 승인 기능의 결함 수정으로 같은 실행판에 교체 예정; 수정 전 익명 동일배치0.1초 간격은 통과했으나60Hz간격360초에14관람/퇴장0·후반0/0 정체 재현: logs/deadlock-20261017-163319/tour-player-12-20261017-163319.log; 수정 Windows 빌드exit0: logs/unity-Build-20261017-163846.log; 동일배치60Hz간격360초:109관람/13퇴장·후반41/6, 실제peak12·FIFO/간격/순서/제거/방전환 PASS: logs/deadlock-20261017-163946/tour-player-12-20261017-163946.log; 60Hz간격900초:289관람/43퇴장·후반41/7 PASS; waiting plan1회·yield2회: logs/deadlock-20261017-164120/tour-player-12-20261017-164120.log; 30Hz간격360초:108관람/13퇴장·후반41/7 PASS; 화면 확인: logs/deadlock-20261017-164145/tour-player-12-20261017-164145.log 및 .png.queue.png; 기존미로6명33관람/7퇴장·인접전시12명122관람/34퇴장 및 후반 진행 PASS: logs/navigation-tests-1792219563504/tour-player-6-20261017-164004.log, logs/queue-compact-20261017-164020/tour-player-12-20261017-164020.log; 개인모델/대사/제목을 복사하지 않고 공개 sample-books와 익명ID로 기하배치만 재현
+- 다음: 사용자 기존 반영 승인 및 실제 결함 수정 요청 범위로 PR/필수CI/통합→기존Viewer 정상종료→활성폴더FF/빌드/동일재현조건실행→개인54파일해시/12명설정보존→PC관람 재실행. 배포 기록은 후속 문서PR.
+- 제한: 테스트는 실제프레임간격을 사용한 PC 모의시간 행동 검증이며 실제FPS/Quest 성능 보장 아님; 개인자료54파일·목표12명·속도1 보존, 현재 실행중 Viewer는 교체 직전까지 유지; 임의 모든 배치의 수용량을 보증하지 않으며 자동인원/입장량 조절은 후속
+- 원본: [작업 인계](handoffs/CROWD-004.json), 시작 5b221ee / 갱신 2026-10-17
 
 ### OPS-002
 

@@ -8,15 +8,20 @@ namespace FamilyMuseum
         public readonly VisitorQueue Tickets = new VisitorQueue();
         public readonly Dictionary<string, Vector3> Waiting = new Dictionary<string, Vector3>();
         public int Room;
+        public bool First;
         public Vector3 Center, View, Clear;
         public List<Vector3> ClearancePath;
         public List<Vector3> Approach;
+        public List<Vector3> Places;
         public long LastViewed;
     }
 
     public sealed partial class MuseumVisitors
     {
         readonly Dictionary<string, TourExhibitQueue> tourQueues = new Dictionary<string, TourExhibitQueue>();
+        readonly Dictionary<int, MuseumGuest> yieldingGuests = new Dictionary<int, MuseumGuest>();
+        public int QueueWaitingPlans { get; private set; }
+        public int QueueYields { get; private set; }
         public bool QueueChecksPassed { get; private set; } = true;
         public int QueueWaits { get; private set; }
         public int QueueDepartures { get; private set; }
@@ -63,7 +68,7 @@ namespace FamilyMuseum
                         for (int p = 1; p < approach.Count; p++)
                             if (SegmentDistance(clear, approach[p-1], approach[p]) < .9f) { separated = false; break; }
                         if (!separated) continue;
-                        q = new TourExhibitQueue { Room = roomIndex, Center = center, View = view, Clear = clear, ClearancePath = departure, Approach = approach };
+                        q = new TourExhibitQueue { Room = roomIndex, First = TourNavigation.Get(TourRooms[roomIndex]).visitOrder[0] == entry, Center = center, View = view, Clear = clear, ClearancePath = departure, Approach = approach };
                         break;
                     }
                     if (q != null) break;
@@ -88,7 +93,7 @@ namespace FamilyMuseum
             return Vector3.Distance(p, a + delta * t);
         }
 
-        bool SafeWaitingPoint(TourExhibitQueue q, string guest, Vector3 point)
+        bool SafeWaitingPoint(TourExhibitQueue q, Vector3 point)
         {
             if (!TourPath(q.Room).Clear(point) || !AwayFromDoors(q.Room, point, 1.2f)) return false;
             // Keep all exhibits' approach spots free, including exhibits not yet visited.
@@ -100,6 +105,9 @@ namespace FamilyMuseum
             foreach (var other in tourQueues.Values)
             {
                 if (other.Room != q.Room) continue;
+                // Park beside circulation routes, never on the route needed by the oldest ticket.
+                for(int i=1;i<other.Approach.Count;i++)
+                    if(SegmentDistance(point,other.Approach[i-1],other.Approach[i])<.8f)return false;
                 if ((point - other.View).sqrMagnitude < 1f || (point - other.Clear).sqrMagnitude < 1f) return false;
                 var previous = other.View;
                 foreach (var step in other.ClearancePath)
@@ -107,8 +115,6 @@ namespace FamilyMuseum
                     if (SegmentDistance(point, previous, step) < .85f) return false;
                     previous = step;
                 }
-                if (other != q) foreach (var reservation in other.Waiting)
-                    if (reservation.Key != guest && (point - reservation.Value).sqrMagnitude < .85f * .85f) return false;
             }
             return true;
         }
@@ -118,8 +124,30 @@ namespace FamilyMuseum
             route = null;
             int rank = q.Tickets.WaitingRank(guest.name);
             if (rank < 0) return false;
-            // Sample the approach backwards: the oldest ticket gets the front place.
-            var places = new List<Vector3>();
+            // Later exhibits receive guests from the preceding departure buffer. Walking back
+            // to an entrance-based line would create opposing traffic in the same narrow lane.
+            if(!q.First)return false;
+            // Geometry is immutable for this tour. Plan once, not every parked guest/frame.
+            if(q.Places==null)q.Places=PlanWaitingPlaces(q);
+            if (rank >= q.Places.Count) return false;
+            var destination = q.Places[rank];
+            if (q.Waiting.TryGetValue(guest.name, out var reserved) && (reserved - destination).sqrMagnitude < .0001f)
+            {
+                if(guest.FollowingQueuePoint(destination))return false; // Keep the current path/waypoint.
+                if((guest.transform.position-reserved).sqrMagnitude<.0001f)
+                {route=new List<Vector3>();return true;}
+            }
+            route = QueueRoute(guest, destination);
+            if (route == null) return false;
+            if (!q.Waiting.ContainsKey(guest.name)) QueueWaits++;
+            q.Waiting[guest.name] = destination;
+            return true;
+        }
+
+        List<Vector3> PlanWaitingPlaces(TourExhibitQueue q)
+        {
+            QueueWaitingPlans++;
+            var places=new List<Vector3>();
             var end = q.View;
             float distanceFromView = 0;
             float lastPlaced = 0;
@@ -131,35 +159,22 @@ namespace FamilyMuseum
                 {
                     float along = distanceFromView + d;
                     if (along < 1.6f || along - lastPlaced < 1f) continue;
-                    var point = Vector3.Lerp(end, start, d / length);
-                    if (!SafeWaitingPoint(q, guest.name, point)) continue;
-                    places.Add(point);lastPlaced = along;
+                    var center = Vector3.Lerp(end, start, d / length);
+                    var direction=(start-end).normalized;
+                    var side=new Vector3(-direction.z,0,direction.x);
+                    foreach(var offset in new[]{side*.9f,-side*.9f,side*1.2f,-side*1.2f})
+                    {
+                        var point=center+offset;
+                        if(!SafeWaitingPoint(q,point))continue;
+                        bool separated=true;
+                        foreach(var existing in places)if((point-existing).sqrMagnitude<.95f*.95f){separated=false;break;}
+                        if(!separated)continue;
+                        places.Add(point);lastPlaced=along;break;
+                    }
                 }
                 distanceFromView += length;end = start;
             }
-            if (rank >= places.Count) return false;
-            var destination = places[rank];
-            if (q.Waiting.TryGetValue(guest.name, out var reserved) && (reserved - destination).sqrMagnitude < .0001f &&
-                (guest.transform.position - reserved).sqrMagnitude < .0001f)
-            {
-                route = new List<Vector3>();
-                return true;
-            }
-            // The destination remains ticket-ordered even if temporary bodies require a detour.
-            route = QueueRoute(guest, destination);
-            if (route == null) return false;
-            if (!q.Waiting.ContainsKey(guest.name)) QueueWaits++;
-            q.Waiting[guest.name] = destination;
-            return true;
-        }
-
-        IEnumerable<Vector3> QueueBodies(MuseumGuest guest)
-        {
-            foreach (var q in tourQueues.Values)
-            {
-                if (q.Room != guest.TourRoom) continue;
-                if (q.Tickets.Owner != null && q.Tickets.Owner != guest.name) yield return q.View;
-            }
+            return places;
         }
 
         public List<Vector3> QueueRoute(MuseumGuest guest, Vector3 destination) =>
@@ -168,12 +183,13 @@ namespace FamilyMuseum
         public bool TryTourYield(MuseumGuest guest, out List<Vector3> route)
         {
             route=null;
+            if(yieldingGuests.TryGetValue(guest.TourRoom,out var active) && active!=null && active!=guest)return false;
             // Older guests and guests already vacating a viewing place have priority.
             bool lowerPriority=false;
             foreach(var other in guests)
                 if(other!=guest && other.TourRoom==guest.TourRoom &&
                     (other.transform.position-guest.transform.position).sqrMagnitude<1.8f*1.8f &&
-                    (other.Sequence<guest.Sequence || other.State==GuestState.Clearing))lowerPriority=true;
+                    other.TourStalled && (other.Sequence<guest.Sequence || other.State==GuestState.Clearing))lowerPriority=true;
             if(!lowerPriority)return false;
             foreach(float radius in new[]{.8f,1.2f,1.6f})
                 for(int i=0;i<8;i++)
@@ -187,9 +203,14 @@ namespace FamilyMuseum
                         if(q.Room==guest.TourRoom && ((point-q.View).sqrMagnitude<.85f*.85f || (point-q.Clear).sqrMagnitude<.85f*.85f)){safe=false;break;}
                     if(!safe)continue;
                     route=FindPath(guest,point);
-                    if(route!=null)return true;
+                    if(route!=null){yieldingGuests[guest.TourRoom]=guest;QueueYields++;return true;}
                 }
             return false;
+        }
+
+        public void FinishTourYield(MuseumGuest guest)
+        {
+            if(yieldingGuests.TryGetValue(guest.TourRoom,out var active) && active==guest)yieldingGuests.Remove(guest.TourRoom);
         }
 
         public void RecordQueuedView(MuseumGuest guest, TourExhibitQueue q)
@@ -208,6 +229,7 @@ namespace FamilyMuseum
 
         public void RemoveTourQueueGuest(MuseumGuest guest)
         {
+            FinishTourYield(guest);
             foreach (var q in tourQueues.Values)
             {
                 q.Tickets.Cancel(guest.name);

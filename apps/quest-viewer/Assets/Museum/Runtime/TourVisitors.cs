@@ -46,26 +46,34 @@ namespace FamilyMuseum
             }
             int crowdTarget=6,peak=0,lateViews=0,lateExits=0;
             var smokeArgs=Environment.GetCommandLineArgs();int countArg=Array.IndexOf(smokeArgs,"-museum-tour-count");
+            float smokeDt=.1f,smokeSeconds=600;
+            int dtArg=Array.IndexOf(smokeArgs,"-museum-tour-dt"),secondsArg=Array.IndexOf(smokeArgs,"-museum-tour-seconds");
+            if(dtArg>=0 && (dtArg+1>=smokeArgs.Length || !float.TryParse(smokeArgs[dtArg+1],System.Globalization.NumberStyles.Float,System.Globalization.CultureInfo.InvariantCulture,out smokeDt) || smokeDt<.01f || smokeDt>.1f))
+            {SmokePassed=false;Debug.Log("TOUR_SMOKE_FAIL: invalid timestep");yield break;}
+            if(secondsArg>=0 && (secondsArg+1>=smokeArgs.Length || !float.TryParse(smokeArgs[secondsArg+1],out smokeSeconds) || smokeSeconds<180 || smokeSeconds>1800))
+            {SmokePassed=false;Debug.Log("TOUR_SMOKE_FAIL: invalid duration");yield break;}
+            int smokeSteps=Mathf.CeilToInt(smokeSeconds/smokeDt),lateStep=Mathf.FloorToInt((smokeSeconds-120)/smokeDt);
             if(countArg>=0 && (countArg+1>=smokeArgs.Length || !int.TryParse(smokeArgs[countArg+1],out crowdTarget) || crowdTarget<1 || crowdTarget>VisitorPreferences.MaxCount))
             { SmokePassed=false;Debug.Log("TOUR_SMOKE_FAIL: invalid crowd target");yield break; }
             ClearRoom();PrepareTours();SetCount(crowdTarget);
+            int initialPlans=QueueWaitingPlans;
             bool cancelledWaiter=false,cancelledOwner=false,queuePreview=false;
-            for(int i=0;i<6000;i++)
+            for(int i=0;i<smokeSteps;i++)
             {
-                Tick(.1f);peak=Mathf.Max(peak,guests.Count);SmokePassed &= guests.Count<=crowdTarget && QueueChecksPassed;
-                if(i==4800){lateViews=Views;lateExits=Exited;}
+                Tick(smokeDt);peak=Mathf.Max(peak,guests.Count);SmokePassed &= guests.Count<=crowdTarget && QueueChecksPassed;
+                if(i==lateStep){lateViews=Views;lateExits=Exited;}
                 foreach(var g in guests)
                 {
                     SmokePassed &= TourPath(g.TourRoom).Clear(g.transform.position) && g.TourVisited.SequenceEqual(expected.Take(g.TourVisited.Count));
                     foreach(var other in guests)
                         if(g!=other && g.TourRoom==other.TourRoom)SmokePassed &= Vector3.Distance(g.transform.position,other.transform.position)>=.64f;
                 }
-                if(i>300 && !cancelledWaiter)
+                if(i*smokeDt>30 && !cancelledWaiter)
                 {
                     var removed=guests.FirstOrDefault(g=>g.State==GuestState.Waiting);
                     if(removed!=null){removed.Close();guests.Remove(removed);SmokePassed &= !HasQueueReferences(removed.name);cancelledWaiter=true;}
                 }
-                if(i>600 && !cancelledOwner)
+                if(i*smokeDt>60 && !cancelledOwner)
                 {
                     var removed=guests.FirstOrDefault(g=>g.State==GuestState.Viewing);
                     if(removed!=null){removed.Close();guests.Remove(removed);SmokePassed &= !HasQueueReferences(removed.name);cancelledOwner=true;}
@@ -89,6 +97,8 @@ namespace FamilyMuseum
             SmokePassed &= peak==crowdTarget && Entered>1&&(expected.Length==0?Views==0:Views>expected.Length)&&Exited>0&&Aborted==0;
             bool progress=(expected.Length==0 || Views>lateViews) && Exited>lateExits;
             SmokePassed &= progress;
+            SmokePassed &= QueueWaitingPlans-initialPlans<=TourRooms.Sum(r=>r.artifacts.Length);
+            Debug.Log($"TOUR_WAIT_PLANS: plans={QueueWaitingPlans-initialPlans} yields={QueueYields} dt={smokeDt}");
             Debug.Log($"TOUR_RECENT_PROGRESS: views={Views-lateViews} exits={Exited-lateExits} passed={progress}");
             // Moving the player's camera between rooms must not replace the museum's guests.
             var retained=guests.ToArray();var tickets=retained.Select(g=>g.QueueTicket).ToArray();
