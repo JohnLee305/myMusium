@@ -29,7 +29,7 @@ function render(){
  if(modeEntrance&&modeExit){modeEntrance.textContent=`입구 지정${doorMode==='entrance'?' · 선택 중':''}`;modeExit.textContent=`출구 지정${doorMode==='exit'?' · 선택 중':''}`;modeEntrance.classList.toggle('active',doorMode==='entrance');modeExit.classList.toggle('active',doorMode==='exit');}
  $('nav-room').disabled=busy||dirty;for(const id of ['nav-entrance','nav-exit'])$(id).disabled=busy;
  $('nav-save').disabled=busy||!dirty;$('nav-cancel').disabled=busy||!dirty;
- }finally{rendering=false;}
+ }finally{rendering=false;document.dispatchEvent(new Event('room-editor-state'));}
 }
 const WALL_SIDES=[['nav-wall-top','back',6],['nav-wall-bottom','front',6],['nav-wall-left','left',5],['nav-wall-right','right',5]];
 const WALL_NAME={front:'아래',back:'위',left:'왼쪽',right:'오른쪽'};
@@ -67,3 +67,6 @@ export function initNavigationEditor(refreshFn){refresh=refreshFn;for(const id o
  $('nav-save').onclick=async()=>{busy=true;render();try{const response=await fetch('/api/navigation',{method:'POST',headers:{'Content-Type':'application/json','X-Museum-Token':state.token},body:JSON.stringify({revision:state.revision,roomId:room().id,navigation:nav,roomOrder:order})});const result=await response.json();if(!response.ok)throw Error(result.error);dirty=false;busy=false;await refresh();text('동선을 저장했습니다. 관람 앱을 다시 열면 반영됩니다.');}catch(e){text(e.message,true);}finally{busy=false;render();}};
  window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 }
+
+export function navigationWorkspaceState(){return {roomId:$('nav-room').value,dirty,busy};}
+export function selectNavigationRoom(id){if(id===$('nav-room').value)return true;if(dirty||busy||!state?.rooms.some(r=>r.id===id))return false;$('nav-room').value=id;load();return true;}

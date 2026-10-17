@@ -1,0 +1,22 @@
+{
+  "taskId": "ADMIN-006",
+  "owner": "Codex",
+  "branch": "codex/admin-006-admin-workspace-20261017",
+  "baseSha": "d5255c671302b1f76037127b03f3a512986dfeeb",
+  "updatedDateKst": "2026-10-17",
+  "status": "validated",
+  "summary": "관리 메뉴4개·전시실3작업 전환·공유 방 선택·기존기능보존",
+  "validation": [
+    "시작 Gate·담당선점 Issue#15 확인",
+    "로컬 Node CI15묶음 PASS, 새 화면 전환·미저장보존·실패/성공저장 등 DOM14사례 PASS",
+    "기존 DOM ID128개 보존·개인 Archive52파일 SHA256 불변",
+    "실제4186 재시작·화면/8정적파일 제공·기존목록 읽기 확인",
+    "2026-10-17 사용자가 실제 화면 정상 동작 확인 후 커밋 요청"
+  ],
+  "nextAction": "사용자 승인된 UI 로컬 커밋. 다음은 전용브랜치 push·PR·GitHub CI·통합 및 담당 완료 처리.",
+  "pullRequest": null,
+  "limitations": [
+    "브라우저 직접 조작이 비활성화되어 실제 화면·모바일 시각 검증 미실시",
+    "기존 API 계약·Archive·Unity 변경 없음. PC 관람 재빌드 불필요"
+  ]
+}

@@ -5,6 +5,7 @@ const fields = new Map();
 function note(text,error=false) { $('theme-status').textContent=text; $('theme-status').classList.toggle('error',error); }
 function changed() { dirty=true; $('theme-preset').value='custom'; paint(); note('미리보기 중 · 저장하면 이 방에만 적용됩니다.'); }
 function paint() {
+ document.dispatchEvent(new Event('room-editor-state'));
  for(const [key,inputs] of fields) { inputs.color.value=draft[key]; inputs.hex.value=draft[key]; $('theme-preview').style.setProperty('--'+key,draft[key]); }
  const pairs=[['명판',draft.plaqueText,draft.plaqueBackground],['안내판',draft.signText,draft.signBackground],['상세창',draft.detailText,draft.detailBackground]];
  function lum(hex) { const c=hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4); return c[0]*.2126+c[1]*.7152+c[2]*.0722; }
@@ -57,3 +58,6 @@ export function initThemeEditor(refresh) {
  });
  window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
 }
+
+export function themeWorkspaceState(){return {roomId,dirty,busy:saving};}
+export function selectThemeRoom(id){if(id===roomId)return true;if(dirty||saving||!data?.rooms.some(r=>r.id===id))return false;loadRoom(id);return true;}

@@ -6,6 +6,7 @@ function status(text,error=false){$('layout-status').textContent=text;$('layout-
 function occupied(n){return draft.find(e=>e.cell===n);}
 function itemFor(entry){return state.artifacts.find(a=>ref(a.id)===entry);}
 function controls(){
+ document.dispatchEvent(new Event('room-editor-state'));
  $('layout-room').disabled=busy||dirty||editing;
  $('layout-save').disabled=busy||!dirty;
  $('layout-cancel').disabled=busy||(!dirty&&!editing);
@@ -95,3 +96,6 @@ export function initLayoutEditor(refreshFn){
  $('trash-item').onclick=()=>{if(editing)return status('설명 수정을 먼저 저장하거나 취소해 주세요.',true);post('/api/trash',{artifactId:itemFor(selected).id});};
  window.addEventListener('beforeunload',event=>{if(dirty||editing){event.preventDefault();event.returnValue='';}});
 }
+
+export function layoutWorkspaceState(){return {roomId,dirty:dirty||editing,busy};}
+export function selectLayoutRoom(id){if(id===roomId)return true;if(dirty||editing||busy||!state?.rooms.some(r=>r.id===id))return false;roomId=id;loadRoom();return true;}

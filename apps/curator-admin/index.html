@@ -3,31 +3,32 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>전시품 관리 · 가족 박물관</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/visitor-style.css"><script src="/app.js" type="module"></script><link rel="stylesheet" href="/reaction-style.css"><script type="module" src="/reaction-editor.js"></script></head>
 <body>
 <header><a class="brand" href="/">FAMILY ARCHIVE <span>타이쿤 실험 관리</span></a><span class="local"><i></i> 최신 PC 관람과 연결</span></header>
-<main>
-  <section class="intro"><p class="eyebrow">COLLECTION STUDIO</p><h1>기억에 자리를 만들어 주세요.</h1><p>소중한 물건의 모형과 이야기를 더하면, 우리 가족의 전시가 됩니다.</p><a class="theme-jump secondary" href="#layout-heading">전시품 배치·수정 ↓</a> <a class="theme-jump secondary" href="#theme-heading">전시실 색상·테마 조정 ↓</a> <a class="theme-jump secondary" href="#visitors-heading">관람객 관리 ↓</a> <a class="theme-jump secondary" href="#reactions-heading">감상 반응 만들기 ↓</a></section>
-  <p class="edition-note">이 페이지는 <strong>PC 관람 / 타이쿤 실험</strong> 앱의 전시품과 관람객을 관리합니다. 기존 버전 보관용 자료는 별도입니다. 전시품·배치 변경은 앱 재실행 후, 관람객 설정은 저장 후 자동 반영됩니다.</p>
-  <section class="panel visitor-panel" aria-labelledby="visitors-heading">
-    <div class="section-heading"><span class="section-number">운영</span><div><h2 id="visitors-heading">관람객 관리</h2><p>손님 수와 이동 속도를 정하고, 등장할 캐릭터를 골라 주세요.</p></div></div>
-    <form id="visitor-form">
-      <fieldset id="visitor-controls" disabled>
-        <label class="visitor-toggle"><input type="checkbox" id="visitor-enabled"> 관람객 받기</label>
-        <div class="visitor-options"><div><label for="visitor-count">목표 인원</label><input id="visitor-count" type="number" min="0" max="6" step="1" required><p class="hint">0~6명 · 입장·퇴장 중에는 실제 인원이 적을 수 있습니다.</p></div><div><label for="visitor-speed">이동 속도 <output id="visitor-speed-value">1.0배</output></label><input id="visitor-speed" type="range" min="0.5" max="1.5" step="0.1" value="1"><p class="hint">0.5배 느긋하게 · 1배 기본 · 1.5배 빠르게</p></div></div>
-        <h3>등장할 캐릭터</h3><p id="visitor-summary" class="hint"></p>
-        <div class="visitor-tools"><label for="visitor-search">캐릭터 검색</label><input id="visitor-search" type="search" placeholder="남성, 여성, 이름으로 찾기"><button id="visitor-all-on" type="button" class="secondary">모두 사용</button><button id="visitor-all-off" type="button" class="secondary">모두 끄기</button></div>
-        <div id="visitor-appearances"></div>
-        <div class="visitor-pages"><button id="visitor-previous" type="button" class="secondary">이전 외형</button><span id="visitor-page"></span><button id="visitor-next" type="button" class="secondary">다음 외형</button></div>
-        <p class="hint" id="visitor-empty-note" hidden>사용할 외형이 없거나 등장 비중이 모두 0이면 관람객이 생성되지 않습니다.</p>
-        <p class="hint" id="visitor-removed-note" hidden>현재 앱에 없는 예전 외형 설정은 적용되지 않으며, 이번 저장에서 정리됩니다.</p>
-        <p class="hint">비중 1:3이면 대략 25%:75%로 새 손님을 선택합니다. 같은 방에는 가능한 서로 다른 외형을 먼저 선택합니다. 외형을 끄면 해당 손님은 정리되고, 비중 변경은 다음 입장부터 반영됩니다. 새 캐릭터는 앱에 등록·빌드한 뒤 이 목록에 나타납니다.</p>
-        <div class="theme-actions"><button id="visitor-save" type="submit">관람객 설정 저장</button></div>
-      </fieldset>
-      <button id="visitor-reload" type="button" class="secondary">저장된 설정 다시 불러오기</button>
-      <p id="visitor-status" role="status" aria-live="polite">관람객 설정을 불러오는 중입니다.</p>
-      <p class="hint">이 설정은 다음 실행에도 유지됩니다. 앱 안의 인원 버튼은 임시 조절이며, 영구 저장은 여기서 해 주세요.</p>
-    </form>
-  </section>
-  <div class="workspace">
-    <section class="panel editor" aria-labelledby="add-heading">
+<div class="admin-shell">
+<nav class="admin-nav" aria-label="관리 메뉴"><p class="eyebrow">MUSEUM STUDIO</p>
+<a href="#home" data-menu="home">홈</a><a href="#artifacts" data-menu="artifacts">전시품</a><a href="#rooms-layout" data-menu="rooms">전시실</a><a href="#visitors" data-menu="visitors">관람객</a>
+<p class="hint">필요한 작업을 골라<br>한 화면씩 관리하세요.</p></nav>
+<main id="admin-main">
+<p id="workspace-notice" class="workspace-notice" role="status" aria-live="polite" hidden></p>
+<div id="message" role="status" aria-live="polite" hidden></div>
+<section id="view-home" data-admin-view="home" aria-labelledby="home-heading">
+<div class="intro"><p class="eyebrow">나의 박물관</p><h1 id="home-heading" tabindex="-1">오늘은 무엇을 꾸며 볼까요?</h1><p>전시품을 더하고, 전시실을 꾸미고, 손님을 맞이하세요.</p></div>
+<div class="home-summary"><div><span>전시품</span><strong id="home-artifact-count">—</strong></div><div><span>전시실</span><strong id="home-room-count">—</strong></div></div>
+<div class="home-shortcuts"><a href="#artifacts"><strong>전시품 관리</strong><span>목록 · 새 전시품 · 감상 대사</span></a><a href="#rooms-layout"><strong>전시실 꾸미기</strong><span>배치 · 관람 동선 · 색상과 테마</span></a><a href="#visitors"><strong>관람객 관리</strong><span>인원 · 속도 · 등장할 캐릭터</span></a></div>
+<p class="edition-note">전시품·배치·동선·테마를 저장한 뒤 관람 앱을 다시 열면 반영됩니다. 관람객 설정은 저장 후 자동 반영됩니다.</p>
+</section>
+<section id="view-artifacts" data-admin-view="artifacts" aria-labelledby="artifacts-heading" hidden>
+<div class="page-heading"><div><p class="eyebrow">COLLECTION</p><h1 id="artifacts-heading" tabindex="-1">전시품</h1><p>모아 둔 물건과 이야기를 관리합니다.</p></div></div>
+<div class="workspace-tabs" role="tablist" aria-label="전시품 작업"><button id="tab-artifacts-list" role="tab" data-artifact-tab="list" aria-controls="artifacts-list">전시품 목록</button><button id="tab-artifacts-add" role="tab" data-artifact-tab="add" aria-controls="artifacts-add">새 전시품 추가</button><button id="tab-artifacts-reactions" role="tab" data-artifact-tab="reactions" aria-controls="artifacts-reactions">감상 대사</button></div>
+<div id="artifacts-list" role="tabpanel" aria-labelledby="tab-artifacts-list" data-artifact-panel="list"><section class="collection" aria-labelledby="collection-heading">
+      <div class="collection-heading"><div><p class="eyebrow">OUR COLLECTION</p><h2 id="collection-heading">모아 둔 기억 <span id="total">—</span></h2></div><button id="refresh" class="secondary" type="button">새로고침</button></div>
+      <div class="capacity"><span id="capacity-text">전시 목록을 불러오는 중입니다.</span><p>방당 최대 30개 · 관람 중 이동하는 방만 불러옵니다.</p></div>
+
+      <label for="room-filter">전시실별 보기</label><select id="room-filter"><option value="all">전체 전시실</option></select>
+      <p id="room-summary" class="hint"></p>
+      <div id="artifacts" class="cards" aria-live="polite"></div>
+      <aside class="note"><span>다음 관람을 위해</span><p>등록·방 이동 후 관람 앱을 다시 열면 반영됩니다. 자동 배정은 빈 자리가 있는 첫 방을 채우고, 모든 방이 가득 차면 새 방을 만듭니다.</p></aside>
+    </section></div>
+<div id="artifacts-add" role="tabpanel" aria-labelledby="tab-artifacts-add" data-artifact-panel="add" hidden><section class="panel editor" aria-labelledby="add-heading">
       <div class="section-heading"><span class="section-number">01</span><div><h2 id="add-heading">새 전시품 추가</h2><p>모델이 없다면 준비된 샘플로 시작해 보세요.</p></div></div>
       <form id="add-form">
         <fieldset><legend>모델 준비</legend><div class="source-options"><label><input type="radio" name="source" value="sample" checked> 샘플로 시작</label><label><input type="radio" name="source" value="file"> 내 GLB 파일</label></div></fieldset>
@@ -42,7 +43,7 @@
           <p id="preview-measure"></p><p id="preview-status" role="status" aria-live="polite">미리보기를 준비하고 있습니다.</p>
           <p class="hint">등록 전 파일은 브라우저에서만 읽습니다. 조명·재질·크기 계산은 관람 앱과 차이가 있을 수 있습니다.</p>
         </section>
-        <details class="upload-limits" open><summary>등록 제한과 지원 형식</summary>
+        <details class="upload-limits"><summary>등록 제한과 지원 형식</summary>
           <dl><dt>파일 형식·용량</dt><dd>텍스처와 데이터가 포함된 GLB 2.0 · 파일당 최대 64MB</dd><dt>전시대 범위</dt><dd>가로 95cm × 깊이 95cm × 높이 180cm 이내</dd><dt>배율</dt><dd>0.01~10 · 전시 크기 입력 또는 권장 크기 적용</dd><dt>이름·설명</dt><dd>이름 80자 · 설명 400자</dd><dt>등록 개수</dt><dd>방당 30개 · 전체 10,000개 · 최대 1,000개 방</dd><dt>전체 저장 용량</dt><dd>합산 용량 제한 없음 · PC 디스크 여유 공간 사용 (휴지통·백업도 공간 사용)</dd></dl>
           <p class="hint">현재 미리보기는 Draco·Meshopt·KTX2 압축 모델을 지원하지 않습니다. 일반 GLB로 내보내 주세요. 64MB 이하여도 면 수·텍스처가 복잡하면 느릴 수 있습니다. 큰 모델은 전시 크기를 줄여 주세요.</p>
         </details>
@@ -54,69 +55,9 @@
         <button id="submit" type="submit" disabled>전시품 등록 <span>↗</span></button>
         <p class="save-note">등록 후 관람 앱을 다시 열면 반영됩니다.</p>
       </form>
-      <div id="message" role="status" aria-live="polite" hidden></div>
-    </section>
-    <section class="collection" aria-labelledby="collection-heading">
-      <div class="collection-heading"><div><p class="eyebrow">OUR COLLECTION</p><h2 id="collection-heading">모아 둔 기억 <span id="total">—</span></h2></div><button id="refresh" class="secondary" type="button">새로고침</button></div>
-      <div class="capacity"><span id="capacity-text">전시 목록을 불러오는 중입니다.</span><p>방당 최대 30개 · 관람 중 이동하는 방만 불러옵니다.</p></div>
-      <form id="room-form" class="room-form"><label for="room-title">새 전시실 이름</label><div><input id="room-title" maxlength="80" placeholder="예: 가족의 기록" required><button class="secondary" type="submit">전시실 추가</button></div></form>
-      <label for="room-filter">전시실별 보기</label><select id="room-filter"><option value="all">전체 전시실</option></select>
-      <p id="room-summary" class="hint"></p>
-      <div id="artifacts" class="cards" aria-live="polite"></div>
-      <aside class="note"><span>다음 관람을 위해</span><p>등록·방 이동 후 관람 앱을 다시 열면 반영됩니다. 자동 배정은 빈 자리가 있는 첫 방을 채우고, 모든 방이 가득 차면 새 방을 만듭니다.</p></aside>
-    </section>
-  </div>
-  <section class="panel layout-panel" aria-labelledby="layout-heading">
-    <div class="section-heading"><span class="section-number">02</span><div><h2 id="layout-heading">전시실 배치</h2><p>방을 위에서 내려다본 모습입니다. 전시대와 명판이 함께 이동합니다.</p></div></div>
-    <details class="route-editor" open><summary>입구·출구와 관람 동선</summary>
-<p>입구로 들어와 번호순으로 감상한 뒤 다음 방으로 이동합니다. 마지막 방의 문은 박물관 출구입니다.</p>
-<label for="nav-room">동선을 편집할 방</label><select id="nav-room"></select>
-<div class="layout-actions"><div><label for="nav-entrance">입구 위치</label><select id="nav-entrance"></select></div><div><label for="nav-exit">출구·다음 방 문 위치</label><select id="nav-exit"></select></div></div>
-<p id="nav-door-summary"></p><div class="layout-actions"><button id="nav-mode-entrance" type="button">입구 지정</button><button id="nav-mode-exit" type="button" class="secondary">출구 지정</button></div><div class="nav-map"><div class="wall-spacer" aria-hidden="true"></div><div id="nav-wall-top" class="wall-row" aria-label="위쪽 벽 문 위치"></div><div class="wall-spacer" aria-hidden="true"></div><div id="nav-wall-left" class="wall-col" aria-label="왼쪽 벽 문 위치"></div><div id="nav-grid" aria-label="관람 동선 6열 5행 격자"></div><div id="nav-wall-right" class="wall-col" aria-label="오른쪽 벽 문 위치"></div><div class="wall-spacer" aria-hidden="true"></div><div id="nav-wall-bottom" class="wall-row" aria-label="아래쪽 벽 문 위치"></div><div class="wall-spacer" aria-hidden="true"></div></div><p id="nav-reach" role="status" aria-live="polite"></p><p>위쪽이 안쪽 벽입니다. 문 표시는 해당 벽의 위치를 뜻하며 전시품 칸을 차지하지 않습니다. 빈 칸을 눌러 벽·통행 금지를 지정하세요.</p>
-<div class="layout-workspace"><div><h3>이 방의 전시품 관람 순서</h3><ol id="nav-exhibits" class="route-list"></ol></div><div><h3>방 관람 순서와 연결</h3><ol id="nav-rooms" class="route-list"></ol></div></div>
-<div class="layout-actions"><button id="nav-save" type="button" disabled>관람 동선 저장</button><button id="nav-cancel" class="secondary" type="button" disabled>동선 변경 취소·다시 불러오기</button></div><p id="nav-status" role="status" aria-live="polite"></p></details>
-<label for="layout-room">배치할 전시실</label><select id="layout-room"></select>
-    <div class="layout-workspace"><div>
-      <div class="room-edge">안쪽 벽 · 5행</div><div id="room-grid" aria-label="전시실 6열 5행 배치"></div><div class="room-edge entrance">입구 · 1행　↑ 바라보는 방향</div>
-      <div class="layout-actions"><button id="layout-move" class="secondary" type="button" disabled>선택한 전시품 위치 바꾸기</button><button id="layout-auto" class="secondary" type="button">입구부터 자동 정돈</button></div>
-      <div class="layout-actions"><button id="layout-save" type="button" disabled>배치 저장</button><button id="layout-cancel" class="secondary" type="button" disabled>변경 취소·다시 불러오기</button></div>
-    </div><aside id="item-editor" hidden>
-      <h3 id="edit-name"></h3><p id="edit-location" class="badge"></p>
-      <fieldset id="item-fields"><form id="edit-form">
-        <label for="edit-title">전시품 이름</label><input id="edit-title" maxlength="80" required>
-        <label for="edit-description">설명</label><textarea id="edit-description" rows="5" maxlength="400" required></textarea>
-        <label for="edit-scale">전시 크기</label><input id="edit-scale" type="number" min="0.01" max="10" step="0.01" required>
-        <button type="submit">설명·크기 저장</button>
-      </form>
-      <label for="move-room">다른 방으로 이동</label><select id="move-room"></select><label for="move-cell">도착할 빈 칸</label><select id="move-cell"></select><button id="move-item" type="button" class="secondary">선택한 방·칸으로 이동</button>
-      <button id="trash-item" class="secondary danger" type="button">휴지통으로 보내기</button><p class="hint">파일은 보관되며 아래 휴지통에서 복원할 수 있습니다.</p></fieldset>
-    </aside></div>
-    <p id="layout-status" role="status" aria-live="polite"></p>
-    <p class="hint">6열 × 5행 · 빈 칸 유지 · 배치 저장 후 관람 앱을 다시 열어 주세요. 선택 후 빈 칸을 누르면 바로 이동하고, 이동 모드에서 다른 전시품을 누르면 서로 교환합니다.</p>
-    <details class="trash"><summary>휴지통 <span id="trash-count">0</span>개</summary><p class="hint">복원할 방과 빈 칸을 고르세요.</p><div id="trash-list"></div></details>
-  </section>
-  <section class="panel theme-panel" aria-labelledby="theme-heading">
-    <div class="section-heading"><span class="section-number">03</span><div><h2 id="theme-heading">방마다 다른 분위기</h2><p>테마를 고른 뒤 원하는 부분의 색을 바꿔 보세요. 선택한 방에만 저장됩니다.</p></div></div>
-    <form id="theme-form">
-      <fieldset id="theme-controls">
-        <div class="theme-selects"><div><label for="theme-room">꾸밀 전시실</label><select id="theme-room"></select></div><div><label for="theme-preset">색상 테마</label><select id="theme-preset"></select></div></div>
-        <div class="theme-layout">
-          <div><div id="theme-preview" role="img" aria-label="선택한 방의 벽·바닥·전시대·명판 색상 조합 미리보기">
-            <div class="preview-wall"><div class="preview-sign"><strong id="theme-preview-title">전시실</strong><span>FAMILY ARCHIVE</span></div></div>
-            <div class="preview-left"></div><div class="preview-right"></div><div class="preview-floor"></div>
-            <div class="preview-plinth"><div class="preview-cap"></div><div class="preview-plaque"><strong>기억을 담은 물건</strong><p>우리 가족의 이야기</p><small>선택하여 이야기 읽기</small></div></div>
-            <div class="preview-detail">상세 설명창 <span>물건에 담긴 이야기를 읽어 보세요.</span></div>
-          </div><p class="hint">색 조합 미리보기입니다. 실제 관람 화면은 조명에 따라 달라집니다. 전시품 모델의 원래 색은 유지됩니다.</p><p id="theme-contrast" class="hint"></p></div>
-          <div id="theme-colors"></div>
-        </div>
-        <div class="theme-actions"><button id="theme-save" type="submit" disabled>이 방의 테마 저장</button><button id="theme-reset" type="button" class="secondary">기본색으로 복원</button><button id="theme-revert" type="button" class="secondary">저장된 색 다시 불러오기</button></div>
-      </fieldset>
-      <p id="theme-status" role="status" aria-live="polite">전시실 목록을 불러오는 중입니다.</p>
-      <p class="hint">저장 후 관람 앱을 종료했다가 다시 열면 방별 색상이 반영됩니다.</p>
-    </form>
-  </section>
 
-  <section class="panel reaction-panel" aria-labelledby="reactions-heading">
+    </section></div>
+<div id="artifacts-reactions" role="tabpanel" aria-labelledby="tab-artifacts-reactions" data-artifact-panel="reactions" hidden><section class="panel reaction-panel" aria-labelledby="reactions-heading">
     <div class="section-heading"><span class="section-number">감상</span><div><h2 id="reactions-heading">전시품을 감상하는 손님들</h2><p>이야기에 맞는 반응을 만들고, 직접 검토한 문구를 관람객에게 들려주세요.</p></div></div>
     <label for="reaction-artifact">반응을 만들 전시품</label><select id="reaction-artifact"></select>
     <button id="reaction-reload" type="button" class="secondary">목록·저장된 반응 다시 불러오기</button>
@@ -137,8 +78,85 @@
     </fieldset>
     <p id="reaction-status" role="status" aria-live="polite">반응 목록을 불러오는 중입니다.</p>
     <p class="hint">저장 후 관람 앱을 다시 열어 주세요. 가까운 관람객이 실제로 감상할 때 승인 문구가 나타납니다. PC 관람객 패널에서 반응 표시를 끌 수 있습니다.</p>
-  </section>
+  </section></div>
+</section>
+<section id="view-rooms" data-admin-view="rooms" aria-labelledby="rooms-heading" hidden>
+<div class="page-heading"><div><p class="eyebrow">GALLERY</p><h1 id="rooms-heading" tabindex="-1">전시실</h1><p>방을 고르고 배치·동선·분위기를 차례로 꾸며 보세요.</p></div></div>
+<div class="room-context"><div><label for="workspace-room">관리할 전시실</label><select id="workspace-room" disabled></select></div><p id="workspace-room-summary"></p><span id="room-draft-badge" class="badge">저장된 상태</span></div>
+<p id="room-change-status" class="hint" role="status" aria-live="polite">전시실 목록을 불러오는 중입니다.</p>
+<details id="room-create" class="advanced"><summary>새 전시실 만들기</summary><form id="room-form" class="room-form"><label for="room-title">새 전시실 이름</label><div><input id="room-title" maxlength="80" placeholder="예: 가족의 기록" required><button class="secondary" type="submit">전시실 추가</button></div></form></details>
+<div class="workspace-tabs" role="tablist" aria-label="전시실 작업"><button id="tab-room-layout" role="tab" data-room-tab="layout" aria-controls="room-layout">전시품 배치</button><button id="tab-room-route" role="tab" data-room-tab="route" aria-controls="room-route">관람 동선</button><button id="tab-room-theme" role="tab" data-room-tab="theme" aria-controls="room-theme">색상·테마</button></div>
+<div id="room-layout" role="tabpanel" aria-labelledby="tab-room-layout" data-room-panel="layout"><section class="panel layout-panel" aria-labelledby="layout-heading">
+    <div class="section-heading"><span class="section-number">02</span><div><h2 id="layout-heading">전시실 배치</h2><p>방을 위에서 내려다본 모습입니다. 전시대와 명판이 함께 이동합니다.</p></div></div>
 
-</main><footer>작은 물건에 담긴, 오래 남을 이야기.</footer>
+<div hidden><label for="layout-room">배치할 전시실</label><select id="layout-room"></select></div>
+    <div class="layout-workspace"><div>
+      <div class="room-edge">안쪽 벽 · 5행</div><div id="room-grid" aria-label="전시실 6열 5행 배치"></div><div class="room-edge entrance">입구 · 1행　↑ 바라보는 방향</div>
+      <div class="layout-actions"><button id="layout-move" class="secondary" type="button" disabled>선택한 전시품 위치 바꾸기</button><button id="layout-auto" class="secondary" type="button">입구부터 자동 정돈</button></div>
+      <div class="layout-actions editor-savebar"><button id="layout-save" type="button" disabled>배치 저장</button><button id="layout-cancel" class="secondary" type="button" disabled>변경 취소·다시 불러오기</button></div>
+    </div><aside id="item-editor" hidden>
+      <h3 id="edit-name"></h3><p id="edit-location" class="badge"></p>
+      <fieldset id="item-fields"><form id="edit-form">
+        <label for="edit-title">전시품 이름</label><input id="edit-title" maxlength="80" required>
+        <label for="edit-description">설명</label><textarea id="edit-description" rows="5" maxlength="400" required></textarea>
+        <label for="edit-scale">전시 크기</label><input id="edit-scale" type="number" min="0.01" max="10" step="0.01" required>
+        <button type="submit">설명·크기 저장</button>
+      </form>
+      <label for="move-room">다른 방으로 이동</label><select id="move-room"></select><label for="move-cell">도착할 빈 칸</label><select id="move-cell"></select><button id="move-item" type="button" class="secondary">선택한 방·칸으로 이동</button>
+      <button id="trash-item" class="secondary danger" type="button">휴지통으로 보내기</button><p class="hint">파일은 보관되며 아래 휴지통에서 복원할 수 있습니다.</p></fieldset>
+    </aside></div>
+    <p id="layout-status" role="status" aria-live="polite"></p>
+    <p class="hint">6열 × 5행 · 빈 칸 유지 · 배치 저장 후 관람 앱을 다시 열어 주세요. 선택 후 빈 칸을 누르면 바로 이동하고, 이동 모드에서 다른 전시품을 누르면 서로 교환합니다.</p>
+    <details class="trash"><summary>휴지통 <span id="trash-count">0</span>개</summary><p class="hint">복원할 방과 빈 칸을 고르세요.</p><div id="trash-list"></div></details>
+  </section></div>
+<div id="room-route" role="tabpanel" aria-labelledby="tab-room-route" data-room-panel="route" hidden><section class="panel route-editor" aria-labelledby="route-heading"><div class="section-heading"><div><h2 id="route-heading">입구·출구와 관람 동선</h2><p>문 위치와 통로, 감상 순서를 정합니다.</p></div></div>
+<p>입구로 들어와 번호순으로 감상한 뒤 다음 방으로 이동합니다. 마지막 방의 문은 박물관 출구입니다.</p>
+<div hidden><label for="nav-room">동선을 편집할 방</label><select id="nav-room"></select></div>
+<details class="advanced"><summary>문 위치를 목록에서 선택</summary><div class="layout-actions"><div><label for="nav-entrance">입구 위치</label><select id="nav-entrance"></select></div><div><label for="nav-exit">출구·다음 방 문 위치</label><select id="nav-exit"></select></div></div></details>
+<p id="nav-door-summary"></p><div class="layout-actions"><button id="nav-mode-entrance" type="button">입구 지정</button><button id="nav-mode-exit" type="button" class="secondary">출구 지정</button></div><div class="nav-map"><div class="wall-spacer" aria-hidden="true"></div><div id="nav-wall-top" class="wall-row" aria-label="위쪽 벽 문 위치"></div><div class="wall-spacer" aria-hidden="true"></div><div id="nav-wall-left" class="wall-col" aria-label="왼쪽 벽 문 위치"></div><div id="nav-grid" aria-label="관람 동선 6열 5행 격자"></div><div id="nav-wall-right" class="wall-col" aria-label="오른쪽 벽 문 위치"></div><div class="wall-spacer" aria-hidden="true"></div><div id="nav-wall-bottom" class="wall-row" aria-label="아래쪽 벽 문 위치"></div><div class="wall-spacer" aria-hidden="true"></div></div><p id="nav-reach" role="status" aria-live="polite"></p><p>위쪽이 안쪽 벽입니다. 문 표시는 해당 벽의 위치를 뜻하며 전시품 칸을 차지하지 않습니다. 빈 칸을 눌러 벽·통행 금지를 지정하세요.</p>
+<div class="layout-workspace"><div><h3>이 방의 전시품 관람 순서</h3><ol id="nav-exhibits" class="route-list"></ol></div><div><h3>방 관람 순서와 연결</h3><ol id="nav-rooms" class="route-list"></ol></div></div>
+<div class="layout-actions editor-savebar"><button id="nav-save" type="button" disabled>관람 동선 저장</button><button id="nav-cancel" class="secondary" type="button" disabled>동선 변경 취소·다시 불러오기</button></div><p id="nav-status" role="status" aria-live="polite"></p></section></div>
+<div id="room-theme" role="tabpanel" aria-labelledby="tab-room-theme" data-room-panel="theme" hidden><section class="panel theme-panel" aria-labelledby="theme-heading">
+    <div class="section-heading"><span class="section-number">03</span><div><h2 id="theme-heading">방마다 다른 분위기</h2><p>테마를 고른 뒤 원하는 부분의 색을 바꿔 보세요. 선택한 방에만 저장됩니다.</p></div></div>
+    <form id="theme-form">
+      <fieldset id="theme-controls">
+        <div hidden><label for="theme-room">꾸밀 전시실</label><select id="theme-room"></select></div><div class="theme-selects"><div><label for="theme-preset">색상 테마</label><select id="theme-preset"></select></div></div>
+        <div class="theme-layout">
+          <div><div id="theme-preview" role="img" aria-label="선택한 방의 벽·바닥·전시대·명판 색상 조합 미리보기">
+            <div class="preview-wall"><div class="preview-sign"><strong id="theme-preview-title">전시실</strong><span>FAMILY ARCHIVE</span></div></div>
+            <div class="preview-left"></div><div class="preview-right"></div><div class="preview-floor"></div>
+            <div class="preview-plinth"><div class="preview-cap"></div><div class="preview-plaque"><strong>기억을 담은 물건</strong><p>우리 가족의 이야기</p><small>선택하여 이야기 읽기</small></div></div>
+            <div class="preview-detail">상세 설명창 <span>물건에 담긴 이야기를 읽어 보세요.</span></div>
+          </div><p class="hint">색 조합 미리보기입니다. 실제 관람 화면은 조명에 따라 달라집니다. 전시품 모델의 원래 색은 유지됩니다.</p><p id="theme-contrast" class="hint"></p></div>
+          <details class="advanced"><summary>세부 색상 조정</summary><div id="theme-colors"></div></details>
+        </div>
+        <div class="theme-actions editor-savebar"><button id="theme-save" type="submit" disabled>이 방의 테마 저장</button><button id="theme-reset" type="button" class="secondary">기본색으로 복원</button><button id="theme-revert" type="button" class="secondary">저장된 색 다시 불러오기</button></div>
+      </fieldset>
+      <p id="theme-status" role="status" aria-live="polite">전시실 목록을 불러오는 중입니다.</p>
+      <p class="hint">저장 후 관람 앱을 종료했다가 다시 열면 방별 색상이 반영됩니다.</p>
+    </form>
+  </section></div>
+</section>
+<section id="view-visitors" data-admin-view="visitors" aria-label="관람객 설정" hidden><section class="panel visitor-panel" aria-labelledby="visitors-heading">
+    <div class="section-heading"><span class="section-number">운영</span><div><h2 id="visitors-heading">관람객 관리</h2><p>손님 수와 이동 속도를 정하고, 등장할 캐릭터를 골라 주세요.</p></div></div>
+    <form id="visitor-form">
+      <fieldset id="visitor-controls" disabled>
+        <label class="visitor-toggle"><input type="checkbox" id="visitor-enabled"> 관람객 받기</label>
+        <div class="visitor-options"><div><label for="visitor-count">목표 인원</label><input id="visitor-count" type="number" min="0" max="6" step="1" required><p class="hint">0~6명 · 입장·퇴장 중에는 실제 인원이 적을 수 있습니다.</p></div><div><label for="visitor-speed">이동 속도 <output id="visitor-speed-value">1.0배</output></label><input id="visitor-speed" type="range" min="0.5" max="1.5" step="0.1" value="1"><p class="hint">0.5배 느긋하게 · 1배 기본 · 1.5배 빠르게</p></div></div>
+        <h3>등장할 캐릭터</h3><p id="visitor-summary" class="hint"></p>
+        <div class="visitor-tools"><label for="visitor-search">캐릭터 검색</label><input id="visitor-search" type="search" placeholder="남성, 여성, 이름으로 찾기"><button id="visitor-all-on" type="button" class="secondary">모두 사용</button><button id="visitor-all-off" type="button" class="secondary">모두 끄기</button></div>
+        <div id="visitor-appearances"></div>
+        <div class="visitor-pages"><button id="visitor-previous" type="button" class="secondary">이전 외형</button><span id="visitor-page"></span><button id="visitor-next" type="button" class="secondary">다음 외형</button></div>
+        <p class="hint" id="visitor-empty-note" hidden>사용할 외형이 없거나 등장 비중이 모두 0이면 관람객이 생성되지 않습니다.</p>
+        <p class="hint" id="visitor-removed-note" hidden>현재 앱에 없는 예전 외형 설정은 적용되지 않으며, 이번 저장에서 정리됩니다.</p>
+        <p class="hint">비중 1:3이면 대략 25%:75%로 새 손님을 선택합니다. 같은 방에는 가능한 서로 다른 외형을 먼저 선택합니다. 외형을 끄면 해당 손님은 정리되고, 비중 변경은 다음 입장부터 반영됩니다. 새 캐릭터는 앱에 등록·빌드한 뒤 이 목록에 나타납니다.</p>
+        <div class="theme-actions"><button id="visitor-save" type="submit">관람객 설정 저장</button></div>
+      </fieldset>
+      <button id="visitor-reload" type="button" class="secondary">저장된 설정 다시 불러오기</button>
+      <p id="visitor-status" role="status" aria-live="polite">관람객 설정을 불러오는 중입니다.</p>
+      <p class="hint">이 설정은 다음 실행에도 유지됩니다. 앱 안의 인원 버튼은 임시 조절이며, 영구 저장은 여기서 해 주세요.</p>
+    </form>
+  </section></section>
+<noscript>관리 화면을 사용하려면 JavaScript를 켜 주세요.</noscript>
+</main></div><footer>작은 물건에 담긴, 오래 남을 이야기.</footer>
 </body></html>
-
