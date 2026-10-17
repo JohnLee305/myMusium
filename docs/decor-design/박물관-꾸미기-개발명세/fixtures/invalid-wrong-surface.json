@@ -1,0 +1,178 @@
+{
+  "catalog": {
+    "revision": "catalog.sample-1",
+    "items": [
+      {
+        "id": "core.plinth.small",
+        "version": 1,
+        "name": "작은 전시대",
+        "kind": "floorFurniture",
+        "dimensionsM": [
+          0.8,
+          1,
+          0.8
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.5,
+            0
+          ],
+          "sizeM": [
+            0.8,
+            1,
+            0.8
+          ]
+        },
+        "supports": [
+          {
+            "id": "top",
+            "centerM": [
+              0,
+              1,
+              0
+            ],
+            "sizeXZ": [
+              0.7,
+              0.7
+            ]
+          }
+        ],
+        "snapM": 0.25,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          },
+          {
+            "id": "green",
+            "label": "녹색",
+            "colorHex": "#244D43"
+          }
+        ]
+      },
+      {
+        "id": "decor.vase.small",
+        "version": 1,
+        "name": "작은 꽃병",
+        "kind": "surfaceDecor",
+        "dimensionsM": [
+          0.12,
+          0.18,
+          0.12
+        ],
+        "collision": {
+          "centerM": [
+            0,
+            0.09,
+            0
+          ],
+          "sizeM": [
+            0.12,
+            0.18,
+            0.12
+          ]
+        },
+        "supports": [],
+        "snapM": 0.05,
+        "variants": [
+          {
+            "id": "ivory",
+            "label": "아이보리",
+            "colorHex": "#EEE9DF"
+          }
+        ]
+      }
+    ]
+  },
+  "world": {
+    "schemaVersion": "decor-slice-1",
+    "id": "world.test",
+    "revision": 0,
+    "catalogRevision": "catalog.sample-1",
+    "lastCommandBatchId": null,
+    "rooms": [
+      {
+        "id": "room.a",
+        "name": "시험 전시실",
+        "bounds": {
+          "centerM": [
+            0,
+            2,
+            0
+          ],
+          "sizeM": [
+            20,
+            4,
+            16
+          ]
+        },
+        "reservedZones": [
+          {
+            "centerM": [
+              0,
+              1,
+              -7.5
+            ],
+            "sizeM": [
+              1.5,
+              2,
+              1
+            ]
+          },
+          {
+            "centerM": [
+              0,
+              1,
+              7.5
+            ],
+            "sizeM": [
+              1.5,
+              2,
+              1
+            ]
+          }
+        ]
+      }
+    ],
+    "instances": [
+      {
+        "id": "plinth.001",
+        "definition": {
+          "id": "core.plinth.small",
+          "version": 1
+        },
+        "variantId": "green",
+        "location": {
+          "kind": "room",
+          "roomId": "room.a",
+          "positionM": [
+            0,
+            0,
+            0
+          ],
+          "yawDeg": 0
+        }
+      },
+      {
+        "id": "vase.001",
+        "definition": {
+          "id": "decor.vase.small",
+          "version": 1
+        },
+        "variantId": "ivory",
+        "location": {
+          "kind": "room",
+          "roomId": "room.a",
+          "positionM": [
+            2,
+            0,
+            0
+          ],
+          "yawDeg": 0
+        }
+      }
+    ]
+  }
+}

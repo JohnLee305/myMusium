@@ -1,0 +1,107 @@
+[
+  {
+    "file": "valid-placed.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "valid-stored.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-unknown-field.json",
+    "expectedSchemaValid": false,
+    "actualSchemaValid": false,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-version-zero.json",
+    "expectedSchemaValid": false,
+    "actualSchemaValid": false,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-duplicate-id.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-missing-parent.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-cycle.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-outside-room.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-missing-definition.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-wrong-surface.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-support-overhang.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-sibling-overlap.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-door-zone.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-bad-variant.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  },
+  {
+    "file": "invalid-parent-height.json",
+    "expectedSchemaValid": true,
+    "actualSchemaValid": true,
+    "passed": true,
+    "semanticTest": "not-run"
+  }
+]
