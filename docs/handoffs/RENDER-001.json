@@ -1,0 +1,22 @@
+{
+  "taskId": "RENDER-001",
+  "owner": "Codex",
+  "branch": "codex/render-001-wall-text-20261017",
+  "baseSha": "f8579a36528d13e5683dcbf83f7c338d90953156",
+  "status": "validated",
+  "updatedDateKst": "2026-10-17",
+  "summary": "시작 화면에서 박물관 제목/부제가 벽을 관통하는 글자 가림 보정",
+  "validation": [
+    "수정전실제GPU: Museum title/subtitle 각각정상615픽셀·벽뒤607픽셀관통 FAIL. logs/text-occlusion-20261017-174910",
+    "수정후실제GPU: 각각정상615픽셀·벽뒤0픽셀 PASS. logs/text-occlusion-20261017-175026",
+    "Windows빌드exit0: logs/unity-Build-20261017-174950.log",
+    "동일익명맵 표시화면·방전환/테마검사 PASS: logs/text-room-visual-20261017-175114",
+    "현재개인맵기하배치가익명회귀배치와같음확인;개인모델외부전송없음"
+  ],
+  "nextAction": "기존반영승인범위의표시결함수정으로PR/필수CI후활성PC실행판교체·개인자료보존확인",
+  "pullRequest": null,
+  "limitations": [
+    "PC Direct3D11검증;Quest실기기미검증",
+    "활성실행판교체는다음단계;기존맵/글꼴/배치/12명설정유지"
+  ]
+}

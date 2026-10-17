@@ -97,6 +97,12 @@ namespace FamilyMuseum
                     themePassed &= !transition.IsFaulted && display.CurrentRoom == 1;
                 }
                 bool detailsPassed = true;
+                if (Array.IndexOf(args, "-museum-text-occlusion-smoke") >= 0)
+                {
+                    var smoke = gameObject.AddComponent<WorldTextSmoke>();
+                    yield return smoke.Run(Path.GetDirectoryName(output));
+                    detailsPassed &= smoke.Passed;
+                }
                 if (Array.IndexOf(args, "-museum-details-smoke") >= 0)
                 {
                     var details = GetComponent<ArtifactDetailsPanel>();
