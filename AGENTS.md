@@ -12,6 +12,8 @@
 6. 완료 전 다시 `fetch`하여 원격 변경과 충돌을 확인하고 테스트·`TASKS.md`·`PROJECT_STATUS.md`·`STATUS.md`·`WORKLOG.md`를 정리한다. PR 미병합과 통합 완료를 구분하여 보고한다. **작업 완료 시 커밋·통합 전에 새 빌드 실행본을 띄운 상태로 마치고, 사용자가 직접 확인 후 성공이라 하면 그때 커밋·push한다. 승인 없이 커밋·통합하지 않는다.**
 7. 작업 시작/종료 시 `docs/LIVE_STATUS.md`에 자신의 블록만 갱신하고 push한다 (남의 블록 수정 금지). 끊긴 작업을 이어받을 때는 `docs/WORK_HANDOFF.md` §8 절차를 따른다.
 
+사전 점검 보조: Windows는 `./tools/git-preflight.ps1 -TaskId OPS-002`, 공통 Node CLI는 `node tools/git-preflight.mjs --task OPS-002`(ID는 실제 작업으로 교체). [실행·중단 조건](docs/GIT_PREFLIGHT.md)을 따른다. 통과 후에도 위 문서 읽기/담당 확인은 수행한다. 이 도구는 Git hook/CI가 아니다.
+
 **아래의 과거 '작업 재개 규칙'은 로컬 상태·환경 점검용으로 유지한다. 충돌 시 위 최신 Git 선행 절차가 우선이다.** GitHub 기본 브랜치가 기준판이므로 ref 미지정 커밋/파일 수정을 하지 않는다.
 
 사용자가 '재개', '계속', '이어서'라고 요청하면 다음 순서로 진행한다.

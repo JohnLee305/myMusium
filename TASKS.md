@@ -134,7 +134,7 @@ TYC-001~003 첫 버전 PC 검증을 완료했습니다. 사용자 피드백 조�
 사용자 확정 원칙: **Work/Codex/다른 에이전트가 매번 작업 시작·재개 시 GitHub 최신 원격 소스를 먼저 확인하고 안전하게 동기화한 뒤, 최신 TODO/프로젝트 진행상황과 중복 진행 작업을 확인한다.** 읽을 문서는 `AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `STATUS.md`, `WORKLOG.md`, 해당 설계/ADR. 상세 절차: [docs/GIT_MULTI_AGENT_WORKFLOW.md](docs/GIT_MULTI_AGENT_WORKFLOW.md) / [docs/WORK_HANDOFF.md](docs/WORK_HANDOFF.md).
 
 - [x] **OPS-001 협업 절차 문서화:** 모든 작업 시작/재개 시 `git status`·현재 브랜치/HEAD → `git fetch --prune origin` → 안전 시 `git pull --ff-only origin codex/museum-tycoon` → 최신 TASKS/PROJECT_STATUS/STATUS/WORKLOG 검토. 다른 에이전트의 작업 ID/PR 확인, 전용 Worktree·브랜치, PR 통합, 충돌 중단/보고, 최종 검증 기록 규칙을 AGENTS/Work 인계 문서에 반영. **완료 범위: 문서 반영만, 자동 실행·CI 강제는 미구현.**
-- [ ] **OPS-002 Git 사전 점검/동기화 스크립트:** Windows/Work 환경에 맞게 원격/브랜치/HEAD/미커밋 변경/동일 작업 PR/문서 존재 여부를 확인하고, 깨끗한 실험 브랜치에 한해 안전한 fast-forward 최신화를 지원. 실패/충돌 시 중단하며 절대 로컬 자료 덮어쓰기 금지. **완료 기준:** 새 Clone/정상 업데이트/더티 워크트리/원격 앞섬/분기/원격 실패/다중 Worktree fixture로 안전성 확인 및 실행 가이드.
+- [ ] **OPS-002 Git 사전 점검/동기화 스크립트:** (2026-10-17 구현·격리Git17사례 검증 완료, 사용자 검토·커밋/통합 대기; docs/GIT_PREFLIGHT.md) Windows/Work 환경에 맞게 원격/브랜치/HEAD/미커밋 변경/동일 작업 PR/문서 존재 여부를 확인하고, 깨끗한 실험 브랜치에 한해 안전한 fast-forward 최신화를 지원. 실패/충돌 시 중단하며 절대 로컬 자료 덮어쓰기 금지. **완료 기준:** 새 Clone/정상 업데이트/더티 워크트리/원격 앞섬/분기/원격 실패/다중 Worktree fixture로 안전성 확인 및 실행 가이드.
 - [ ] **OPS-003 PR/CI 통합 보호 검토·설정:** `codex/museum-tycoon` 통합 전 자동 회귀검사, 관련 TODO/현황 갱신 검사, 최소 브랜치 보호/PR 정책을 GitHub 지원 범위·권한에 맞게 검토. **완료 기준:** 병렬 브랜치 2개에서 충돌/비충돌/검증 실패 사례와 통합 순서를 실제로 확인. 사용자 의사 없이 공개범위·복원 태그·기준판 변경하지 않음.
 - [ ] **OPS-004 에이전트 작업 할당/중복 감지 체계 검토:** 동일 TODO ID의 진행 중 작업을 PR/Draft PR 또는 Issue로 표시하고 담당·작업 브랜치·시작 SHA·진행/차단 상태를 노출하는 경량 협업 방법 결정. **완료 기준:** 에이전트 2명이 동시에 같은 ID를 시작하려 할 때 중복을 발견하고 안전하게 분리/대기할 수 있음.
 
