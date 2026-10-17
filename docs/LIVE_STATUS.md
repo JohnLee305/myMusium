@@ -32,9 +32,9 @@ Git 사전점검·선택적FF 완료
 
 PR CI·필수검사 보호 및 단일 배포정본·작업별 인계·자동 현황판
 
-- 근거: 로컬 Node CI 13묶음 PASS: logs/ops-003-local-ci.log; 인계 누락/미검증 거절 및 실제 병렬Git 충돌/비충돌 8사례 PASS; 실제 GitHub Actions 및 보호 설정 검증은 PR에서 이어서 수행; 첫 실제Actions: 인계정책 PASS, Linux 제어시험의 C:/Dev 기준판 하드코딩 발견→저장소 상대경로+격리Archive로 수정
-- 다음: 전용PR에서 Actions 확인→필수검사 보호→병합SHA/실행폴더 확인
-- 제한: Unity 빌드와 Quest 실기기 검사는 CI 범위 밖; 미게시 별도 Clone 작업은 자동 감지 불가; validated는 로컬검증 근거이며 원격CI/보호가 적용됐다는 뜻이 아님
+- 근거: 로컬 Node CI13묶음 PASS: logs/ops-003-local-ci.log; 실제병렬Git 비충돌합류/충돌중단·인계누락/미검증거절8사례 PASS; GitHub Actions39000998335: Ubuntu/Windows13회귀묶음+handoff-policy+museum-required 모두 success; 최초실패39000864161에서 museum-required failure 확인; test-control 기준판하드코딩을 격리Archive로 수정; tycoon 보호 API재조회: required museum-required(GitHub Actions app15368), strict/latest-base, PR, enforce-admins, conversation-resolution, force/delete금지
+- 다음: PR#12 최종CI·병합상태와 원격SHA 확인 후 새업무는 별도ID로 시작. OPS-004 담당선점 자동화는 후속.
+- 제한: Unity빌드·Quest·개인Archive·바탕화면실행 검사는 이CI 범위 밖; 미게시 별도Clone 작업은 자동감지불가; GitHub승인리뷰 수0; 사용자통합승인 규칙은 AGENTS대로 유지
 - 원본: [작업 인계](handoffs/OPS-003.json), 시작 26e3056 / 갱신 2026-10-17
 
 ### OPS-008

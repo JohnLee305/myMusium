@@ -803,3 +803,9 @@
 ## 2026-10-17 / OPS-003 실제 CI 검증
 - PR#12 생성, 최초Actions39000864161 인계정책PASS·Linux 제어시험실패. test-control.mjs가 C:/Dev/vr-museum 기준판을 고정참조한 원인으로 실제루트+빈격리Archive 사용 및 조기서버종료 감지로 수정. 기존로컬검사가 기준판을 테스트했다는 한계도 바로잡음.
 - GitHub CLI에workflow쓰기scope가 없어 최초push거절. 미게시커밋bundle보존 후 소스와workflow업로드를 분리, 이미연결된GitHub커넥터로workflow생성·동일내용fetch확인. 새계정권한추가 없음.
+
+## 2026-10-17 / OPS-003 CI·보호 확인 및 최종 인계
+- 실제Actions39000998335 Ubuntu/Windows13회귀묶음·정책·필수집계 모두success. 최초실패집계도failure 확인, 기준판경로하드코딩시험 수정으로 현재소스검증 정합성 회복.
+- tycoon PR/필수museum-required(app15368)/strict-base/관리자적용/대화해결/force·삭제금지 적용 API재조회. 기준판/태그/개인자료 변경없음.
+- 배포정본PROJECT_STATE + ID별JSON + 생성LIVE_STATUS, 짧은AGENTS/인계진입, 과거원문history보존. 완료OPS-002/008 연결. 통합이력PR#12가정본.
+- 종료Gate: 최종문서커밋 CI확인→PR#12통합→양쪽실험폴더FF·원격일치·Archive해시확인. 다음새작업은 새ID/전용브랜치/Gate부터, OPS-004 자동담당선점은 미구현.

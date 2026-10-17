@@ -10,7 +10,7 @@
 
 ## 브랜치 보호
 
-codex/museum-tycoon만 대상으로 PR 경유·museum-required 필수·최신base필수·대화해결·관리자도적용·force push/삭제금지를 적용할 계획이다. 기존 기준브랜치/태그/기본브랜치는 바꾸지 않는다. 요구승인리뷰 수는0으로 하여 단독사용자를 다른GitHub계정 승인 때문에 막지 않는다. 사용자의 채팅상 통합승인 규칙은 AGENTS에 유지한다. 실제 적용 여부/검사URL은 OPS-003 인계JSON에 기록한다.
+codex/museum-tycoon만 대상으로 PR 경유·museum-required 필수·최신base필수·대화해결·관리자도적용·force push/삭제금지를 적용했고 API 재조회로 확인했다 (2026-10-17). 기존 기준브랜치/태그/기본브랜치는 바꾸지 않는다. 요구승인리뷰 수는0으로 하여 단독사용자를 다른GitHub계정 승인 때문에 막지 않는다. 사용자의 채팅상 통합승인 규칙은 AGENTS에 유지한다. 실제 적용 여부/검사URL은 OPS-003 인계JSON에 기록한다.
 
 ## 버전이 분산된 이유와 정리 원칙
 
@@ -34,3 +34,11 @@ node tools/run-ci.mjs
 Unity 빌드·Quest·실제데스크톱연결은 이CI에 포함되지 않는다. 공개샘플LFS를checkout하므로개인자료는올리지않는다. CI실패를무시하거나관리자우회로통합하지않는다.
 
 참고: [GitHub 최소토큰권한](https://docs.github.com/en/actions/tutorials/authenticate-with-github_token), [브랜치 보호·필수검사](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
+
+## 실제 검증 결과
+
+- [성공한 Actions39000998335](https://github.com/JohnLee305/myMusium/actions/runs/39000998335): 인계정책·Ubuntu/Windows13회귀·museum-required 모두success.
+- [최초 실패39000864161](https://github.com/JohnLee305/myMusium/actions/runs/39000864161): 고정 C:/Dev 기준판 경로 때문에 제어시험 실패,집계검사도failure. 저장소상대경로+격리Archive로 수정한뒤통과.
+- 실제두Git브랜치 비충돌합류/충돌중단·인계누락/미검증거절8사례, 기존 Git17안전성사례 포함.
+- 브랜치보호는 tycoon만 설정·재조회. 기준판/태그/기본브랜치 변경 없음. 기존CLI의workflow scope 부족은 기존GitHub연결로 파일업로드하여해결; 새계정권한 추가 없음.
+- [PR#12](https://github.com/JohnLee305/myMusium/pull/12)의최종검사·병합상태·SHA가현재통합정본이다.
