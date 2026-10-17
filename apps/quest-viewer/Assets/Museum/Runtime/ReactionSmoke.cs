@@ -68,7 +68,7 @@ namespace FamilyMuseum
                 string priorText=guest.ReactionText;guest.SetReactionText(new string('가',72));guest.UpdateThoughtVisibility();yield return null;guest.UpdateThoughtVisibility();
                 var local=text.GetComponent<Renderer>().localBounds;float textScale=text.transform.localScale.x;
                 var background=guest.transform.Find("Visitor reaction bubble/Reaction background");
-                bool fitted=local.size.x*textScale<=1.63f&&local.size.y*textScale+.1f<=background.localScale.y;
+                bool fitted=local.size.x*textScale<=.551f&&local.size.y*textScale<=.301f&&background.localScale.x>=.85f&&background.localScale.y>=.68f;
                 SmokePassed &= fitted;Debug.Log("REACTION_LONG_TEXT_CHECK: width="+(local.size.x*textScale)+" height="+(local.size.y*textScale)+" background="+background.localScale+" passed="+fitted);
                 guest.SetReactionText(priorText);guest.UpdateThoughtVisibility();
                 ShowReactions=false;guest.UpdateThoughtVisibility();SmokePassed &= !guest.ThoughtVisible;ShowReactions=true;

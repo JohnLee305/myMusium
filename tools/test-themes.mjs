@@ -3,7 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { PRESETS, COLOR_FIELDS } from '../apps/curator-admin/themes.mjs';
+import { PRESETS, COLOR_FIELDS, validateTheme } from '../apps/curator-admin/themes.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const fixture=path.join(root,'logs',`theme-tests-${Date.now()}`);
 fs.mkdirSync(fixture,{recursive:true});
@@ -28,6 +28,19 @@ try {
   ['CSS injection rejected',{...base,theme:{floor:'url(https://example.invalid)'}},{},400],['unknown key',{...base,theme:{model:'#FFFFFF'}},{},400],
   ['array rejected',{...base,theme:[]},{},400],['null field rejected',{...base,theme:{floor:null}},{},400]]) {
    const before=fs.readFileSync(file);const response=await post(meta,headers);assert.equal(response.status,status,await response.text());assert.deepEqual(fs.readFileSync(file),before);pass(name+' / no writes');
+ }
+ // Exercise every preset through the real save API.
+ assert.equal(Object.keys(PRESETS).length,34);
+ assert.equal(new Set(Object.values(PRESETS).map(p=>p.name)).size,34);
+ for(const [id,preset] of Object.entries(PRESETS)) {
+  assert.equal(Object.keys(preset.colors).length,COLOR_FIELDS.length);
+  validateTheme(preset.colors);
+  const current=await get();
+  const saved=await post({roomId:'theme-empty',theme:preset.colors,themeRevision:current.rooms[2].themeRevision});
+  assert.equal(saved.status,200,await saved.text());
+  const next=await get();assert.deepEqual(next.rooms[2].theme,preset.colors);
+  assert.equal(next.rooms[0].theme,null);assert.equal(next.rooms[1].theme,null);
+  pass('preset '+id+' saves all colour fields without touching other rooms');
  }
  let response=await post(base);assert.equal(response.status,200,await response.text());state=await get();
  assert.deepEqual(state.rooms[0].theme,PRESETS.bright.colors);assert.equal(state.rooms[1].theme,null);assert.deepEqual(JSON.parse(fs.readFileSync(file)).artifacts,paths);pass('all colour fields persist only in selected room');

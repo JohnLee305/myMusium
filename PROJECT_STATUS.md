@@ -1,6 +1,8 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
-최종 갱신: 2026-10-16 (한국 시간)
+> **2026-10-17 갱신:** ROUTE-002 PR#8, REACT-014/015, ROUTE-003 통합 완료. OPS-008에서 테마34개·동선 전체검증·회귀 보강·스킬/문서 정합성 정리. [구조 평가·검증](docs/INTEGRATION_REVIEW_20261017.md), [실시간 현황](docs/LIVE_STATUS.md). 아래 과거 단계의 대기/48개 기록은 당시 상태다.
+
+최종 갱신: 2026-10-17 (한국 시간)
 
 최신 진행상황의 기준 문서는 **타이쿤 실험 브랜치의 이 파일**입니다.
 [GitHub에서 최신 진행상황 보기](https://github.com/JohnLee305/myMusium/blob/codex/museum-tycoon/PROJECT_STATUS.md)

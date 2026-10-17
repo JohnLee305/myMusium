@@ -20,7 +20,7 @@
 2. **실제 개발 브랜치의** `PROJECT_STATUS.md`에 현황, `TASKS.md`에 작업 ID, `STATUS.md`에 작업 재개 상태, `WORKLOG.md`에 검증 이력을 유지한다.
 3. 결정된 요구를 `docs/REACTION_SYSTEM_DESIGN.md` 등 feature spec에 저장하고, Work가 관련 ID를 골라 구현한다.
 4. **매 작업 시작·재개 때 먼저 [GIT_MULTI_AGENT_WORKFLOW.md](GIT_MULTI_AGENT_WORKFLOW.md)의 필수 시작 Gate를 수행한다.** `git status`/브랜치·원격/HEAD → `git fetch --prune origin` → 안전할 때만 `git pull --ff-only origin codex/museum-tycoon` → 로컬·원격 차이 확인의 순서다. 문제 발생 시 덮어쓰지 않고 중단·보고하며, 최신 원격 상태를 확보하지 못한 상태에서 구현을 진행하지 않는다.
-5. **Git 최신화 뒤** 최신 `AGENTS.md` → `PROJECT_STATUS.md` → `TASKS.md` → `STATUS.md` → `WORKLOG.md` → 관련 설계/ADR을 읽는다. 같은 TODO ID의 진행 브랜치/PR과 충돌 위험을 확인하고 작업 ID·시작 SHA·담당자를 남긴다.
+5. **Git 최신화 뒤** 최신 `AGENTS.md` → `docs/LIVE_STATUS.md` → `PROJECT_STATUS.md` → `TASKS.md` → `STATUS.md` → `WORKLOG.md` → 관련 설계/ADR을 읽는다. 같은 TODO ID의 진행 브랜치/PR과 충돌 위험을 확인하고 작업 ID·시작 SHA·담당자를 남긴다.
 6. 여러 에이전트가 개발하므로 **별도 Clone/Worktree와 작업 전용 브랜치**를 쓰고, 원칙적으로 PR을 통해 실험 브랜치에 통합한다. 매번 PR 병합 전에도 최신 원격과 회귀 영향도를 확인한다.
 7. Work의 실제 코드 수정은 현재 작업 공간의 승인·권한 범위 내에서만 한다. 요구가 문서에 추가됐다는 사실은 백그라운드 작업이 이미 시작됐다는 뜻이 아니다.
 

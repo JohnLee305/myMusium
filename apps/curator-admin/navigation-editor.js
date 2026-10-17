@@ -1,4 +1,4 @@
-import {checkReachable} from './navigation.mjs';
+import {validateNavigation} from './navigation.mjs';
 const $=id=>document.getElementById(id);
 let state,nav,order=[],dirty=false,busy=false,refresh,doorMode='entrance',rendering=false;
 const room=()=>state?.rooms.find(r=>r.id===$('nav-room').value);
@@ -54,7 +54,7 @@ function renderWalls(){
 function setMode(mode){if(doorMode!==mode){doorMode=mode;render();}}
 function previewReach(r){
  const box=$('nav-reach');if(!box)return;
- try{checkReachable({cells:r.cells,artifacts:r.artifacts,navigation:nav});box.textContent='저장 전 확인: 입구에서 출구와 모든 감상 위치까지 연결됩니다.';box.classList.toggle('error',false);}
+ try{validateNavigation({cells:r.cells,artifacts:r.artifacts,navigation:nav});box.textContent='저장 전 확인: 입구에서 출구와 모든 감상 위치까지 연결됩니다.';box.classList.toggle('error',false);}
  catch(e){box.textContent=`저장 전 확인: ${e.message}`;box.classList.toggle('error',true);}
 }
 function list(container,values,label){container.replaceChildren();values.forEach((id,i)=>{const line=document.createElement('li');const name=document.createElement('span');name.textContent=`${i+1}. ${label(id)}`;line.append(name);for(const [step,title] of [[-1,'위로'],[1,'아래로']]){const b=document.createElement('button');b.type='button';b.className='secondary';b.textContent=title;b.setAttribute('aria-label',`${label(id)} ${title}`);b.disabled=busy||i+step<0||i+step>=values.length;b.onclick=()=>{[values[i],values[i+step]]=[values[i+step],values[i]];change();};line.append(b);}container.append(line);});}
