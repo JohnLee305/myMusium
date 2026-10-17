@@ -28,7 +28,7 @@
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
 | OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
 | OPS-010 | Codex | validated | codex/ops-010-retrospective-board-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/37) |
-| OPS-011 | Codex | validated | codex/ops-011-free-retrospective-20261017 | 미게시 |
+| OPS-011 | Codex | validated | codex/ops-011-free-retrospective-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/40) |
 | RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/30) |
 
 ### ADMIN-006
