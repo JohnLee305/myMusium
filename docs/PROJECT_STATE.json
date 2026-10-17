@@ -19,10 +19,10 @@
     "visitors": 12
   },
   "runtimeVerification": {
-    "buildLog": "logs/unity-Build-20261017-172219.log",
+    "buildLog": "logs/unity-Build-20261017-175452.log",
     "verifiedDateKst": "2026-10-17",
     "level": "PC; Quest unverified",
-    "note": "CROWD-006 deployed: PC executable passed anonymized current-layout 12-guest 60Hz regression; real-time private-map audit reduced longest movement-intent standstill16.01 to0.37s in120s; archive54files/target12/speed1/three shortcuts preserved, one PC viewer relaunched. Historical verification; recheck processes."
+    "note": "RENDER-001 deployed: PC GPU check confirms gallery title/subtitle visible normally and zero text pixels through an opaque wall; anonymized saved-layout startup visual and room/theme regression passed. Archive54files/target12/speed1/three shortcuts preserved; PC viewer relaunched. Historical verification; recheck processes."
   },
   "versionPolicy": {
     "mode": "single",
