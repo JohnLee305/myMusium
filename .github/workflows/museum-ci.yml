@@ -1,0 +1,56 @@
+name: Museum CI
+on:
+  pull_request:
+    branches: [codex/museum-tycoon]
+  push:
+    branches: [codex/museum-tycoon]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: museum-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  handoff-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Validate handoff and changed task evidence
+        run: node tools/ci-policy.mjs
+        env:
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          CI_PR_TITLE: ${{ github.event.pull_request.title }}
+          CI_HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+  node-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          lfs: true
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Regression suites (public fixture archive only)
+        run: node tools/run-ci.mjs
+  museum-required:
+    if: always()
+    needs: [handoff-policy, node-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every check to pass
+        env:
+          POLICY: ${{ needs.handoff-policy.result }}
+          TESTS: ${{ needs.node-tests.result }}
+        run: test "$POLICY" = success && test "$TESTS" = success
