@@ -1,60 +1,28 @@
-# 작업 재개 규칙
+# 박물관 개발 에이전트 시작 지침
 
-## 필수 사전 절차 · 모든 Work/Codex/기타 에이전트에 적용 (2026-10-16)
+## 1. 작업 전 필수 Gate
 
-**반드시 코드/문서 수정 전에** [docs/GIT_MULTI_AGENT_WORKFLOW.md](docs/GIT_MULTI_AGENT_WORKFLOW.md)의 시작 Gate를 수행한다. 최초 작업·'재개'·이어서 작업 모두 동일하게 적용한다.
+1. 이 저장소는 `JohnLee305/myMusium`, 소스 정본은 `origin/codex/museum-tycoon`이다. GitHub 기본브랜치/다른 로컬폴더를 최신이라고 가정하지 않는다.
+2. 실제 루트·HEAD·브랜치·미커밋/미추적 자료를 확인하고 fetch한다. Windows `./tools/git-preflight.ps1 -TaskId 실제ID`, 공통 `node tools/git-preflight.mjs --task 실제ID`를 사용한다. 시작 전 detached면 최신원격에서 작업전용 codex/ID 브랜치를 먼저 만든다. dirty/분기/원격실패/중복작업은 자료를 보존하고 보고한다. 자동stash/reset/clean/force push 금지.
+3. **읽기 순서:** 이 파일 → [현재 현황](docs/LIVE_STATUS.md) → [배포 정본](docs/PROJECT_STATE.json) → TASKS.md의 해당ID → 관련 설계/인계. STATUS/WORKLOG 전체와 과거 문서를 매번 읽지 않는다. 필요할 때 해당ID의 검증 이력만 검색한다.
+4. 작업별 별도 Clone/Worktree·codex/ID 브랜치를 사용한다. 같은 물리폴더·Unity Library/빌드·관리포트를 동시에 쓰지 않는다. 동일 작업의 PR/브랜치 및 docs/handoffs 기록을 확인한다.
 
-1. 작업 폴더/현재 브랜치/원격/HEAD 및 **미커밋 변경**을 먼저 확인한다. 로컬 사용자의 자료 및 다른 에이전트의 변경을 보호한다.
-2. `git fetch --prune origin`으로 GitHub **`codex/museum-tycoon` 최신 SHA를 가져와 비교**한다. 깨끗하고 동일 브랜치라면 `git pull --ff-only origin codex/museum-tycoon`으로 최신화한다. 다른 작업 브랜치/미커밋 상태는 안전한 별도 Worktree/브랜치에서 동기화 방법을 선택한다.
-3. 원격 실패·분기·충돌·미커밋 자료로 인해 안전한 최신화가 불가능하면 **새 작업을 임의로 시작하지 않는다.** 덮어쓰기/자동 stash/reset/force push 없이 차이를 보고한다.
-4. **최신 파일** `AGENTS.md`, `docs/LIVE_STATUS.md` (실시간 현황판, 최우선), `PROJECT_STATUS.md`, `TASKS.md`, `STATUS.md`, `WORKLOG.md`, `docs/WORK_HANDOFF.md`, 해당 설계/ADR을 읽고 이미 다른 에이전트가 처리 중인 TODO ID/PR 및 의존관계를 확인한 다음 작업한다.
-5. 여러 에이전트는 **각자 별도 Clone 또는 Git Worktree + ID가 포함된 작업 브랜치**를 사용한다. 기본 통합은 기능 브랜치 push → PR → 최신 베이스/회귀 확인 → `codex/museum-tycoon`이다. 기준 `codex/museum-baseline`/복원 태그는 보존한다.
-6. 완료 전 다시 `fetch`하여 원격 변경과 충돌을 확인하고 테스트·`TASKS.md`·`PROJECT_STATUS.md`·`STATUS.md`·`WORKLOG.md`를 정리한다. PR 미병합과 통합 완료를 구분하여 보고한다. **작업 완료 시 커밋·통합 전에 새 빌드 실행본을 띄운 상태로 마치고, 사용자가 직접 확인 후 성공이라 하면 그때 커밋·push한다. 승인 없이 커밋·통합하지 않는다.**
-7. 작업 시작/종료 시 `docs/LIVE_STATUS.md`에 자신의 블록만 갱신하고 push한다 (남의 블록 수정 금지). 끊긴 작업을 이어받을 때는 `docs/WORK_HANDOFF.md` §8 절차를 따른다.
+## 2. 진행·종료·통합
 
-사전 점검 보조: Windows는 `./tools/git-preflight.ps1 -TaskId OPS-002`, 공통 Node CLI는 `node tools/git-preflight.mjs --task OPS-002`(ID는 실제 작업으로 교체). [실행·중단 조건](docs/GIT_PREFLIGHT.md)을 따른다. 통과 후에도 위 문서 읽기/담당 확인은 수행한다. 이 도구는 Git hook/CI가 아니다.
+- 시작 전에 `docs/handoffs/ID.json`에 담당·브랜치·시작SHA·범위·다음행동을 기록한다. 남의 인계파일을 수정하지 않는다. [인계 가이드](docs/WORK_HANDOFF.md)의 예를 따른다.
+- 실행/자료 경로·보호대상·한도는 PROJECT_STATE.json, 작업의 상태/근거는 작업별JSON, 계획은 TASKS/PROJECT_STATUS, 역사적 검증은 WORKLOG/STATUS에 둔다. 같은 최신정보를 여러곳에 다시 복사하지 않는다. LIVE_STATUS는 생성물이며 `node tools/handoff-state.mjs`로 갱신한다.
+- 의미 있는 작업 전후 STATUS/WORKLOG에는 해당ID의 시작·결과·재개위치를 간결히 남긴다. 성공/미검증/예정을 구분한다. PC 검증을 Quest 실기기 완료로 기록하지 않는다.
+- 완료 시 실제 회귀·실행 경로를 검증한다. 사용자에게 확인 가능한 결과를 제시하고, 사용자가 확인·승인한 뒤 커밋·push·통합한다. 사용자의 명시적 통합 요청은 해당 작업의 승인으로 기록한다. GitHub CI 자체를 검증하는 작업의 전용브랜치 push/시험PR은 그 구현·검증 범위에 포함한다.
+- 통합 전 최신fetch/기준차이·CI를 다시 확인한다. 작업 ID를 제목에 넣고 PR로 codex/museum-tycoon에 통합한다. PR에 실제검증/남은위험을 적고 승인 없는 강제병합·검사 우회는 하지 않는다.
+- 최종 상태: 파일 생성/기능브랜치push/PR미병합/통합완료를 구분한다. 병합SHA 확인→사용자 실행폴더FF→개인자료 보존→바탕화면 경로 확인. 완료브랜치 정리는 병합 확인 후. 현재 최신SHA를 문서마다 손으로 복사하지 않는다. GitHub의 실제 PR 병합SHA가 정본이다.
 
-**아래의 과거 '작업 재개 규칙'은 로컬 상태·환경 점검용으로 유지한다. 충돌 시 위 최신 Git 선행 절차가 우선이다.** GitHub 기본 브랜치가 기준판이므로 ref 미지정 커밋/파일 수정을 하지 않는다.
+## 3. 보호와 제품 방향
 
-사용자가 '재개', '계속', '이어서'라고 요청하면 다음 순서로 진행한다.
+- codex/museum-baseline 및 museum-baseline-20261015 태그는 보존. 기능 병합·기본브랜치 변경은 별도 사용자 요청 없이 하지 않는다.
+- 개인 Archive/모델/대사/가족기록은 공개Git/외부AI에 무단 전송하지 않는다. 실행소스와 개인자료를 분리하고 기존 metadata/모델/설정/승인을 보존한다.
+- PC Quest Link 우선, standalone 후속. 소장품/스토리에 반응하는 살아있는 박물관이 목적이며 경제/해금은 미래 선택 확장이다.
+- 새 모델 맞춤 대사/보충 요청은 [.agents/skills/museum-model-reactions/SKILL.md](.agents/skills/museum-model-reactions/SKILL.md)를 읽는다. 에이전트가 관찰→작성→검토→요청에 따라draft/승인→API·실제표시를 확인한다. 업로드 자동실행/1,000개 저장은 미구현.
+- 설치는 공식출처와 게시자서명/체크섬을 확인한다. 이 지침은 샌드박스 밖 쓰기 권한을 부여하지 않는다.
 
-1. 실제 개발 루트 `C:\Dev\vr-museum`의 STATUS.md와 WORKLOG.md를 읽는다. 이 폴더가 존재하지 않을 때만 현재 작업공간의 문서를 참고한다.
-2. STATUS.md의 진행 중 설치/프로세스/파일을 실제 환경과 대조한다. 이전 도구 세션 ID가 살아 있다고 가정하지 않는다.
-3. 완료한 설치와 작업은 반복하지 않고 기록된 다음 작업부터 진행한다.
-4. 사용자 결정: PC 연결 Quest Link 우선, standalone은 후속, C: 기본 설치, 개발 루트는 C:\Dev\vr-museum.
-5. 각 의미 있는 작업 전후에 STATUS.md를 갱신하고 WORKLOG.md에 결과를 추가한다. 세션 종료 전 중단점과 다음 동작을 구체적으로 기록한다.
-6. 로그인, 기기 착용/연결 등 사용자 입력이 필요한 부분은 요청하면서 독립적인 작업을 계속한다.
-7. 설치 파일은 공식 출처를 사용하고 게시자 서명 또는 공식 체크섬을 확인한다.
-8. 문서는 사실/완료/예정을 구분한다. 테스트하지 않은 상태를 완료로 기록하지 않는다.
-9. 이 지침은 샌드박스 밖 쓰기 권한을 부여하지 않는다. 필요 시 도구의 권한 승인을 사용한다.
-
-# 타이쿤 실험 분기 규칙
-이 작업폴더는 사용자 승인으로 분리한 실험본입니다. 이 폴더를 작업할 때는 이 폴더의 STATUS.md/WORKLOG.md가 우선이며, 기존 C:\Dev\vr-museum에 기능 변경을 반영하지 않습니다. 원래 루트 지정은 기준 버전에만 적용합니다. 실험 데이터·빌드·관리서버 포트도 분리합니다. 실험 관리 서버는 기본4177로 실행하지 말고 별도 포트를 지정합니다. 기준 버전 합치기는 사용자가 요청할 때 진행합니다.
-
-
-## 전체 진행상황 MD 및 GitHub 관리 (2026-10-15 사용자 지시)
-
-- 전체 계획과 현황의 기준 문서는 실험 브랜치의 PROJECT_STATUS.md입니다. 기존 재개 점검 후 실제 작업 브랜치의 이 문서도 읽습니다. 타이쿤 기능은 C:\Dev\vr-museum-tycoon에서 개발하고 그곳의 문서를 갱신합니다.
-- 기능 추가·수정마다 PROJECT_STATUS.md의 갱신 날짜, 기능 상태, 검증 결과, 다음 작업과 주요 변경 이력을 갱신합니다. TASKS.md의 관련 ID와 STATUS.md/WORKLOG.md도 맞춥니다.
-- 구현/미검증/PC 검증/Quest 실기기 검증을 구분하고, 미구현이나 실패를 완료로 표시하지 않습니다.
-- 사용자 지시에 따라 검토한 코드와 관련 MD를 기능 단위로 커밋/push합니다. **다중 에이전트 환경에서는 전용 작업 브랜치 + PR 통합을 기본으로 하고, 직접 통합 브랜치에 push하는 과거 절차보다 위 Git 선행·충돌방지 규칙이 우선합니다.** 별도 승인 대상은 공개범위 변경·기준 버전 병합·파괴적 작업 등입니다.
-- push 후 작업 브랜치 원격 SHA와 로컬 HEAD 일치를 확인하고, PR 병합 완료 시 통합 브랜치의 HEAD와 실제 반영 커밋을 추가 확인합니다. 업로드 실패 시 로컬 변경을 보존하고 미완료 사유와 다음 동작을 기록·안내합니다. 인증값·로그·임시파일은 커밋하지 않습니다.
-- 기존 기준 버전 기능과 museum-baseline-20261015 태그를 유지합니다. 최신 타이쿤 진행상황을 기존 브랜치에 기능과 함께 자동 병합하지 않습니다. 기준 브랜치의 README는 최신 실험 문서로 연결합니다.
-
-## 아이디어 회의(ChatGPT) → Work 구현 인계 (2026-10-16)
-
-- 사용자의 새 역할 분담: **ChatGPT 대화에서 아이디어·제품 방향·설계를 합의하고, Work에서 실제 구현 및 테스트한다.** 별도 대화에 논의 전체가 자동 전달되었다고 가정하지 않는다. 공통 자료는 이 GitHub 실험 브랜치의 문서다.
-- 시작 전 [docs/WORK_HANDOFF.md](docs/WORK_HANDOFF.md)와 해당 기능 설계 문서, 이 브랜치의 TASKS.md 및 PROJECT_STATUS.md를 읽는다. `REACT-` 작업은 [docs/REACTION_SYSTEM_DESIGN.md](docs/REACTION_SYSTEM_DESIGN.md) 참고.
-- 이 저장소의 핵심 제품 목적은 **내 컬렉션/스토리에 반응하는 관람객이 있는 살아 있는 박물관**이다. 타이쿤 경제·해금은 선택적 미래 확장이다. NPC 성향·서술 생성은 해당 전시품의 실제 정보에 근거해야 한다.
-- `TASKS.md`에 **미완료**로 추가된 제안은 구현 완료가 아니며, Work가 명시적으로 작업을 시작하지 않는 한 자동 실행 대상도 아니다. 작업 시 단일 ID의 범위·선행 계약·테스트·회귀를 기록한다.
-- 로컬 `C:\Dev\vr-museum-tycoon` 또는 Work가 사용하는 독립 Clone/Worktree에서 Git 선행 Gate를 수행한다. `git fetch` 및 안전한 최신화 이후 문서를 읽고, 다른 세션의 변경을 보존한다. 기준 브랜치 `codex/museum-baseline`은 사용자 승인 없이 수정하지 않는다.
-- 사전 생성하는 관람객 반응 데이터는 현재 `artifact.json` v1과 호환되게 설계하고, 관리자 승인 문구만 런타임 표시한다. 실제 가족 기록을 외부 AI에 무단 전송하거나 공개 Git에 자동 올리지 말 것. 기존 모델/전시/관람객 기능과 Quest 미검증 구분을 유지한다.
-
-## 사용자 실행 경로 완료 확인
-- 기능 배포 완료 전 기존 바탕화면 PC관람/관리 바로가기가 최신 빌드·관리도구 및 올바른 개인 Archive/포트를 가리키는지 확인한다. 별도 작업폴더로 빌드했다면 소스/실행도구 제공만으로 사용자 적용 완료라 보고하지 않는다. 바로가기 백업·재읽기·실제 실행 검증을 기록하고 기준판/Quest 경로는 별도 요청 없이 바꾸지 않는다.
-
-## 모델 맞춤 대사 제작 스킬
-- 새 모델/모델 교체 후 대사 작성, 맞춤 반응 보충, 미완성 대사 처리 요청은 [.agents/skills/museum-model-reactions/SKILL.md](.agents/skills/museum-model-reactions/SKILL.md)를 읽고 수행한다. 스킬 목록에 없어도 저장소 원본을 직접 읽는다. 호출명: `$museum-model-reactions`.
-- 실행 주체는 작업 중인 에이전트다. 순서: 최신 Git/상태·실제 Archive 확인 → 여러 각도 관찰/지문 기록 → 성향별10개 이상·기본40개 맞춤 작성 → 근거/의미 중복/계약 검토 → 요청에 맞게 draft 또는 approved 저장 → API/관리 화면·바탕화면 경로·실제 감상 말풍선 검증 → 작업 기록.
-- 작성만 요청하면 초안, 적용 요청이면 검토한 대상 문구 승인·활성화까지 처리한다. 기존 명시적 적용 권한을 재질문하지 않되 스킬 설치 자체를 모든 미래 초안의 자동 승인으로 해석하지 않는다. 현재 최대96개/64KiB/문구72 UTF-16,1,000개 확장은 후속.
-- 실제 시각 표시를 확인하지 못했으면 저장·활성화와 표시 검증을 구분한다. 개인 모델/문구/관찰 메모를 공개 Git에 올리지 않는다. 업로드 후 자동 실행/작업 큐는 아직 없다. [운영·호출·기록 상태](docs/REACTION_AUTHORING_WORKFLOW.md) 참고.
+[Git 운영 상세](docs/GIT_MULTI_AGENT_WORKFLOW.md) · [과거 지침 보존본](docs/history/AGENTS_20261017.md)
+과거 지침의 경로·절차가 충돌하면 이 시작 지침과 현재 배포정본이 우선한다.

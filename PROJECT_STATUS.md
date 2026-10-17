@@ -1,5 +1,9 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
+OPS-003: PR/Linux·Windows 회귀CI와 tycoon 필수검사보호 적용. 인계는 PROJECT_STATE·작업별JSON·생성LIVE_STATUS로 통일. 근거/통합상태는 [OPS-003 인계](docs/handoffs/OPS-003.json)와 PR#12 참조.
+
+> 현재 배포/작업은 docs/LIVE_STATUS.md와 docs/PROJECT_STATE.json·docs/handoffs를 확인한다. 이 파일의 과거 경로/대기상태는 당시 기록이며 최신판을 결정하지 않는다.
+
 > **2026-10-17 갱신:** ROUTE-002 PR#8, REACT-014/015, ROUTE-003 통합 완료. OPS-008에서 테마34개·동선 전체검증·회귀 보강·스킬/문서 정합성 정리. [구조 평가·검증](docs/INTEGRATION_REVIEW_20261017.md), [실시간 현황](docs/LIVE_STATUS.md). 아래 과거 단계의 대기/48개 기록은 당시 상태다.
 
 최종 갱신: 2026-10-17 (한국 시간)
