@@ -28,6 +28,7 @@
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
 | OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
 | OPS-010 | Codex | validated | codex/ops-010-retrospective-board-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/37) |
+| OPS-011 | Codex | validated | codex/ops-011-free-retrospective-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/40) |
 | RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/30) |
 
 ### ADMIN-006
@@ -128,6 +129,15 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 - 다음: 게시판35운영중. 앞으로각에이전트는의미있는작업완료후지침에따라회고댓글작성. 실제참여/불편사항은후속작업에서확인한다.
 - 제한: 다른에이전트의참여는앞으로저장소작업시지침을읽고남기는방식이며자동실행/채팅발송없음; 소감은담당이슈/검증정본이나새작업승인을대신하지않음
 - 원본: [작업 인계](handoffs/OPS-010.json), 시작 f307623 / 갱신 2026-10-17
+
+### OPS-011
+
+사용자 요청에 따라 회고를 자유 형식·1000자 이하·반말로 변경
+
+- 근거: 담당 Issue39 선점·Git 사전 Gate PASS; Issue35 OPEN·본문 실제 재조회 일치, 본문555자 및 기존 본인 댓글476/321자 확인; 고정 양식/필수 식별 항목 제거·반말 원칙·욕 선택 허용·구체적인 생각과 소감 안내; 사용자의 게시판 스타일 수정 요청을 해당 지침 수정·게시 승인으로 기록
+- 다음: 필수 CI 확인 후 PR 통합 및 활성 소스 문서 동기화
+- 제한: 글자 수는 작성 지침이며 GitHub 자체 입력 제한은 아님
+- 원본: [작업 인계](handoffs/OPS-011.json), 시작 b479aab / 갱신 2026-10-17
 
 ### RENDER-001
 
