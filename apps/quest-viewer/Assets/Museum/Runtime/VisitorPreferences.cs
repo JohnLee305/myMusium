@@ -14,6 +14,7 @@ namespace FamilyMuseum
     }
     [Serializable] public sealed class VisitorPreferences
     {
+        public const int MaxCount=12;
         public string schemaVersion;
         public bool enabled;
         public int count=-1;
@@ -22,7 +23,7 @@ namespace FamilyMuseum
         public static VisitorPreferences Default()=>new VisitorPreferences {schemaVersion="1.0",enabled=true,count=1,speed=1,appearances=Array.Empty<VisitorAppearancePreference>()};
         public void Validate()
         {
-            if(schemaVersion!="1.0" || count<0 || count>6 || float.IsNaN(speed) || float.IsInfinity(speed) || speed<.5f || speed>1.5f || appearances==null || appearances.Length>256) throw new InvalidDataException("VISITOR_SETTINGS_INVALID");
+            if(schemaVersion!="1.0" || count<0 || count>MaxCount || float.IsNaN(speed) || float.IsInfinity(speed) || speed<.5f || speed>1.5f || appearances==null || appearances.Length>256) throw new InvalidDataException("VISITOR_SETTINGS_INVALID");
             var seen=new HashSet<string>();
             foreach(var entry in appearances)
                 if(entry==null || entry.id==null || !Regex.IsMatch(entry.id,@"^[a-z0-9][a-z0-9-]{0,63}$") || !seen.Add(entry.id) || float.IsNaN(entry.weight) || float.IsInfinity(entry.weight) || entry.weight<0 || entry.weight>100) throw new InvalidDataException("VISITOR_APPEARANCE_SETTINGS_INVALID");

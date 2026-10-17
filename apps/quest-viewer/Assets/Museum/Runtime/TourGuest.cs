@@ -13,6 +13,22 @@ namespace FamilyMuseum
         Vector3 tourCenter;
         float retry;
         bool tourLeaving;
+        TourExhibitQueue tourQueue;
+        public long QueueTicket { get; internal set; }
+        bool tourYielding;
+        float yieldPause,yieldCooldown;
+        Vector3 resumeDestination;
+        bool TryYield(Vector3 destination)
+        {
+            if(tourYielding || yieldCooldown>0 || !museum.TryTourYield(this,out var escape))return false;
+            resumeDestination=destination;path=escape;waypoint=0;blockedFor=0;tourYielding=true;yieldPause=.6f;yieldCooldown=3;
+            return true;
+        }
+        bool SetQueuePath(Vector3 destination)
+        {
+            path=museum.QueueRoute(this,destination);waypoint=0;blockedFor=0;
+            return path!=null;
+        }
         public readonly List<string> TourVisited=new List<string>();
         public void BeginTour()
         {
@@ -31,13 +47,9 @@ namespace FamilyMuseum
                 ArtifactData item=museum.TourArtifact(entry);
                 if(item==null){Debug.LogWarning("TOUR_ARTIFACT_SKIPPED: "+entry);tourIndex++;continue;}
                 tourCenter=TourNavigation.Center(room.cells[i])+Vector3.forward*.8f;
-                foreach(var offset in TourNavigation.ViewOffsets)
-                {
-                    if(!SetPath(tourCenter+offset))continue;
-                    tourTarget=item;State=GuestState.Walking;return;
-                }
-                // A guest occupying a viewing spot is temporary: wait and retry this same exhibit.
-                State=GuestState.Walking;path=null;retry=1;return;
+                tourTarget=item;
+                tourQueue=museum.JoinTourQueue(this,entry,tourCenter);
+                State=GuestState.Waiting;path=null;retry=0;return;
             }
             tourLeaving=true;State=GuestState.Leaving;
             if(!SetPath(TourNavigation.Door(nav.exit))){path=null;retry=1;}
@@ -57,24 +69,59 @@ namespace FamilyMuseum
             if(State==GuestState.Finished)return;
             gameObject.SetActive(TourRoom==museum.VisibleRoom);
             bool moving=false;
+            yieldCooldown-=dt;
+            if(tourYielding && (path==null || waypoint>=path.Count))
+            {
+                yieldPause-=dt;
+                if(yieldPause<=0){tourYielding=false;SetQueuePath(resumeDestination);retry=1;}
+                Visual.Tick(false,dt,museum.SpeedMultiplier);UpdateThoughtVisibility();return;
+            }
+            if(!tourYielding && State==GuestState.Waiting && retry<=0)
+            {
+                if(tourQueue==null)NextTourTarget();
+                if(tourQueue!=null && tourQueue.Tickets.TryAcquire(name))
+                {
+                    tourQueue.Waiting.Remove(name);
+                    State=GuestState.Walking;SetQueuePath(tourQueue.View);retry=1;
+                }
+                else if(tourQueue!=null)
+                {
+                    if(museum.TryWaitingPath(this,tourQueue,out var waitingPath)){path=waitingPath;waypoint=0;}
+                    retry=1;
+                }
+                else retry=1;
+            }
+            retry-=dt;
             if(State==GuestState.Viewing)
             {
                 wait-=dt;thoughtTime-=dt;
                 var direction=tourCenter-transform.position;direction.y=0;
                 if(direction.sqrMagnitude>.001f)transform.rotation=Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(direction),dt*150);
-                if(wait<=0)NextTourTarget();
+                if(wait<=0){State=GuestState.Clearing;SetQueuePath(tourQueue.Clear);retry=1;}
             }
             else if(path==null)
             {
-                retry-=dt;
-                if(retry<=0){if(tourLeaving){SetPath(TourNavigation.Door(TourNavigation.Get(museum.TourRooms[TourRoom]).exit));retry=1;}else NextTourTarget();}
+                if(retry<=0)
+                {
+                    if(State==GuestState.Waiting) { retry=0; }
+                    else if(State==GuestState.Clearing){if(!SetQueuePath(tourQueue.Clear))TryYield(tourQueue.Clear);retry=1;}
+                    else if(State==GuestState.Walking && tourQueue!=null){if(!SetQueuePath(tourQueue.View))TryYield(tourQueue.View);retry=1;}
+                    else if(tourLeaving){var exit=TourNavigation.Door(TourNavigation.Get(museum.TourRooms[TourRoom]).exit);if(!SetPath(exit))TryYield(exit);retry=1;}
+                    else NextTourTarget();
+                }
             }
             else if(waypoint>=path.Count)
             {
                 if(State==GuestState.Entering)NextTourTarget();
                 else if(State==GuestState.Leaving)AdvanceTourRoom();
-                else if(tourTarget!=null)
+                else if(State==GuestState.Clearing)
                 {
+                    museum.ReleaseTourPlace(this,tourQueue);tourQueue=null;NextTourTarget();
+                }
+                else if(State==GuestState.Waiting){path=null;retry=0;}
+                else if(State==GuestState.Walking && tourTarget!=null)
+                {
+                    museum.RecordQueuedView(this,tourQueue);
                     State=GuestState.Viewing;wait=4.5f+(tourIndex%3)*.5f;Viewed++;museum.RecordView();tourIndex++;
                     TourVisited.Add(tourTarget.id);
                     SetReactionText(museum.Reactions.Select(tourTarget,Persona,reactionHistory));
@@ -87,7 +134,13 @@ namespace FamilyMuseum
                 if(!museum.CanMove(this,next))
                 {
                     blockedFor+=dt;
-                    if(blockedFor>=2){var destination=path[path.Count-1];if(!SetPath(destination)){path=null;retry=1;}blockedFor=0;}
+                    if(blockedFor>=2)
+                    {
+                        var destination=path[path.Count-1];
+                        if(!tourYielding && TryYield(destination)){Visual.Tick(false,dt,museum.SpeedMultiplier);return;}
+                        bool found=tourQueue!=null?SetQueuePath(destination):SetPath(destination);
+                        if(!found){path=null;retry=1;}blockedFor=0;
+                    }
                 }
                 else
                 {

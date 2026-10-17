@@ -1,3 +1,4 @@
+export const MAX_VISITORS=12;
 export const DEFAULT_VISITORS = Object.freeze({schemaVersion:'1.0',enabled:true,count:1,speed:1,appearances:[]});
 const bad=message=>{throw Object.assign(new Error(message),{status:400});};
 const keys=(value,allowed)=>value && typeof value==='object' && !Array.isArray(value) && Object.keys(value).every(key=>allowed.includes(key));
@@ -13,7 +14,7 @@ export function validateVisitorCatalog(value){
     return {schemaVersion:'1.0',appearances};
 }
 export function validateVisitorSettings(value,catalog=null){
-    if(!keys(value,['schemaVersion','enabled','count','speed','appearances']) || value.schemaVersion!=='1.0' || typeof value.enabled!=='boolean' || !Number.isInteger(value.count) || value.count<0 || value.count>6 || !Number.isFinite(value.speed) || value.speed<.5 || value.speed>1.5 || !Array.isArray(value.appearances) || value.appearances.length>256) bad('관람객은 0~6명, 이동 속도는 0.5~1.5배로 입력해 주세요.');
+    if(!keys(value,['schemaVersion','enabled','count','speed','appearances']) || value.schemaVersion!=='1.0' || typeof value.enabled!=='boolean' || !Number.isInteger(value.count) || value.count<0 || value.count>MAX_VISITORS || !Number.isFinite(value.speed) || value.speed<.5 || value.speed>1.5 || !Array.isArray(value.appearances) || value.appearances.length>256) bad(`관람객은 0~${MAX_VISITORS}명, 이동 속도는 0.5~1.5배로 입력해 주세요.`);
     const seen=new Set();
     const appearances=value.appearances.map(entry=>{
         if(!keys(entry,['id','enabled','weight']) || !idPattern.test(entry.id) || seen.has(entry.id) || typeof entry.enabled!=='boolean' || !Number.isFinite(entry.weight) || entry.weight<0 || entry.weight>100) bad('외형별 사용 여부와 등장 비중(0~100)을 확인해 주세요.');

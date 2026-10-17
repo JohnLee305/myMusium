@@ -142,7 +142,7 @@
     <form id="visitor-form">
       <fieldset id="visitor-controls" disabled>
         <label class="visitor-toggle"><input type="checkbox" id="visitor-enabled"> 관람객 받기</label>
-        <div class="visitor-options"><div><label for="visitor-count">목표 인원</label><input id="visitor-count" type="number" min="0" max="6" step="1" required><p class="hint">0~6명 · 입장·퇴장 중에는 실제 인원이 적을 수 있습니다.</p></div><div><label for="visitor-speed">이동 속도 <output id="visitor-speed-value">1.0배</output></label><input id="visitor-speed" type="range" min="0.5" max="1.5" step="0.1" value="1"><p class="hint">0.5배 느긋하게 · 1배 기본 · 1.5배 빠르게</p></div></div>
+        <div class="visitor-options"><div><label for="visitor-count">목표 인원</label><input id="visitor-count" type="number" min="0" max="12" step="1" required><p class="hint">박물관 전체 0~12명 · 입구가 혼잡하거나 입장·퇴장 중이면 실제 인원이 적을 수 있습니다.</p></div><div><label for="visitor-speed">이동 속도 <output id="visitor-speed-value">1.0배</output></label><input id="visitor-speed" type="range" min="0.5" max="1.5" step="0.1" value="1"><p class="hint">0.5배 느긋하게 · 1배 기본 · 1.5배 빠르게</p></div></div>
         <h3>등장할 캐릭터</h3><p id="visitor-summary" class="hint"></p>
         <div class="visitor-tools"><label for="visitor-search">캐릭터 검색</label><input id="visitor-search" type="search" placeholder="남성, 여성, 이름으로 찾기"><button id="visitor-all-on" type="button" class="secondary">모두 사용</button><button id="visitor-all-off" type="button" class="secondary">모두 끄기</button></div>
         <div id="visitor-appearances"></div>
