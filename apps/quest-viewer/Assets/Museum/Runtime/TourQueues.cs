@@ -185,12 +185,14 @@ namespace FamilyMuseum
             route=null;
             if(yieldingGuests.TryGetValue(guest.TourRoom,out var active) && active!=null && active!=guest)return false;
             // Older guests and guests already vacating a viewing place have priority.
-            bool lowerPriority=false;
+            MuseumGuest priority=null;
             foreach(var other in guests)
                 if(other!=guest && other.TourRoom==guest.TourRoom &&
                     (other.transform.position-guest.transform.position).sqrMagnitude<1.8f*1.8f &&
-                    other.TourStalled && (other.Sequence<guest.Sequence || other.State==GuestState.Clearing))lowerPriority=true;
-            if(!lowerPriority)return false;
+                    other.TourStalled && (other.Sequence<guest.Sequence || other.State==GuestState.Clearing))
+                    if(priority==null || other.Sequence<priority.Sequence)priority=other;
+            if(priority==null)return false;
+            var escapePoints=new List<Vector3>();
             foreach(float radius in new[]{.8f,1.2f,1.6f})
                 for(int i=0;i<8;i++)
                 {
@@ -202,9 +204,17 @@ namespace FamilyMuseum
                     foreach(var q in tourQueues.Values)
                         if(q.Room==guest.TourRoom && ((point-q.View).sqrMagnitude<.85f*.85f || (point-q.Clear).sqrMagnitude<.85f*.85f)){safe=false;break;}
                     if(!safe)continue;
-                    route=FindPath(guest,point);
-                    if(route!=null){yieldingGuests[guest.TourRoom]=guest;QueueYields++;return true;}
+                    var priorityDirection=priority.TravelDirection.sqrMagnitude>.01f?priority.TravelDirection:priority.transform.forward;
+                    if(SegmentDistance(point,priority.transform.position,priority.transform.position+priorityDirection*2.5f)<.9f)continue;
+                    if(Vector3.Distance(point,priority.transform.position)<Vector3.Distance(guest.transform.position,priority.transform.position)+.2f)continue;
+                    escapePoints.Add(point);
                 }
+            escapePoints.Sort((a,b)=>(a-guest.transform.position).sqrMagnitude.CompareTo((b-guest.transform.position).sqrMagnitude));
+            foreach(var point in escapePoints)
+            {
+                route=FindPath(guest,point);
+                if(route!=null){guest.YieldPriority=priority;yieldingGuests[guest.TourRoom]=guest;QueueYields++;return true;}
+            }
             return false;
         }
 

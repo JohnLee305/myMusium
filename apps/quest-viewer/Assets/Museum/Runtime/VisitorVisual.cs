@@ -70,10 +70,15 @@ namespace FamilyMuseum
         }
         public void Tick(bool moving,float dt,float movementSpeed=1)
         {
+            TickLocomotion(moving?1:0,dt,movementSpeed);
+        }
+        public void TickLocomotion(float speedRatio,float dt,float movementSpeed=1)
+        {
             if(!graph.IsValid()) return;
-            blend=Mathf.MoveTowards(blend,moving?1:0,dt*6);
+            speedRatio=Mathf.Clamp01(speedRatio);
+            blend=Mathf.MoveTowards(blend,speedRatio,dt*4);
             mixer.SetInputWeight(0,1-blend); mixer.SetInputWeight(1,blend);
-            mixer.GetInput(1).SetSpeed(Appearance.animationSpeed*movementSpeed);
+            mixer.GetInput(1).SetSpeed(Appearance.animationSpeed*movementSpeed*Mathf.Max(.15f,speedRatio));
             graph.Evaluate(dt);
         }
         public Bounds Bounds

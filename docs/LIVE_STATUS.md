@@ -20,6 +20,7 @@
 | ADMIN-006 | Codex | validated | codex/admin-006-admin-workspace-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/16) |
 | CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/20) |
 | CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
+| CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -52,6 +53,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: 정체수정PR23 통합·실행판반영·개인자료보존·PC재실행 완료. 배포기록PR검사/통합 후 담당해제. 다음 실제 사용자 사용감 확인 및 자동 안전수용량 후속.
 - 제한: 실제프레임간격을 사용한 PC 모의시간 행동 검증이며 실제FPS/Quest 성능보장은 아님; 개인자료54파일·목표12명·속도1 보존. 사용자 실제 장시간 사용감 추가확인 필요; 모든 임의배치 수용량 보장 및 자동입장량조절은 후속
 - 원본: [작업 인계](handoffs/CROWD-004.json), 시작 5b221ee / 갱신 2026-10-17
+
+### CROWD-006
+
+현재맵12명 보행 가감속·속도애니메이션·통행우선순위 및 양보반복 보정
+
+- 근거: Windows 빌드 exit0: logs/unity-Build-20261017-171332.log; 개인 저장맵 12명 실제120초: 이동의도 연속정지 최대16.01→0.37초, 양보12→0, 관람23→23회; frameP95 6.99→6.97ms. logs/motion-20261017-171726/summary.txt; 개인54파일SHA256불변; 동일 익명배치12명60Hz간격900초:276관람41퇴장·후반39/6 PASS. logs/deadlock-20261017-171544/; 별도미로6명/인접전시12명/실제FIFO18검사 PASS; docs/CROWD_MOTION_SMOOTHING.md; Node 전체15묶음 PASS: logs/crowd-006-local-ci-retry.log
+- 다음: 사용자 기존 반영승인과 이번 보정요청에 따라 PR/필수CI 통합 후 활성 PC 실행판 빌드·개인자료 보존·재실행 검증
+- 제한: 한PC·한배치의 전후1회실측이며 임의배치/Quest 성능보장은 아님; 모의900초는 행동회귀이며 실제15분FPS검사가 아님; 120초관람동일23회이나퇴장1→0으로처리량향상주장없음; 활성실행판교체는다음단계;개인맵/목표12/속도1보존
+- 원본: [작업 인계](handoffs/CROWD-006.json), 시작 0ea530b / 갱신 2026-10-17
 
 ### OPS-002
 
