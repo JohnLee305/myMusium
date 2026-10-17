@@ -27,7 +27,7 @@
 | DECOR-02 | Codex | validated | codex/decor-02-commands-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/48) |
 | DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/51) |
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
-| DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | 미게시 |
+| DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
