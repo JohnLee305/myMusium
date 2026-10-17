@@ -11,7 +11,7 @@
 - 개인 자료: `C:/Dev/vr-museum-tycoon/museum-archive` (소스 버전과 분리·공개 Git 제외)
 - 관리: 4186, PC 실행: `Builds/Windows/VRMuseum.exe`
 - 보존 대상: `codex/museum-tycoon`
-- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-175452.log`. 현재 실행 여부는 재확인한다.
+- 검증 기록: 2026-10-17 / PC; Quest unverified / `logs/unity-Build-20261017-185515.log`. 현재 실행 여부는 재확인한다.
 
 ## 작업 인계
 
@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | ADMIN-006 | Codex | validated | codex/admin-006-admin-workspace-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/16) |
 | CROWD-001 | Codex | validated | codex/crowd-001-queue-core-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/20) |
-| CROWD-002 | Codex | validated | codex/crowd-002-auto-capacity-20261017 | 미게시 |
+| CROWD-002 | Codex | validated | codex/crowd-002-auto-capacity-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/33) |
 | CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
 | CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/27) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
@@ -49,11 +49,11 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 
 ### CROWD-002
 
-방당6명 자동목표(상한120)·혼잡입장조절·계산분산/비표시애니메이션중단;사용자반영승인
+방당6명 자동목표·혼잡 입장조절·계산분산 구현 및 활성 실행판 자동모드 반영 완료
 
-- 근거: 최종Windows빌드exit0: logs/unity-Build-20261017-181931.log; 현재맵동일익명3방60Hz900초:목표18/peak16·271관람42퇴장·후반39/7·간격/벽/수용량/FIFO/경로예산PASS. logs/auto-crowd-20261017-182047/; 6방목표36/peak25·493관람71퇴장·후반73/12 PASS: logs/auto-crowd-20261017-182006/; 20방목표120/peak75·1150관람21퇴장·후반246/12 PASS: logs/auto-crowd-20261017-182154/; 실제30초분산부하30/60/120명계속유지,frameP95모두6.97ms·NPC처리P95 0.29/0.41/1.08ms. 초기일괄생성포함최대프레임153/257/479ms; 정상운영은점진입장. logs/auto-crowd-20261017-182251/,182332/,182412/; 기존현재맵수동12명900초·인접12명·별도미로6명·FIFO18검사 PASS. logs/deadlock-20261017-182115/,queue-compact-20261017-182139/,navigation-tests-1792228446603/tour-player-6-20261017-182554.log; 자동/수동계약38검사포함Node전체15묶음PASS: logs/crowd-002-node-ci-final.log;OneDrive rename EPERM을시험임시폴더분리로해결; 전시없는방제외/120상한/부하입장중단·복귀/수동전환·방별색인정리검사PASS;개인자료미변경; 2026-10-17 사용자 그렇게 가자 커밋해로 검토한 기준·커밋/PR/통합·실행판반영 승인; PR33 비인증REST403 차단. workflow권한추가없이동일공개Git담당ref/커밋조회로교체.워크플로변경없음·필수소유권검증유지
-- 다음: 사용자승인완료. commit/push/PR/필수CI→활성FF/빌드·관리4186재시작→기존외형/속도/count보존하며API mode=auto저장/개인자료검증→배포기록통합·담당해제.
-- 제한: 성능은한PC의30초·여러방분산검사;순간일괄생성의최대479ms초기부하포함. Quest/장시간/임의배치성능보장없음; 방수변경은관람앱재실행시반영. 실제인원은통로/방한도로목표보다적을수있음; 공정경로예산만으로는출구정체가남았고출구동선대기금지까지보완후다방검사통과;전용진단/시험로그개인자료공개금지
+- 근거: 최종Windows빌드exit0: logs/unity-Build-20261017-181931.log; 현재맵동일익명3방60Hz900초:목표18/peak16·271관람42퇴장·후반39/7·간격/벽/수용량/FIFO/경로예산PASS. logs/auto-crowd-20261017-182047/; 6방목표36/peak25·493관람71퇴장·후반73/12 PASS: logs/auto-crowd-20261017-182006/; 20방목표120/peak75·1150관람21퇴장·후반246/12 PASS: logs/auto-crowd-20261017-182154/; 실제30초분산부하30/60/120명계속유지,frameP95모두6.97ms·NPC처리P95 0.29/0.41/1.08ms. 초기일괄생성포함최대프레임153/257/479ms; 정상운영은점진입장. logs/auto-crowd-20261017-182251/,182332/,182412/; 기존현재맵수동12명900초·인접12명·별도미로6명·FIFO18검사 PASS. logs/deadlock-20261017-182115/,queue-compact-20261017-182139/,navigation-tests-1792228446603/tour-player-6-20261017-182554.log; 자동/수동계약38검사포함Node전체15묶음PASS: logs/crowd-002-node-ci-final.log;OneDrive rename EPERM을시험임시폴더분리로해결; 전시없는방제외/120상한/부하입장중단·복귀/수동전환·방별색인정리검사PASS;개인자료미변경; 2026-10-17 사용자 그렇게 가자 커밋해로 검토한 기준·커밋/PR/통합·실행판반영 승인; PR33 비인증REST403 차단. workflow권한추가없이동일공개Git담당ref/커밋조회로교체.워크플로변경없음·필수소유권검증유지; PR33필수Ubuntu/Windows15묶음·인계정책·museum-required PASS;병합001d12d11d93984c0ac19f12bc635e56c44cf018; 활성FF/build185515exit0·관리4186정상재시작·API mode=auto 저장. 수동fallback12/속도1/외형설정모두보존,이전설정해시동일백업확인·기타53파일SHA256불변; 개인현재맵실제120초:15명입장/23관람·양보0·최장이동의도정지.37초·frameP95 6.97ms/NPC처리P95 .29ms. logs/motion-20261017-185617/;개인55파일불변; 기존바탕화면3개불변·PC관람수정판재실행확인; CI담당조회에서depth옵션제거·로컬전체Git이력복구확인(false shallow)·정책10검사PASS
+- 다음: 기능PR33통합·자동모드실제반영/자료보존·PC검증완료. 배포기록PR필수CI/통합→활성FF→회고Issue35댓글/담당해제. 이후OPS-010게시판지침통합.
+- 제한: 한PC의짧은분산부하측정;일괄생성최대479ms초기부하포함,일반은점진입장. Quest/장시간/임의배치성능보장없음; 방수변경은관람앱재실행시반영. 실제인원은통로/방한도로목표보다적을수있음
 - 원본: [작업 인계](handoffs/CROWD-002.json), 시작 f307623 / 갱신 2026-10-17
 
 ### CROWD-004
