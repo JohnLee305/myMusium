@@ -23,6 +23,7 @@
 | CROWD-004 | Codex | validated | codex/crowd-004-deadlock-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/23) |
 | CROWD-006 | Codex | validated | codex/crowd-006-smooth-motion-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/27) |
 | DECOR-000 | Codex | validated | codex/decor-000-design-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/44) |
+| DECOR-01 | Codex | validated | codex/decor-01-contract-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/46) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -86,6 +87,15 @@ FIFO 대기 A/B와 수동12명 상한 C 구현·PC 검증, 혼잡 양보 이동 
 - 다음: PR44 필수검사 확인 후 사용자 병합 승인 시 통합. 다음 구현 세션은 설계 README의 DECOR-01부터 새 담당선점·Git Gate 후 진행.
 - 제한: 문서와 가상 fixture만 변경; 게임 기능/의미 검사기/Unity/Quest 미구현·미검증
 - 원본: [작업 인계](handoffs/DECOR-000.json), 시작 eddb801 / 갱신 2026-10-17
+
+### DECOR-01
+
+꾸미기 공통 DTO와 엄격 형식·참조 검사
+
+- 근거: Issue45 선점·최신원격 Git Gate PASS; production C# DTO/codec/reference validator 실제 Add-Type 컴파일·204검사 PASS: logs/decor-01-contract.log; fixture15개 schema와 C# 형식 판정 일치; 좌표/ID/locale/Unicode/512cycle/오류정렬 검사 PASS; 검사에 geometry5종 미구현을 명시, 기존 ArchiveData/씬/개인자료 변경 없음; Ubuntu/Windows Actions에 동일 pwsh 검사 추가; 원격CI는 커밋/게시 후 검증 대상; 사용자 구현 확인·커밋/통합 및 검증 후 DECOR-02 진행 명시 승인; GitHub workflow 권한 제한으로 직접 workflow 수정 대신 기존 tools/run-ci.mjs에 pwsh C#검사 연결; 동일 Ubuntu/Windows 실행 경로 유지
+- 다음: PR 필수CI 통과 후 통합·활성소스 FF 확인. DECOR-02 새 작업 선점으로 진행.
+- 제한: 참조 단계1~5만 구현; geometry/동선/저장/UI/Unity/Player/Quest 미검증; 실제 실행파일 미반영; 도메인 소스와 검사만 변경
+- 원본: [작업 인계](handoffs/DECOR-01.json), 시작 9ed0d0b / 갱신 2026-10-17
 
 ### OPS-002
 
