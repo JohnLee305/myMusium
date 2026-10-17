@@ -146,7 +146,6 @@ namespace FamilyMuseum
         IEnumerable<Vector3> Bodies(MuseumGuest current)
         {
             foreach(var guest in guests) if(guest!=current && (!OrderedTours||guest.TourRoom==current.TourRoom)) yield return guest.transform.position;
-            if(OrderedTours) foreach(var point in QueueBodies(current)) yield return point;
             if(Camera.main!=null && !(gallery?.IsOutside??false) && (!OrderedTours||current.TourRoom==VisibleRoom)) { Vector3 player=Camera.main.transform.position; player.y=0; yield return player; }
         }
         public List<Vector3> FindPath(MuseumGuest guest,Vector3 destination)=>(OrderedTours?TourPath(guest.TourRoom):Paths).Find(guest.transform.position,destination,Bodies(guest));
@@ -159,7 +158,7 @@ namespace FamilyMuseum
         }
         public void ClearRoom()
         {
-            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); tourQueues.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
+            foreach(var guest in guests) if(guest!=null) guest.Close(); guests.Clear(); tourQueues.Clear(); yieldingGuests.Clear(); Paths=null; room=-1; spawnWait=0; Reactions?.Clear();
         }
         void OnGUI()
         {

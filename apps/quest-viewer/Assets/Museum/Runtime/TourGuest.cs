@@ -7,7 +7,7 @@ namespace FamilyMuseum
     public sealed partial class MuseumGuest
     {
         public int TourRoom {get;private set;}
-        public string TourStatus=>$"room={TourRoom} state={State} position={transform.position} index={tourIndex} waypoint={waypoint}/{path?.Count} destination={(path==null?Vector3.zero:path[path.Count-1])}";
+        public string TourStatus=>$"room={TourRoom} state={State} position={transform.position} index={tourIndex} ticket={QueueTicket} yielding={tourYielding} blocked={blockedFor} waypoint={waypoint}/{path?.Count} destination={(path==null||path.Count==0?Vector3.zero:path[path.Count-1])}";
         int tourIndex;
         ArtifactData tourTarget;
         Vector3 tourCenter;
@@ -16,12 +16,15 @@ namespace FamilyMuseum
         TourExhibitQueue tourQueue;
         public long QueueTicket { get; internal set; }
         bool tourYielding;
-        float yieldPause,yieldCooldown;
+        float yieldPause,yieldCooldown,yieldAge;
+        internal bool FollowingQueuePoint(Vector3 point)=>path!=null && path.Count>0 && waypoint<path.Count && (path[path.Count-1]-point).sqrMagnitude<.0001f;
+        internal bool TourStalled=>State!=GuestState.Viewing && State!=GuestState.Finished && !tourYielding &&
+            ((State!=GuestState.Waiting && path==null) || blockedFor>=1.5f);
         Vector3 resumeDestination;
         bool TryYield(Vector3 destination)
         {
             if(tourYielding || yieldCooldown>0 || !museum.TryTourYield(this,out var escape))return false;
-            resumeDestination=destination;path=escape;waypoint=0;blockedFor=0;tourYielding=true;yieldPause=.6f;yieldCooldown=3;
+            resumeDestination=destination;path=escape;waypoint=0;blockedFor=0;tourYielding=true;yieldPause=1.2f;yieldCooldown=3;yieldAge=0;
             return true;
         }
         bool SetQueuePath(Vector3 destination)
@@ -70,10 +73,19 @@ namespace FamilyMuseum
             gameObject.SetActive(TourRoom==museum.VisibleRoom);
             bool moving=false;
             yieldCooldown-=dt;
+            if(tourYielding)
+            {
+                yieldAge+=dt;
+                if(yieldAge>=4)
+                {
+                    museum.FinishTourYield(this);tourYielding=false;SetQueuePath(resumeDestination);retry=1;
+                    Visual.Tick(false,dt,museum.SpeedMultiplier);return;
+                }
+            }
             if(tourYielding && (path==null || waypoint>=path.Count))
             {
                 yieldPause-=dt;
-                if(yieldPause<=0){tourYielding=false;SetQueuePath(resumeDestination);retry=1;}
+                if(yieldPause<=0){museum.FinishTourYield(this);tourYielding=false;SetQueuePath(resumeDestination);retry=1;}
                 Visual.Tick(false,dt,museum.SpeedMultiplier);UpdateThoughtVisibility();return;
             }
             if(!tourYielding && State==GuestState.Waiting && retry<=0)
@@ -87,6 +99,11 @@ namespace FamilyMuseum
                 else if(tourQueue!=null)
                 {
                     if(museum.TryWaitingPath(this,tourQueue,out var waitingPath)){path=waitingPath;waypoint=0;}
+                    if(path==null || waypoint>=path.Count)
+                    {
+                        var resume=tourQueue.Waiting.TryGetValue(name,out var parked)?parked:transform.position;
+                        TryYield(resume);
+                    }
                     retry=1;
                 }
                 else retry=1;
@@ -118,7 +135,7 @@ namespace FamilyMuseum
                 {
                     museum.ReleaseTourPlace(this,tourQueue);tourQueue=null;NextTourTarget();
                 }
-                else if(State==GuestState.Waiting){path=null;retry=0;}
+                else if(State==GuestState.Waiting){path=null;retry=1;}
                 else if(State==GuestState.Walking && tourTarget!=null)
                 {
                     museum.RecordQueuedView(this,tourQueue);
