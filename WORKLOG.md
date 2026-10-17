@@ -809,3 +809,21 @@
 - tycoon PR/필수museum-required(app15368)/strict-base/관리자적용/대화해결/force·삭제금지 적용 API재조회. 기준판/태그/개인자료 변경없음.
 - 배포정본PROJECT_STATE + ID별JSON + 생성LIVE_STATUS, 짧은AGENTS/인계진입, 과거원문history보존. 완료OPS-002/008 연결. 통합이력PR#12가정본.
 - 종료Gate: 최종문서커밋 CI확인→PR#12통합→양쪽실험폴더FF·원격일치·Archive해시확인. 다음새작업은 새ID/전용브랜치/Gate부터, OPS-004 자동담당선점은 미구현.
+
+## 2026-10-17 / OPS-004 시작
+- 사용자: 다른에이전트의중복작업방지·담당즉시조회 요청. Codex, 시작34ac954,전용 codex/ops-004-task-coordination-20261017,Gate PASS·열린PR/Issue 없음.
+- 범위: GitHub Issue로담당표시, 동시선점은원자적전용claim ref로1명만성공, 기존Gate/인계연동·격리경쟁회귀. source/빌드/개인Archive 변경없음.
+
+## 2026-10-17 / OPS-004 구현·로컬 검증
+- task-coordination CLI/Windows실행기: 공유Issue와원자적claims ref·세션영수증·상태갱신·완료이력해제. Git Gate 및 실제PR의담당/브랜치/인계일치검사연동,README/AGENTS/인계/현황판 연결.
+- 로컬14회귀묶음 PASS(logs/ops-004-local-ci.log), 동시실제2프로세스13사례 PASS(logs/ops-004-coordination-tests.log), Gate18/PR정책9 통과. 실제GitHub Issue#13·중복거절·소유권보존·Windows review상태갱신 확인.
+- 새상태생성문구 backtick 및Windows인수전달 오류를실행검사에서수정,재통과. 공개Git에개인자료/세션토큰없음. 다음: 전용PR·CI검증→승인범위통합→원격/자료보존·완료공유확인.
+
+## 2026-10-17 / OPS-004 실제 PR 검증
+- 구현4e13133·PR#14,clean owner Gate ok=true/Codex/review/Issue#13/blockers0. 실제Actions39002781936 담당/인계정책·Ubuntu14묶음PASS,Windows검사중.
+- 공개담당Issue#13·원격claim정본·로컬영수증으로다른세션중단. 단일클릭Issue생성응답유실시고아Issue가능성은명시,담당정본은보존. 다음: 최종CI성공→PR#14통합→소스FF·자료해시→완료공유/해제.
+
+## 2026-10-17 / OPS-004 실제 CI 성공·최종 인계
+- Actions39002847939 Ubuntu/Windows14회귀·담당정책·museum-required 모두success. WindowsPS5.1 실행기기본Root가비던문제는param후계산으로두실행기보정,목록/담당Gate실행확인. 기본공유목록은현재담당만표시.
+- 통합정본PR#14,사용자OPS-004진행요청범위내구현·검증. 종료Gate: 최종커밋CI→보호규칙통합→양쪽실험소스FF/개인자료해시→Issue13 done·release·현재담당없음확인. 담당ref는소스브랜치정리와구분해보존.
+- 재개동작: 최신fetch후PR#14병합상태부터확인,완료된구현/테스트를반복하지않음. 새업무는공유list→claim→Git Gate. 소스/빌드/개인자료경로는PROJECT_STATE정본유지.

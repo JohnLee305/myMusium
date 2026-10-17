@@ -4,6 +4,7 @@ import {spawnSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import assert from 'node:assert/strict';
 import {readHandoff,renderHandoff} from './handoff-state.mjs';
+import {validateClaim,claimRef} from './task-coordination.mjs';
 export function checkChangePolicy({root,files,taskId,headBranch}){
  assert.match(taskId,/^[A-Z]+-\d+$/,'PR title/branch must identify one task ID');
  const record=`docs/handoffs/${taskId}.json`;
@@ -15,6 +16,13 @@ export function checkChangePolicy({root,files,taskId,headBranch}){
  if(files.some(f=>/^(apps\/|tools\/|museum-archive\/schemas\/|\.agents\/|\.github\/)/.test(f)))assert.ok(files.includes('TASKS.md'),'Code/config changes must update TASKS.md');
  return true;
 }
+export function checkPrOwnership(claim,taskId,headBranch,owner){
+ validateClaim(claim);assert.equal(claim.taskId,taskId);assert.equal(claim.branch,headBranch);assert.equal(claim.agent,owner);assert.ok(['in_progress','blocked','review'].includes(claim.status),'PR must have an active claimed owner');return true;
+}
+async function publicClaim(taskId){
+ const get=async endpoint=>{const res=await fetch('https://api.github.com/repos/JohnLee305/myMusium/'+endpoint,{headers:{Accept:'application/vnd.github+json'},signal:AbortSignal.timeout(15000)});assert.ok(res.ok,'Cannot verify shared task owner: '+res.status);return res.json();};
+ const ref=await get('git/ref/heads/'+claimRef(taskId)),commit=await get('git/commits/'+ref.object.sha);assert.ok(commit.message.startsWith('MUSEUM_TASK_CLAIM\n'));return JSON.parse(commit.message.slice('MUSEUM_TASK_CLAIM\n'.length));
+}
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
  const root=process.cwd(),state=readHandoff(root);
  assert.equal(fs.readFileSync(path.join(root,'docs/LIVE_STATUS.md'),'utf8').replace(/\r\n/g,'\n'),renderHandoff(state),'Generated LIVE_STATUS differs from handoff sources');
@@ -25,7 +33,10 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1]
   const files=diff.stdout.split('\0').filter(Boolean);
   const title=process.env.CI_PR_TITLE??'';
   const id=title.match(/\b[A-Z]+-\d+\b/)?.[0]??files.map(f=>f.match(/^docs\/handoffs\/([A-Z]+-\d+)\.json$/)?.[1]).find(Boolean);
-  if(files.length)checkChangePolicy({root,files,taskId:id,headBranch:process.env.CI_HEAD_BRANCH||undefined});
+  if(files.length){
+   checkChangePolicy({root,files,taskId:id,headBranch:process.env.CI_HEAD_BRANCH||undefined});
+   if(process.env.GITHUB_ACTIONS==='true'&&process.env.CI_HEAD_BRANCH){const task=state.tasks.find(t=>t.taskId===id);checkPrOwnership(await publicClaim(id),id,process.env.CI_HEAD_BRANCH,task.owner);}
+  }
  }
  console.log('CI_POLICY_PASS');
 }

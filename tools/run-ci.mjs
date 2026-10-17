@@ -1,5 +1,5 @@
 import {spawnSync} from 'node:child_process';
-const tests=['test-ci-policy.mjs','test-git-preflight.mjs','test-navigation-editor-dom.mjs','test-navigation.mjs','test-reactions.mjs','test-reaction-registration.mjs','test-themes.mjs','test-admin.mjs','test-layout.mjs','test-preview.mjs','test-visitor-admin.mjs','test-visitor-diversity-admin.mjs','test-control.mjs'];
+const tests=['test-task-coordination.mjs','test-ci-policy.mjs','test-git-preflight.mjs','test-navigation-editor-dom.mjs','test-navigation.mjs','test-reactions.mjs','test-reaction-registration.mjs','test-themes.mjs','test-admin.mjs','test-layout.mjs','test-preview.mjs','test-visitor-admin.mjs','test-visitor-diversity-admin.mjs','test-control.mjs'];
 for(const file of tests){
  console.log('\nCI_TEST: '+file);
  const r=spawnSync(process.execPath,['tools/'+file],{stdio:'inherit',windowsHide:true,timeout:180000});
