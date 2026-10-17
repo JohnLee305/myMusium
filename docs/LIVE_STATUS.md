@@ -26,6 +26,7 @@
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
 | OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
+| RENDER-001 | Codex | validated | codex/render-001-wall-text-20261017 | 미게시 |
 
 ### ADMIN-006
 
@@ -107,6 +108,15 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 - 다음: PR#18 최종CI 성공→통합→활성 sourceRoot tycoon 체크아웃. 보조폴더는 detached 기록/개인자료보관표시. 해시확인→담당완료/해제·임시브랜치정리. 이후 새작업은 단일최신판에서 새ID선점.
 - 제한: 개인 Archive와 과거 Git기록/로컬백업은 보존; Quest 실제기기 미검증
 - 원본: [작업 인계](handoffs/OPS-009.json), 시작 82a9f3e / 갱신 2026-10-17
+
+### RENDER-001
+
+시작 화면에서 박물관 제목/부제가 벽을 관통하는 글자 가림 보정
+
+- 근거: 수정전실제GPU: Museum title/subtitle 각각정상615픽셀·벽뒤607픽셀관통 FAIL. logs/text-occlusion-20261017-174910; 수정후실제GPU: 각각정상615픽셀·벽뒤0픽셀 PASS. logs/text-occlusion-20261017-175026; Windows빌드exit0: logs/unity-Build-20261017-174950.log; 동일익명맵 표시화면·방전환/테마검사 PASS: logs/text-room-visual-20261017-175114; 현재개인맵기하배치가익명회귀배치와같음확인;개인모델외부전송없음
+- 다음: 기존반영승인범위의표시결함수정으로PR/필수CI후활성PC실행판교체·개인자료보존확인
+- 제한: PC Direct3D11검증;Quest실기기미검증; 활성실행판교체는다음단계;기존맵/글꼴/배치/12명설정유지
+- 원본: [작업 인계](handoffs/RENDER-001.json), 시작 f8579a3 / 갱신 2026-10-17
 
 validated는 기록된 검증 완료를 뜻한다. 통합 여부·최종 SHA는 각 PR의 실제 병합 상태가 정본이며, 이 문서는 실행 프로세스/승인/병합을 추측하지 않는다.
 

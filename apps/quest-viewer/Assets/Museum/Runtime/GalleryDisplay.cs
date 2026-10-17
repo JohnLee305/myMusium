@@ -38,6 +38,14 @@ namespace FamilyMuseum
             plinth = GameObject.Find("Display plinth"); cap = GameObject.Find("Display cap");
             font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Arial" }, 64);
             font.material.shader = Resources.Load<Shader>("WorldText");
+            // Authored header labels retain their font, but must depth-test like exhibit text.
+            // Bind before the first asynchronous load so the loading view is also occluded.
+            foreach (string name in new[] { "Museum title", "Museum subtitle" })
+            {
+                var label = GameObject.Find(name).GetComponent<TextMesh>();
+                label.font.material.shader = font.material.shader;
+                label.GetComponent<Renderer>().sharedMaterial = label.font.material;
+            }
             foreach (var obj in new[] { first.modelSlot.gameObject, first.placeholder, first.titleLabel.gameObject, first.descriptionLabel.gameObject, plinth, cap }) obj.SetActive(false);
             try
             {
