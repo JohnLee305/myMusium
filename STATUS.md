@@ -1,5 +1,7 @@
 # VR 박물관 개발 상태
 
+> **현재 체크포인트: 2026-10-17 OPS-008.** 최신 소스/실행본은 sync-20261016, 개인 Archive는 vr-museum-tycoon. 테마34개·반응96한도·ROUTE-003 적용. 아래 날짜별 기록은 당시 사실이며 현재 상태는 docs/LIVE_STATUS.md의 Codex 블록과 docs/INTEGRATION_REVIEW_20261017.md를 우선한다.
+
 **최신 체크포인트(2026-10-16): REACT-001~008 PC 첫 버전 검증 완료. 소스/빌드는 C:\Dev\vr-museum-sync-20261016, 개인 자료는 기존 실험 Archive 유지. 마지막 완료 기록과 PR #2 참조. 실제 Quest 미검증.**
 
 ## 2026-10-16 / 모든 개발 에이전트의 Git 선행 점검 규칙 (문서만 적용)
@@ -630,3 +632,13 @@
 - 순차 관람 회귀 logs/navigation-tests-1792154323758/tour-player-20261016-215527.log PASS. 최종 외부 NPC 통행 보정 전 동일 관람 로직 검사이며, 추가된 외부 분기는 최종 출구 검사에 포함. 상세화면4회귀 logs/details-tests-20261016-215734 PASS. 첫 상세검사 Windows PowerShell5.1 한글 인코딩 실패는 pwsh로 재실행해 해결(제품 코드 실패 아님).
 - 바탕화면 PC 대상/개인Archive 확인 후 최신 실행본 재실행. 관리4186은 코드 변경 없으므로 재시작하지 않음, health/기존48승인 확인. 개인 자료/모델/대사 및 Quest/기준판 바로가기 변경 없음.
 - 실제 Quest 미검증. 현재 외부 처리는 안전 바닥·충돌 경계와 입장/종료 안내, 전체 실외 로비 건물은 후속. 기능/사용법·검증 자료 PR 통합 후 원격 확인 예정.
+## 2026-10-17 / OPS-008 통합·구조 점검 시작
+- Codex, 기준 726ee93, codex/ops-008-integration-review-20261017. 사용자 지시: 테마 통합·Git 정리·구조 보정·평가 기록.
+- 기준판 미커밋 테마/기록을 logs/ops-008-preservation-20261017에 보존한 뒤 실험본으로 이관. 개인 Archive 전체 해시 기록, 변경 금지.
+- 검증 예정: 34프리셋 저장, 동선 DOM/API, 반응 계약/등록/Unity. 검증 후 사용자 명시적 통합 요청에 따라 PR 통합.
+
+## 2026-10-17 / OPS-008 검증 완료·통합 준비
+- 테마52·동선DOM10/API29·반응79/등록9 PASS. Unity Build114603 exit0, reaction fixture open-persona/72자 풍선/REACTION_SMOKE/MUSEUM_SMOKE PASS, tour-player114909 PASS.
+- 사용자4186 최신 실행, 브라우저34프리셋·동선 안내·error0, 개인6전시품416승인 enabled/stale/API 정상. 원본 Archive51파일 SHA256 동일.
+- 기준판 세 파일을 보존 backup/patch 후 HEAD로 복원, Git clean. 모든 참조 Git bundle verify 완료. 병합된 PR#1~7 원격7개, REACT-015/ROUTE-003 원격2개 정리. 로컬 완료브랜치11개 정리. bootstrap 및 ROUTE-002 기록용 브랜치는 보존.
+- 전체 평가 docs/INTEGRATION_REVIEW_20261017.md. 최신 스킬 quick_validate 원본/설치본 PASS·해시 동일, 현행문서96개로 보정. 현재 사용자가 통합·Git 정리를 명시 승인했으므로 PR 통합 진행; Quest/사용자 수동시험 새 완료 기록 없음.

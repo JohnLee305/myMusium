@@ -5,6 +5,14 @@
 > 남의 블록을 수정하지 않는다. 이 파일을 안 읽고 시작한 작업은 무효로 간주한다.
 > 갱신 시각은 KST 기준이다.
 
+## Codex / OPS-008 / 2026-10-17 최신 체크포인트
+- 상태: 구현·PC 검증 완료, PR 통합 진행. 기준726ee93, codex/ops-008-integration-review-20261017, 소스/빌드 sync-20261016.
+- 아래 opencode 블록은 당시 기록으로 보존. ROUTE-002 PR#8·REACT-014/015·ROUTE-003은 이미 통합 완료. 삭제된 완료 작업브랜치로 돌아가지 않는다.
+- 테마34개 이관, 기준판 세 파일 복원·clean 확인. 전체 Git bundle/기준판 patch: logs/ops-008-preservation-20261017. 개인 Archive51파일 해시 동일,6전시품416승인 유지.
+- 최신 관리4186 실행, 구4181 정리 예정. 브라우저34프리셋/동선 안내/error0 확인, PC 바로가기 최신 빌드 실행. 스킬 원본/설치본96개 기준 동일.
+- 검증·구조평가: [OPS-008 평가](INTEGRATION_REVIEW_20261017.md). 다음: PR 통합SHA 확인→개인자료 보존한tycoon작업폴더FF→최종현황 기록.
+- 다음 기능: OPS-002/003 자동 Gate·CI, REACT-011 모델stale, 신규persona 배정·1,000개 확장, Quest 실기기. 자동 착수하지 않는다.
+
 갱신: 2026-10-16 23:40 (KST) / 작성: opencode
 
 ## 지금 손대면 안 되는 것
@@ -40,3 +48,4 @@
 1. tycoon 반영 push 여부 확인 (`git rev-list HEAD...origin/codex/museum-tycoon`).
 2. 반영됐으면 `tmp/route-002-merge-20261016` 브랜치 삭제 여부 확인, sync 폴더를 `route-002`로 원상복구했는지 확인.
 3. Codex 한도 해제(10-17 02:22) 후 복귀 시 이 파일 정본부터 읽을 것.
+

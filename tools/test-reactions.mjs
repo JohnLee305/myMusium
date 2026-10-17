@@ -15,7 +15,7 @@ const maximum=clone(good);for(let n=0;n<56;n++)maximum.reactions.push({id:'extra
 for(const [name,document] of [['empty',emptyReactions(item)],['draft',good],['approved',{...clone(good),reactions:good.reactions.map(r=>({...r,status:'approved'}))}],['maximum96',maximum]]){
     validateReactions(document,item.id);fs.writeFileSync(path.join(fixture,'contract-valid',name+'.json'),JSON.stringify(document));pass('contract valid '+name);
 }
-const openPersona=clone(good);openPersona.reactions[0].persona='nostalgic';validateReactions(openPersona,item.id);pass('contract accepts extensible persona value');
+const openPersona=clone(good);openPersona.reactions[0].persona='nostalgic';validateReactions(openPersona,item.id);fs.writeFileSync(path.join(fixture,'contract-valid','open-persona.json'),JSON.stringify(openPersona));pass('contract accepts extensible persona value');
 const mutations={
     version:d=>d.schemaVersion='2.0',id:d=>d.artifactId='other',enabled:d=>delete d.enabled,unknown:d=>d.extra='x',sourceUnknown:d=>d.source.extra='x',fingerprint:d=>d.source.sha256='0'.repeat(64),numericPointId:d=>d.points[0].id=123,numericReactionId:d=>d.reactions[0].id=123,
     evidence:d=>d.points[0].evidence='설명에 없는 희귀한 유물',duplicatePoint:d=>d.points.push(d.points[0]),duplicateReaction:d=>d.reactions.push(d.reactions[0]),

@@ -134,7 +134,7 @@ if (wallTop && wallBottom && wallLeft && wallRight && wallTop.children.length > 
   assert.ok(created < 1000 && appended < 2000, `wall slot click re-render bounded (created=${created} appended=${appended})`);
   pass(`wall slot click re-renders bounded (had ${before} appends before click)`);
 } else {
-  pass('wall slots absent (baseline) — skipped');
+  assert.fail('wall-slot controls must be rendered');
 }
 
 // Reachability preview: same checkReachable as the server save path.
@@ -149,5 +149,18 @@ editor.syncNavigationEditor(blocked);
 assert.ok(created < 1000 && appended < 2000, `blocked preview render bounded (created=${created} appended=${appended})`);
 assert.ok(getOrCreate('nav-reach').classList.contains('error'), 'blocked preview marked as error');
 pass('reachability preview shows blocked state without DOM blowup');
+
+// Save preview rejects structural errors as well as blocked routes.
+for (const [name, mutate, message] of [
+ ['overlapping doors', n => { n.exit = {...n.entrance}; }, /다른 위치/],
+ ['duplicate visit order', n => { n.visitOrder[1] = n.visitOrder[0]; }, /한 번씩/],
+]) {
+ await getOrCreate('nav-cancel').onclick();
+ const invalid = structuredClone(data); mutate(invalid.rooms[0].navigation);
+ created = 0; appended = 0; editor.syncNavigationEditor(invalid);
+ assert.ok(getOrCreate('nav-reach').classList.contains('error'));
+ assert.match(getOrCreate('nav-reach').textContent, message);
+ pass(name + ' rejected by save preview');
+}
 
 console.log(`NAVIGATION_EDITOR_DOM_PASS: ${passed} cases | created=${firstCreated} appended=${firstAppended}`);

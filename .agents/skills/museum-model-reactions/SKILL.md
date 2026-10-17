@@ -10,7 +10,7 @@ description: Create, review, and apply model-specific Korean visitor reactions f
 ## 1. 저장소와 실행 범위 확인
 
 - 사용자 지정 저장소 또는 현재 작업폴더에서 `JohnLee305/myMusium`을 확인한다. 로컬 설치 사본에서 실행해도 실제 저장소 루트를 먼저 찾는다. 이 PC의 최근 작업 위치는 `C:\Dev\vr-museum-sync-20261016`이나 존재·origin·HEAD를 실제 확인한다. 클라우드에서 이 경로를 가정하지 않는다.
-- 루트 `AGENTS.md`와 `docs/GIT_MULTI_AGENT_WORKFLOW.md`의 시작 Gate를 수행한다. 최신 `codex/museum-tycoon`·TASKS/PROJECT_STATUS/STATUS/WORKLOG/WORK_HANDOFF와 진행 PR을 확인한다. 기존 개인 자료/미커밋 작업을 보호한다.
+- 루트 `AGENTS.md`와 `docs/GIT_MULTI_AGENT_WORKFLOW.md`의 시작 Gate를 수행한다. 최신 `codex/museum-tycoon`·LIVE_STATUS·TASKS/PROJECT_STATUS/STATUS/WORKLOG/WORK_HANDOFF와 진행 PR을 확인한다. 기존 개인 자료/미커밋 작업을 보호한다.
 - `docs/REACTIONS.md`, `docs/REACTION_CONTENT_SCALE.md` 및 실제 `apps/curator-admin/reactions.mjs`, `reaction-service.mjs`, Unity `ReactionCatalog.cs`의 현재 계약을 읽는다. 스킬에 기록된 한도보다 실제 최신 계약이 우선한다.
 - 요청한 전시품 ID, 목표 개수, 작성만인지 작성·적용인지 기록한다. 사용자 지정 모델만 처리하며, 전체 미완성 모델 처리를 요청하면 manifest에 등록된 항목을 조사해 목록을 만든다. 파일 유무만으로 자동 템플릿을 맞춤 완료로 판단하지 않는다.
 - 실제 Archive는 관리 `/api/health`의 archive와 관람 앱/바탕화면 바로가기 `-museum-archive`를 대조해 결정한다. 소스 작업폴더의 샘플 Archive를 개인 Archive로 오인하지 않는다. 활성 프로세스·포트를 재확인한다.
@@ -27,7 +27,7 @@ description: Create, review, and apply model-specific Korean visitor reactions f
 
 - 기본 목표는 **40개 이상**, 일반·디테일·이야기·수집가별 최소10개다. 추가로 의미 있는 소재가 있으면96개(성향별24개)까지 작성한다. 사용자 지정 개수가 현재 한도를 넘으면 제한과 후속 구현을 설명하고 허위 완료하지 않는다.
 - 일반: 첫인상·전체 윤곽·색 대비. 디테일: 구체적인 부분·표면·구성. 이야기: 설명의 실제 이야기나 관찰에서 떠오르는 열린 질문. 수집가: 전시 관점·비교하고 싶은 특징·컬렉션 관심. 모든 성향을 역사·가격 추측으로 채우지 않는다.
-- 짧은 감탄, 보통 감상, 드문 코멘트를 섞는다. 같은 의미의 조사/어미/동의어 교체를 독립 대사로 세지 않는다. 말투는 자연스러운 관람객의 한국어 생각으로 쓴다.
+- 짧은 감탄, 보통 감상, 드문 코멘트를 섞는다. 같은 의미의 조사/어미/동의어 교체를 독립 대사로 세지 않는다. 말투는 자연스러운 관람객의 한국어 생각으로 쓴다. 기준 v2에 따라 설명 사실·직접 관찰·개인적 감상을 구분하고, 호기심/놀람/따뜻함/차분함/유쾌함/아련함/감탄/공감을 관점·tier와 독립적으로 문구에 배분한다. 감정은 별도 저장 필드가 아니다.
 - 기존 승인·수정·거절 내용을 먼저 읽고 보존한다. 기존 승인문이 충분하면 무조건 재생성하지 않는다. 남은 용량 안에서 보충하거나 변경이 필요한 항목을 명시해 수정한다. 검토하지 않은 기존 초안을 일괄 승인하지 않는다.
 - 현재 v1 한도: 후보96개, 파일64KiB, 문구72 UTF-16 코드 유닛, 근거16개. 문구 ID의 유일성·성향/tier/status·금지 HTML/제어문자와 근거 참조를 실제 validator로 검사한다. persona는 4종 기본값 외 ID 형식의 새 값도 허용되며, 새 성향의 표시는 guest 성향 부여 후속이 필요하다. 원문 인용 evidence는 실제 원문 안에 있어야 한다. 시각 감상을 원문 인용이라고 꾸미지 않는다. 현재 시각 수동문은 `evidencePointIds: []`와 별도 관찰 메모로 기록할 수 있다.
 - 문장별 근거·서로 다른 의미·모델에 맞는 내용인지 검토한다. 의미 중복 제거는 에이전트 검토이며 기계적인 문자열 중복 검사만으로 통과했다고 하지 않는다. 관찰 소재가 부족하면 수량을 부풀리지 말고 부족한 근거와 실제 개수를 기록한다.
