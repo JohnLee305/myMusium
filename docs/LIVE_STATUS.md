@@ -22,7 +22,7 @@
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
 | OPS-008 | Codex | validated | codex/ops-008-integration-review-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/10) |
-| OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | 미게시 |
+| OPS-009 | Codex | validated | codex/ops-009-single-version-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/18) |
 
 ### ADMIN-006
 
@@ -74,7 +74,7 @@ GitHub 작업담당 현황·동시선점 방지·시작Gate 연동
 최신판 기본브랜치·단일 실행경로 통일 및 기준판 은퇴
 
 - 근거: 사용자 단일버전 통일·기준판정리 명시승인; Issue#17 선점·최신원격 owner Gate PASS; GitHub 기본브랜치/원격HEAD를 codex/museum-tycoon으로 변경 API확인; 기준판 Git bundle 검증·브랜치/태그은퇴·양쪽개인Archive 해시불변; PC/Quest Link/관리 세 바로가기 동일최신소스·개인자료 연결 확인 및 기존별칭 백업/제거; 로컬 Node CI15묶음 PASS(logs/ops-009/local-ci.log), 단일통합판보호 정책10사례 PASS; tycoon 필수museum-required/strict/force·delete금지 보호 유지 확인
-- 다음: 전용PR 필수CI→통합→활성 sourceRoot에서 tycoon 체크아웃·보조폴더 데이터보관표시·담당완료/해제·임시브랜치정리
+- 다음: PR#18 최종CI 성공→통합→활성 sourceRoot tycoon 체크아웃. 보조폴더는 detached 기록/개인자료보관표시. 해시확인→담당완료/해제·임시브랜치정리. 이후 새작업은 단일최신판에서 새ID선점.
 - 제한: 개인 Archive와 과거 Git기록/로컬백업은 보존; Quest 실제기기 미검증
 - 원본: [작업 인계](handoffs/OPS-009.json), 시작 82a9f3e / 갱신 2026-10-17
 
