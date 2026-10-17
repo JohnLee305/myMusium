@@ -12,7 +12,8 @@
     "node tools/run-ci.mjs PASS: Node15묶음 + 계약204 + 명령132 + 배치127; logs/decor-04-local-ci.log",
     "schema 및 기존 DTO/참조검사/명령 소스 불변; CI 진입점에 새 배치검사 연결",
     "사용자 DECOR-03/04 커밋·통합 명시 승인; 03 선행통합 후 재검증 예정",
-    "PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결"
+    "PR51 병합5090c0f와 실제 소스FF 확인; 04에03 통합판 병합, 겹친 현황문서 양쪽 기록 보존 및 CI4개 묶음 연결",
+    "03 통합 후 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+배치127; logs/decor-04-combined-ci.log"
   ],
   "nextAction": "합쳐진03/04 전체회귀 후 PR 필수CI 통합. 이후05 시험씬.",
   "pullRequest": null,
