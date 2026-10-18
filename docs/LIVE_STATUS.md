@@ -29,7 +29,7 @@
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
 | DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
 | DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/56) |
-| DECOR-07 | Codex | validated | codex/decor-07-persistence-20261018 | 미게시 |
+| DECOR-07 | Codex | validated | codex/decor-07-persistence-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/60) |
 | DECOR-13 | Codex | validated | codex/decor-13-dual-input-design-20261018 | 미게시 |
 | DECOR-14 | Codex | validated | codex/decor-14-editor-rebuild-20261018 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
@@ -152,10 +152,10 @@ OS잠금·원자적 월드저장·백업·복구
 
 ### DECOR-07
 
-PC 시험판 적용·전체취소·저장·재실행복원 검증 완료, 사용자 통합 승인
+PC시험 저장·적용/전체취소·재실행복원 검증 및 PR60 필수CI 통합 완료
 
-- 근거: 사용자 계속진행 요청;06 PR56 필수CI 전체PASS·통합·활성소스FF 확인; Issue57/전용브랜치/Git Gate PASS; production C#23 및 전체회귀 Node15+계약204+명령132+저장62+충돌127+상호작용31 PASS: logs/decor-07-full-ci.log; 실제Player105 및 별도프로세스 동시열기/재실행 PASS: logs/decor-ui-20261018-141727. 진단장치 해제·버튼상태 보강 후 최종 재검증 진행; 개인55파일 SHA256/수량·기존바로가기2개 불변; 최종 Unity build exit0: logs/decor-07-build-final.log. 최종 Player105 및 동시실행/readOnly·종료후ready·저장전체일치 PASS: logs/decor-ui-20261018-141841; 최종 작은창150%·저장 후 활성화 실패 안내·동시열기 안내·재실행 캡처 직접 확인. 실제관람씬/ProjectSettings 내용 불변; 문서정책10검사·diff --check PASS; 방명록6246039242 게시·재조회 일치; 별도07시험판 Launch. 재개 시 프로세스 재확인; 2026-10-18 사용자 커밋·통합 명시 승인. 검증된07/13/14를 의존순서로 PR 통합
-- 다음: 승인된07 PR 필수CI 확인·통합 후13설계 및14공통구조 순차통합
+- 근거: 사용자 계속진행 요청;06 PR56 필수CI 전체PASS·통합·활성소스FF 확인; Issue57/전용브랜치/Git Gate PASS; production C#23 및 전체회귀 Node15+계약204+명령132+저장62+충돌127+상호작용31 PASS: logs/decor-07-full-ci.log; 실제Player105 및 별도프로세스 동시열기/재실행 PASS: logs/decor-ui-20261018-141727. 진단장치 해제·버튼상태 보강 후 최종 재검증 진행; 개인55파일 SHA256/수량·기존바로가기2개 불변; 최종 Unity build exit0: logs/decor-07-build-final.log. 최종 Player105 및 동시실행/readOnly·종료후ready·저장전체일치 PASS: logs/decor-ui-20261018-141841; 최종 작은창150%·저장 후 활성화 실패 안내·동시열기 안내·재실행 캡처 직접 확인. 실제관람씬/ProjectSettings 내용 불변; 문서정책10검사·diff --check PASS; 방명록6246039242 게시·재조회 일치; 별도07시험판 Launch. 재개 시 프로세스 재확인; 2026-10-18 사용자 커밋·통합 명시 승인. 검증된07/13/14를 의존순서로 PR 통합; 통합직전 전체회귀 Node15+C#6 PASS: logs/decor-07-premerge-ci.log. PR60 담당/정책 및Linux PASS;Windows 진행중; PR60 필수CI4개 PASS·병합 c6c4bdeb9cfb570db3e17ff56901021683b8029b 확인
+- 다음: 13설계·14공통구조 순차통합 후15새PC뷰 진행
 - 제한: 실제 Windows Player에 합성 Input System 장치로 조작. 사람 실제마우스 다섯 장면·사용감 검토는 사용자 확인 대기; 실제 관람씬/NPC/개인자료 이전·Quest·자유yaw·벽/천장 제외. 시험판 제품저장만 사용; Ctrl+S UI포커스 차단은 Unity6에서 obsolete 경고가 있는 PreventDefault API 사용. 현재 설치 버전에서 실제검증; UI Toolkit 업그레이드 때 IgnoreEvent 대체 검토
 - 원본: [작업 인계](handoffs/DECOR-07.json), 시작 5c50201 / 갱신 2026-10-18
 
