@@ -31,7 +31,7 @@
 | DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/56) |
 | DECOR-07 | Codex | validated | codex/decor-07-persistence-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/60) |
 | DECOR-13 | Codex | validated | codex/decor-13-dual-input-design-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/61) |
-| DECOR-14 | Codex | validated | codex/decor-14-editor-rebuild-20261018 | 미게시 |
+| DECOR-14 | Codex | validated | codex/decor-14-editor-rebuild-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/62) |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -173,7 +173,7 @@ PC·VR 공통조작·Meta원칙·재구축계획 검증 및 PR61 통합 완료
 PC·VR 공통 세션·입력중재·월드질의·Presenter 구현,67검사·전체CI 통과,통합승인
 
 - 근거: Issue59 담당선점 및 clean Git preflight PASS; 새 production C# 공통입력67검사 PASS: logs/decor-14-input-final.log; 07 저장 코어·meta·23검사·실행스크립트4파일 SHA256 일치; 기존 Domain/UI/Editor/Scene/ProjectSettings 차이 없음. 기존시험판 비교용 보존; 전체 CI: Node15묶음 + 계약204/명령132/저장62/충돌127/상호작용31/저장조정23/공통입력67 PASS: logs/decor-14-full-ci.log; 방명록6247937147 게시 및 재조회 확인; 13설계에새PC/VR뷰재구축결정반영,문서링크184개오류0.14 handoff생성/diff --check PASS; 2026-10-18 사용자07/13/14커밋·통합 명시승인.선행통합후동일저장코어재대조예정; 07저장·13설계 브랜치병합 후 전체회귀 Node15+C#7 PASS: logs/decor-14-premerge-ci.log.저장코어 중복파일 충돌없음
-- 다음: 07/13통합 후14병합·전체CI·PR통합.다음15새최소PC뷰/16공통세션VR패널
+- 다음: PR62 필수CI통과·통합·활성소스FF·Unity시험빌드검증후15새최소PC뷰연결
 - 제한: 사용자시작승인으로07/13통합전선행개발.통합은07→13→14순서; 새PC/VR뷰·Physics어댑터·UnityPlayer·Quest착용검증은후속15~17이며이번공통코어검사로대체하지않음
 - 원본: [작업 인계](handoffs/DECOR-14.json), 시작 5c50201 / 갱신 2026-10-18
 
