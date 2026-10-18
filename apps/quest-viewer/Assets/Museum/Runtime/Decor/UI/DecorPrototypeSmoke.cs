@@ -103,6 +103,7 @@ namespace FamilyMuseum.Decor
             yield return Click(panel.Root.Q<Button>("inventory-tab"));
             Check(panel.Root.Query<Button>(className: "card").ToList().Count == 1 && panel.Root.Query<Label>(className: "card-subtitle").First().text.Contains("소품 포함"), "inventory displays actual stored assembly count");
             yield return Click(panel.Root.Q<Button>("catalog-tab"));
+            panel.Editor.Cancel();
             var target = FindObjectsByType<DecorSelectable>(FindObjectsSortMode.None).First(o => o.InstanceId == "plinth.001");
             var worldPoint = panel.cameraRig.View.WorldToScreenPoint(target.GetComponentInChildren<Renderer>().bounds.center);
             Check(!panel.IsOverUI(worldPoint), "world pointer is not intercepted by transparent UI root");
@@ -125,11 +126,108 @@ namespace FamilyMuseum.Decor
             yield return Click(panel.Root.Q<Button>("parent")); Check(panel.SelectedInstanceId == "plinth.001", "parent button selects support instead of child");
             panel.FrameRoom(); panel.CycleWalls(); panel.CycleWalls(); panel.ToggleGrid(); panel.ToggleGrid();
             Check(DecorJson.Write(panel.Document) == documentBefore, "viewing selections/filter/walls/grid/camera never mutate fixture world");
+            yield return InteractionChecks();
             panel.SelectInstance("plinth.001"); panel.FrameSelection(); yield return Pause();
             yield return Capture("selected-item");
             File.WriteAllLines(Path.Combine(output, "results.txt"), results.Concat(new[] { (failed ? "DECOR_UI_FAIL" : "DECOR_UI_PASS") + " checks=" + checks }));
             Debug.Log((failed ? "DECOR_UI_FAIL" : "DECOR_UI_PASS") + " checks=" + checks);
             InputSystem.RemoveDevice(keyboard); InputSystem.RemoveDevice(mouse); yield return new WaitForSecondsRealtime(.3f); Application.Quit(failed ? 1 : 0);
+        }
+        IEnumerator WorldClick(Vector3 position, bool shift = false, bool alt = false)
+        {
+            if (shift) yield return KeyState(Key.LeftShift);
+            if (alt) yield return KeyState(Key.LeftAlt);
+            var point = (Vector2)panel.cameraRig.View.WorldToScreenPoint(position);
+            MouseState(point); yield return Pause(); MouseState(point, true); yield return Pause(); MouseState(point); yield return Pause(); yield return KeyState();
+        }
+        IEnumerator InteractionChecks()
+        {
+            var edit = panel.Editor.Interaction;
+            panel.ClearSelection(); panel.Editor.Cancel(); panel.cameraRig.Frame(new Bounds(new Vector3(0, .5f, 0), new Vector3(10, 2, 8)));
+            // Cutaway must not put a wall between camera and the chosen placement surface.
+            panel.CycleWalls(); panel.CycleWalls(); // previous test left all walls; now hidden
+            yield return Pause();
+            var card = panel.Root.Query<Button>(className: "card").First(); yield return Click(card);
+            Check(edit.HasPreview && edit.UndoCount == 0, "catalog click starts preview without command");
+            int count = edit.Inventory().ownedCount;
+            yield return WorldClick(new Vector3(-1.4f, 0, 0));
+            Check(edit.HasPreview && !edit.PreviewValid && edit.UndoCount == 0 && edit.Inventory().ownedCount == count, "invalid overlapping click preserves ownership and Undo");
+            yield return Capture("rejected-placement");
+            yield return WorldClick(new Vector3(-3, 0, -2));
+            string newId = panel.SelectedInstanceId;
+            Check(!edit.HasPreview && edit.UndoCount == 1 && edit.Inventory().ownedCount == count + 1 && newId != null, "real mouse places exactly one new plinth");
+            yield return Click(panel.Root.Q("swatches").Children().OfType<Button>().Last());
+            Check(panel.Document.world.instances.First(i => i.id == newId).variantId == "charcoal", "actual color chip submits selected variant");
+            yield return KeyState(Key.E); yield return KeyState();
+            Check(panel.Document.world.instances.First(i => i.id == newId).location.yawDeg == 90, "E rotates selected furniture by quarter turn");
+            panel.Editor.Cancel(); // clear selection so the next catalog click has no side effects
+            yield return Click(panel.Root.Query<Button>(className: "card").ToList()[1]);
+            var plinth = panel.ObjectFor(newId); var top = plinth.transform.TransformPoint(new Vector3(0, 1, 0));
+            panel.cameraRig.Frame(new Bounds(top, new Vector3(2, 2, 2))); yield return Pause();
+            yield return WorldClick(top + new Vector3(.1f, 0, .1f));
+            string vaseId = panel.SelectedInstanceId;
+            Check(vaseId != null && panel.Document.world.instances.First(i => i.id == vaseId).location.parentId == newId, "real mouse attaches new vase to visible top surface");
+            var vaseBefore = panel.Document.world.instances.First(i => i.id == vaseId).location.localPositionM.ToArray();
+            var vaseClick = panel.ObjectFor(vaseId).GetComponentInChildren<Renderer>().bounds.center;
+            yield return WorldClick(vaseClick);
+            Check(panel.SelectedInstanceId == vaseId, "real ray selects vase separately from supporting furniture");
+            yield return KeyState(Key.M); yield return KeyState();
+            yield return WorldClick(top + new Vector3(.15f, 0, .1f));
+            Check(panel.SelectedInstanceId == vaseId && !edit.HasPreview, "individual vase moves without selecting parent");
+            var vaseAfter = panel.Document.world.instances.First(i => i.id == vaseId).location.localPositionM;
+            Check(Math.Abs(Math.Abs(vaseAfter[2] - vaseBefore[2]) - .05) < .001 && Math.Abs(vaseAfter[0] - vaseBefore[0]) < .001, "actual vase move snaps exactly five centimetres in parent space");
+            yield return KeyState(Key.LeftCtrl, Key.Z); yield return KeyState();
+            Check(edit.RedoCount == 1 && panel.Document.world.instances.Any(i => i.id == vaseId), "Ctrl Z undoes vase move and preserves vase ID");
+            Check(panel.Document.world.instances.First(i => i.id == vaseId).location.localPositionM.SequenceEqual(vaseBefore), "Undo restores exact child local offset");
+            yield return Click(panel.Root.Q<Button>("parent")); Check(panel.SelectedInstanceId == newId, "real parent button selects plinth with attached vase");
+            panel.cameraRig.Frame(new Bounds(new Vector3(0, .5f, 0), new Vector3(10, 2, 8))); yield return Pause();
+            yield return KeyState(Key.M); yield return KeyState();
+            var movePoint = panel.cameraRig.View.WorldToScreenPoint(new Vector3(-3, 0, 2)); MouseState(movePoint); yield return Pause();
+            Check(panel.Editor.Preview.ObjectCount == 2 && edit.PreviewValid, "moving parent previews its child assembly");
+            yield return Capture("assembly-preview");
+            yield return WorldClick(new Vector3(-3, 0, 2));
+            Check(panel.Document.world.instances.First(i => i.id == vaseId).location.parentId == newId, "committed parent move keeps child attachment");
+            var oldVasePosition = panel.ObjectFor(vaseId).transform.position;
+            yield return KeyState(Key.E); yield return KeyState();
+            Check(Vector3.Distance(oldVasePosition, panel.ObjectFor(vaseId).transform.position) > .1f && panel.Document.world.instances.First(i => i.id == vaseId).location.localPositionM.SequenceEqual(vaseBefore), "rotating placed parent moves child in world while preserving attachment offset");
+            yield return KeyState(Key.Delete); yield return KeyState();
+            Check(panel.Document.world.instances.First(i => i.id == newId).location.kind == "storage" && edit.Inventory().storedCount >= 4, "Delete stores assembly with child");
+            yield return Click(panel.Root.Q<Button>("inventory-tab"));
+            var storedCard = panel.Root.Query<Button>(className: "card").ToList().First(c => c.tooltip.Contains("작은 소품"));
+            yield return Click(storedCard); Check(edit.HasPreview && edit.PreviewItem.id == newId, "inventory restores most recently stored same instance");
+            int owned = edit.Inventory().ownedCount;
+            yield return WorldClick(new Vector3(0, 0, -2));
+            Check(!edit.HasPreview && edit.Inventory().ownedCount == owned && panel.Document.world.instances.First(i => i.id == newId).variantId == "charcoal", "stored item reinstallation keeps count and color");
+            Check(panel.Document.world.instances.First(i => i.id == vaseId).location.parentId == newId, "reinstallation preserves exact attached vase");
+            yield return Click(panel.Root.Q<Button>("catalog-tab"));
+            yield return Click(panel.Root.Query<Button>(className: "card").First());
+            yield return WorldClick(new Vector3(3, 0, -2), true);
+            string firstRepeat = edit.Snapshot().instances.Last().id;
+            Check(edit.HasPreview, "Shift placement continues new preview");
+            yield return WorldClick(new Vector3(4.5f, 0, -2));
+            Check(!edit.HasPreview && edit.Snapshot().instances.Last().id != firstRepeat, "continuous placement issues distinct second ID");
+            yield return Click(panel.Root.Query<Button>(className: "card").First());
+            yield return WorldClick(new Vector3(.137f, 0, -3.137f), false, true);
+            var freeItem = panel.Document.world.instances.First(i => i.id == panel.SelectedInstanceId);
+            Check(Math.Abs(freeItem.location.positionM[0] - .137) < .003 && Math.Abs(freeItem.location.positionM[2] + 3.137) < .003, "Alt placement disables grid while keeping millimetre precision");
+            var snapshot = DecorJson.WriteWorld(edit.Snapshot()); int history = edit.UndoCount;
+            yield return Click(panel.Root.Query<Button>(className: "card").First()); yield return KeyState(Key.Escape); yield return KeyState();
+            Check(!edit.HasPreview && history == edit.UndoCount && snapshot == DecorJson.WriteWorld(edit.Snapshot()), "Escape preview cancel leaves draft and history untouched");
+            panel.cameraRig.Frame(new Bounds(panel.ObjectFor(newId).transform.position + Vector3.up, new Vector3(3, 3, 3))); yield return Pause();
+            var sampledCount = edit.Inventory().ownedCount; yield return KeyState(Key.I); yield return KeyState();
+            yield return WorldClick(panel.ObjectFor(newId).transform.position + new Vector3(.3f, .5f, 0));
+            Check(edit.HasPreview && edit.PreviewItem.variantId == "charcoal" && edit.PreviewWorld().instances.Count(i => i.location.kind == "parent") == panel.Document.world.instances.Count(i => i.location.kind == "parent") && edit.Inventory().ownedCount == sampledCount, "eyedropper chooses definition and color without cloning children or ownership");
+            panel.Editor.Cancel();
+            int materialBaseline = Resources.FindObjectsOfTypeAll<Material>().Length;
+            int objectsBaseline = FindObjectsByType<Renderer>(FindObjectsSortMode.None).Length;
+            for (int i = 0; i < 50; i++)
+            {
+                edit.BeginNew(panel.Document.catalog.items[0]); edit.SetTarget(new ItemLocation { kind = "room", roomId = "room.a", positionM = new double[] { 6, 0, 3 }, yawDeg = 0 });
+                panel.Editor.Preview.Show(edit); panel.Editor.Cancel(); yield return Pause();
+            }
+            Check(panel.Editor.Preview.ObjectCount == 0 && Resources.FindObjectsOfTypeAll<Material>().Length == materialBaseline && FindObjectsByType<Renderer>(FindObjectsSortMode.None).Length == objectsBaseline, "50 real preview create/cancel cycles release objects without material growth");
+            Check(DecorPlacementValidator.Validate(panel.Document.catalog, edit.Snapshot()).ok, "all actual UI edits leave valid geometry");
+            panel.SelectInstance(newId); panel.FrameSelection(); yield return Pause(); yield return Capture("decor-06-result");
         }
     }
 }

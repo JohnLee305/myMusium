@@ -28,6 +28,7 @@
 | DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/51) |
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
 | DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
+| DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -130,12 +131,21 @@ OS잠금·원자적 월드저장·백업·복구
 
 ### DECOR-05
 
-분리된 꾸미기 시험씬·카메라·UI Toolkit 화면 구현, PC Player63검사 완료·사용자 통합 승인
+꾸미기 시험씬·편집카메라·UI Toolkit 골격 PR54 통합 완료
 
-- 근거: 사용자03/04 통합 후05 진행 승인; PR51/52 필수CI 전체PASS·병합 및 활성소스FF 확인; 개인자료55파일 SHA256 불변; Issue53 선점 및 최신원격 Git Gate PASS; Unity 6000.3.23f1 Windows Development Player build exit0: logs/decor-05-build-reviewed.log; 기존 관람씬·EditorBuildSettings 불변 및 관람씬 편집입력 컴포넌트 없음 확인; 실제 표시 창의 PC Player63검사 PASS: logs/decor-ui-20261017-233303/results.txt 및 player.log; 1280x800/1920x1080/1024x720, UI배율125/150% 포함6조합; 주요영역/버튼/한국어2줄/카드설명 스크롤바 경계/실제GPU 비어있지 않은 캡처 확인; Input System 가상 키보드·마우스 이벤트로 검색포커스·UI클릭/휠차단·목록스크롤·보관함수량·방선택·중/우드래그·WASD·휠·F·받침대선택 및 모델불변 확인; 최종1280선택물/1024x720 150%/초기화면 캡처 직접 검토. 초기 형식이름충돌·설정참조·작은창/카드설명가림·숨김첫렌더·시험입력장치경합 조건을 로그와 함께 수정/분리; CI 정책10검사·diff --check PASS; 개인55파일 SHA256/파일수 및 바탕화면 박물관바로가기2개 불변. 방명록6235150326 게시/재조회 일치.; 사용자가 화면 확인 후 DECOR-05 커밋·통합을 명시 승인. 최신 원격과 HEAD 일치, 기존 검증 이후 기능소스 변경 없음.
-- 다음: 승인에 따라 커밋·PR 필수CI·통합 후 활성소스FF 및 통합판 시험씬 빌드/검사. 다음 구현은 DECOR-06(별도 요청 시).
-- 제한: 사용자 통합 승인 후 PR 필수CI 진행. 기존 관람 실행파일과 개인Archive 변경 없음.; 배치/저장/실제소장품/경제/Quest 연결 제외; 사람의 사용성 검토와 Windows OS배율·모니터 간 이동 미검증; 125/150%는 실제Player의 UI Toolkit 논리배율 검사이며 Windows 자체 배율 변경 시험은 아님; OpenXR 패키지의 기기미연결 네이티브 진단이 있을 수 있음. Quest 착용/연결 또는 VR 렌더 검증으로 주장하지 않음
+- 근거: 사용자03/04 통합 후05 진행 승인; PR51/52 필수CI 전체PASS·병합 및 활성소스FF 확인; 개인자료55파일 SHA256 불변; Issue53 선점 및 최신원격 Git Gate PASS; Unity 6000.3.23f1 Windows Development Player build exit0: logs/decor-05-build-reviewed.log; 기존 관람씬·EditorBuildSettings 불변 및 관람씬 편집입력 컴포넌트 없음 확인; 실제 표시 창의 PC Player63검사 PASS: logs/decor-ui-20261017-233303/results.txt 및 player.log; 1280x800/1920x1080/1024x720, UI배율125/150% 포함6조합; 주요영역/버튼/한국어2줄/카드설명 스크롤바 경계/실제GPU 비어있지 않은 캡처 확인; Input System 가상 키보드·마우스 이벤트로 검색포커스·UI클릭/휠차단·목록스크롤·보관함수량·방선택·중/우드래그·WASD·휠·F·받침대선택 및 모델불변 확인; 최종1280선택물/1024x720 150%/초기화면 캡처 직접 검토. 초기 형식이름충돌·설정참조·작은창/카드설명가림·숨김첫렌더·시험입력장치경합 조건을 로그와 함께 수정/분리; CI 정책10검사·diff --check PASS; 개인55파일 SHA256/파일수 및 바탕화면 박물관바로가기2개 불변. 방명록6235150326 게시/재조회 일치.; 사용자가 화면 확인 후 DECOR-05 커밋·통합을 명시 승인. 최신 원격과 HEAD 일치, 기존 검증 이후 기능소스 변경 없음.; PR54 필수CI 전체PASS·병합0b8ca43·활성소스FF 및 통합판PC빌드/Player63검사 PASS. 개인55파일·바로가기 보존, 방명록6245289653 확인·담당해제 완료.
+- 다음: 통합 완료. DECOR-06 배치 조작 연결 진행.
+- 제한: 가상 시험판만 연결; 기존 관람 실행파일과 개인Archive 불변.; 배치/저장/실제소장품/경제/Quest 연결 제외; 사람의 사용성 검토와 Windows OS배율·모니터 간 이동 미검증; 125/150%는 실제Player의 UI Toolkit 논리배율 검사이며 Windows 자체 배율 변경 시험은 아님; OpenXR 패키지의 기기미연결 네이티브 진단이 있을 수 있음. Quest 착용/연결 또는 VR 렌더 검증으로 주장하지 않음
 - 원본: [작업 인계](handoffs/DECOR-05.json), 시작 668fe67 / 갱신 2026-10-17
+
+### DECOR-06
+
+놓기·상판소품·회수·색상·Undo UI 로컬 구현, 순수31/실제Player92 및 전체회귀 PASS·미커밋 검토 대기
+
+- 근거: 사용자 계속진행 요청; 선행02/04/05 통합 확인; Issue55 담당선점 및 최신원격 Git Gate PASS; production C# 입력독립 프리뷰 조정기31검사 PASS: logs/decor-06-full-ci.log; 프리뷰취소/오류 시 Undo/Redo·수량 보존, 연속새ID, 부모자손·색상 및 저장묶음 복원 검증; Unity PC build exit0: logs/decor-06-build-final.log; 기존관람씬·빌드목록 보존; 실제 표시된 Windows Player92검사 PASS: logs/decor-ui-20261018-125122/results.txt; 6해상도/UI배율조합·UI포커스·카메라 회귀 + 새배치/색상/꽃병개별레이선택/정확5cm이동/Undo/부모이동회전/회수동일ID복원/Shift/Alt/Esc/스포이트/50회프리뷰객체재질유지 검증; 최종 작은창150%·배치결과 및 충돌/조립체프리뷰 캡처 직접 확인; 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+충돌127+상호작용31; logs/decor-06-full-ci.log; 개인55파일 SHA256/수량 불변, 활성통합소스0b8ca43 clean. 기존씬/설정/실행판/개인자료 수정 없음; 방명록6245377437 게시 및 재조회 일치; 사용자가06 결과 제시 후 계속진행 요청. 후속07을 위한06 커밋·PR·통합 진행. 기능코드 변경없이 최신원격일치 확인.
+- 다음: 06 커밋/PR필수CI/통합 후07 저장·적용취소 연결.
+- 제한: 06 미커밋·미통합, 원격CI는 아직 실행 전.01~05만 통합 완료; 실제Windows Player에 가상Input System장치 이벤트를 넣어 검사; 사람이 실제마우스로 수행한 체감검토는 사용자 확인 대기; 영구저장·전체변경폐기·관람복귀·관람객동선·Quest·자유yaw·벽/천장 제외. 창종료 시 초기fixture로 복귀; 첫 시험판은 첫 상판 하나만 사용; 기존물건 이동/재설치 프리뷰의 색변경은 확정/취소 후 안내; Windows OS배율/모니터 이동 미검증; 125/150%는 UI Toolkit 논리배율 검사
+- 원본: [작업 인계](handoffs/DECOR-06.json), 시작 0b8ca43 / 갱신 2026-10-18
 
 ### OPS-002
 

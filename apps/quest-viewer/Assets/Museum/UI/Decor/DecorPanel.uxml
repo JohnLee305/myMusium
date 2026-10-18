@@ -16,9 +16,15 @@
         <ui:Label text="방 안의 물건을 클릭하거나 아래 목록을 선택하세요." name="selection-body" class="paragraph" />
         <ui:VisualElement name="swatches" class="row" />
         <ui:Button name="parent" text="받침대 선택" />
-        <ui:Label text="놓기·이동·회전은 다음 단계에서 연결됩니다." class="caption paragraph" />
+        <ui:VisualElement class="row">
+          <ui:Button name="move-item" text="이동 · M" />
+          <ui:Button name="rotate-left" text="↶ Q" />
+          <ui:Button name="rotate-right" text="↷ E" />
+          <ui:Button name="store-item" text="보관 · Del" />
+        </ui:VisualElement>
+        <ui:Label text="색상을 눌러 바꾸세요. 변경은 이번 실행에서만 유지됩니다." class="caption paragraph" />
       </ui:ScrollView>
-      <ui:Label name="help-text" text="WASD·방향키 이동  /  가운데 드래그 이동&#10;오른쪽 드래그 회전  /  휠 확대·축소&#10;F 선택·방 맞춤  /  G 눈금 전환&#10;검색 중에는 카메라 단축키가 멈춥니다." class="surface paragraph" />
+      <ui:Label name="help-text" text="카드 선택 → 방 클릭 / 꽃병은 보이는 상판 클릭&#10;M 이동 · Q/E 90도 회전 · Del 보관 · I 스포이트&#10;Alt 자유 위치 · Shift 연속 배치 · Esc 프리뷰 취소&#10;Ctrl+Z/Y 되돌리기/다시 실행 · 이번 실행만 유지&#10;WASD 이동 · 가운데 드래그 이동 · 오른쪽 회전&#10;휠 확대 · F 맞춤 · G 눈금 / 검색 중 단축키 중지" class="surface paragraph" />
     </ui:VisualElement>
     <ui:VisualElement name="catalog" class="surface">
       <ui:VisualElement name="tabs" class="row">
@@ -32,6 +38,9 @@
         <ui:Button name="all-filter" text="전체" />
         <ui:Button name="furniture-filter" text="가구" />
         <ui:Button name="decor-filter" text="소품" />
+        <ui:Button name="undo" text="Undo" tooltip="되돌리기 · Ctrl+Z" />
+        <ui:Button name="redo" text="Redo" tooltip="다시 실행 · Ctrl+Y" />
+        <ui:Button name="cancel-preview" text="Esc" tooltip="미리보기 취소" />
         <ui:Label name="list-hint" text="목록 선택은 정보 보기입니다." class="caption" />
       </ui:VisualElement>
       <ui:ScrollView name="cards" mode="Horizontal" horizontal-scroller-visibility="Auto" vertical-scroller-visibility="Hidden" />
