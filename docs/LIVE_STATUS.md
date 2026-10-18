@@ -29,6 +29,7 @@
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
 | DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
 | DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | 미게시 |
+| DECOR-14 | Codex | validated | codex/decor-14-editor-rebuild-20261018 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -146,6 +147,15 @@ OS잠금·원자적 월드저장·백업·복구
 - 다음: 06 커밋/PR필수CI/통합 후07 저장·적용취소 연결.
 - 제한: 06 미커밋·미통합, 원격CI는 아직 실행 전.01~05만 통합 완료; 실제Windows Player에 가상Input System장치 이벤트를 넣어 검사; 사람이 실제마우스로 수행한 체감검토는 사용자 확인 대기; 영구저장·전체변경폐기·관람복귀·관람객동선·Quest·자유yaw·벽/천장 제외. 창종료 시 초기fixture로 복귀; 첫 시험판은 첫 상판 하나만 사용; 기존물건 이동/재설치 프리뷰의 색변경은 확정/취소 후 안내; Windows OS배율/모니터 이동 미검증; 125/150%는 UI Toolkit 논리배율 검사
 - 원본: [작업 인계](handoffs/DECOR-06.json), 시작 0b8ca43 / 갱신 2026-10-18
+
+### DECOR-14
+
+PC·VR 공통 세션·입력중재·월드질의·Presenter 구현,67검사·전체CI 통과,통합승인
+
+- 근거: Issue59 담당선점 및 clean Git preflight PASS; 새 production C# 공통입력67검사 PASS: logs/decor-14-input-final.log; 07 저장 코어·meta·23검사·실행스크립트4파일 SHA256 일치; 기존 Domain/UI/Editor/Scene/ProjectSettings 차이 없음. 기존시험판 비교용 보존; 전체 CI: Node15묶음 + 계약204/명령132/저장62/충돌127/상호작용31/저장조정23/공통입력67 PASS: logs/decor-14-full-ci.log; 방명록6247937147 게시 및 재조회 확인; 13설계에새PC/VR뷰재구축결정반영,문서링크184개오류0.14 handoff생성/diff --check PASS; 2026-10-18 사용자07/13/14커밋·통합 명시승인.선행통합후동일저장코어재대조예정
+- 다음: 07/13통합 후14병합·전체CI·PR통합.다음15새최소PC뷰/16공통세션VR패널
+- 제한: 07/13 미커밋 작업은 원본 폴더 보존. 사용자 새 구조 시작 지시로 별도14 선행 개발; 통합은07/13 이후; 07의 Unity독립 저장 조정기 두 파일을 동일 바이트로 의존성 반입;07 통합 시 동일성 확인; 새 PC/VR 화면 및 Quest 실기기 미검증
+- 원본: [작업 인계](handoffs/DECOR-14.json), 시작 5c50201 / 갱신 2026-10-18
 
 ### OPS-002
 
