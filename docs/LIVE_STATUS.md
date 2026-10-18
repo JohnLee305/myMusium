@@ -29,6 +29,7 @@
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
 | DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
 | DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | 미게시 |
+| DECOR-13 | Codex | validated | codex/decor-13-dual-input-design-20261018 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
 | OPS-004 | Codex | validated | codex/ops-004-task-coordination-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/14) |
@@ -146,6 +147,15 @@ OS잠금·원자적 월드저장·백업·복구
 - 다음: 06 커밋/PR필수CI/통합 후07 저장·적용취소 연결.
 - 제한: 06 미커밋·미통합, 원격CI는 아직 실행 전.01~05만 통합 완료; 실제Windows Player에 가상Input System장치 이벤트를 넣어 검사; 사람이 실제마우스로 수행한 체감검토는 사용자 확인 대기; 영구저장·전체변경폐기·관람복귀·관람객동선·Quest·자유yaw·벽/천장 제외. 창종료 시 초기fixture로 복귀; 첫 시험판은 첫 상판 하나만 사용; 기존물건 이동/재설치 프리뷰의 색변경은 확정/취소 후 안내; Windows OS배율/모니터 이동 미검증; 125/150%는 UI Toolkit 논리배율 검사
 - 원본: [작업 인계](handoffs/DECOR-06.json), 시작 0b8ca43 / 갱신 2026-10-18
+
+### DECOR-13
+
+PC·VR 공통조작·Meta원칙·VR적합성검토 및 새뷰 재구축 계획 검증, 통합 승인
+
+- 근거: Issue58 담당선점 및 Git Gate PASS; 설치 manifest의 OpenXR1.18/XRI3.6/InputSystem1.20 및 기존 VRExhibitInteraction 입력을 읽어 경계 확인. 새 API실행/바인딩 검증은16 예정; 기존 P01 PC우선·작업지도 VR제외 조항 수정,08~12 양쪽지원 Gate 반영. 런타임/DTO/개인자료 변경 없음; 07 PC사용자확인은 기록하되07미커밋 구현과 인계파일 수정 없이 보존; 변경29파일의 로컬 Markdown링크167개 확인, 누락/일본어혼입0: logs/decor-13-doc-review.json; handoff생성·CI정책 PASS 및 정책10검사 PASS. git diff --check PASS; Issue35 방명록6246117069 게시·재조회 일치; Meta공식 Key considerations/Hands UI best practices/Panels 재조회. 손추적/MR 적용범위 구분. M01~M08을우리적용/인수/담당과연결; 기존25mm단독기준을거리/시야각기준으로수정.16최소패널실기기Gate→메뉴확장·17P0검증을명시. VR/SDK구현 없음; 보강후변경30파일 로컬링크179개 오류0: logs/decor-13-doc-review.json; 방명록6246117069에Meta원칙검토회고추가·재조회일치; 07 현재 구현 정적 검토 R1~R7 기록: PC카메라/입력, 바닥 가림, UI·세션 수명, 오류복구UI, 키보드 전용기능, 성능 실측 경계. 14~17 카드에 연결. 런타임/실기기검사 없음; 사용자 재구축 시작 승인: 기존PC패널 보강에서 새PC/VR뷰 작성으로06/14~16계획 보강.14별도폴더 첫공통구조67검사·전체CI 결과는14인계가정본이며실기기미검증; 2026-10-18 사용자 커밋·통합 명시 승인.07통합 후13설계/14구조 순차통합
+- 다음: 07통합판 공유문서 병합·현황재생성 후13 PR 필수CI·통합,이후14통합
+- 제한: 문서 개정만 완료. VR입력/공간UI/모드전환 구현 및Quest실기기검증 미착수; 07미커밋 구현을 별도 작업폴더에 보존.13 역시 미커밋·미통합; 07통합 후13통합 시 README/PROJECT_STATUS/TASKS/LIVE_STATUS 등 공유문서를 최신07인계와 병합·재생성해야 함; UI 기술/XR 바인딩/선택보조 수치는 설계 기본안.16기술검사와17실기기측정으로 확인
+- 원본: [작업 인계](handoffs/DECOR-13.json), 시작 5c50201 / 갱신 2026-10-18
 
 ### OPS-002
 
