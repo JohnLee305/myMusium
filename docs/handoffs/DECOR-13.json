@@ -5,7 +5,7 @@
   "baseSha": "5c502015cc9a9bd6deecbe2fab56cb6af99d1a3c",
   "status": "validated",
   "updatedDateKst": "2026-10-18",
-  "summary": "PC·VR 공통조작·Meta원칙·VR적합성검토 및 새뷰 재구축 계획 검증, 통합 승인",
+  "summary": "PC·VR 공통조작·Meta원칙·재구축계획 검증 및 PR61 통합 완료",
   "validation": [
     "Issue58 담당선점 및 Git Gate PASS",
     "설치 manifest의 OpenXR1.18/XRI3.6/InputSystem1.20 및 기존 VRExhibitInteraction 입력을 읽어 경계 확인. 새 API실행/바인딩 검증은16 예정",
@@ -20,9 +20,10 @@
     "방명록6246117069에Meta원칙검토회고추가·재조회일치",
     "07 현재 구현 정적 검토 R1~R7 기록: PC카메라/입력, 바닥 가림, UI·세션 수명, 오류복구UI, 키보드 전용기능, 성능 실측 경계. 14~17 카드에 연결. 런타임/실기기검사 없음",
     "사용자 재구축 시작 승인: 기존PC패널 보강에서 새PC/VR뷰 작성으로06/14~16계획 보강.14별도폴더 첫공통구조67검사·전체CI 결과는14인계가정본이며실기기미검증",
-    "2026-10-18 사용자 커밋·통합 명시 승인.07통합 후13설계/14구조 순차통합"
+    "2026-10-18 사용자 커밋·통합 명시 승인.07통합 후13설계/14구조 순차통합",
+    "PR61 필수CI4개 PASS·병합3e769f577dbfd45a6707d8bb89db1f36780eb3dd확인"
   ],
-  "nextAction": "PR61 필수CI완료 후통합;후속14공통구조 검증·통합",
+  "nextAction": "14공통구조 통합 후15새PC뷰·16같은세션VR패널 연결",
   "pullRequest": "https://github.com/JohnLee305/myMusium/pull/61",
   "limitations": [
     "문서 개정만 완료. VR입력/공간UI/모드전환 구현 및Quest실기기검증 미착수",

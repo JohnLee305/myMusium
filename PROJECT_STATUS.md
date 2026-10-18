@@ -1,6 +1,6 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
-**현재 작업: PC·VR 꾸미기 편집기 재구축.** DECOR-01~06 통합 완료. [DECOR-07 저장 시험판](docs/decor-design/DECOR-07-IMPLEMENTATION.md)은 Player105·저장조정23검증 및 사용자 통합 승인을 받았습니다. [공통조작 설계](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)에 따라 공통 세션 위에 새 PC/VR 뷰를 작성합니다.07→13→14 순차통합 중이며 실제 Quest 검증은 후속입니다.
+**현재 작업: PC·VR 꾸미기 편집기 재구축.** DECOR-01~06 통합 완료. [DECOR-07 저장 시험판](docs/decor-design/DECOR-07-IMPLEMENTATION.md)은 Player105·저장조정23검증 및 사용자 통합 승인을 받았습니다. [공통조작 설계](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)에 따라 공통 세션 위에 새 PC/VR 뷰를 작성합니다.07 저장은 PR60,13 설계는 PR61로 통합했습니다.14 공통 구조는67검사·전체회귀를 통과했으며 각 PR의 실제 상태를 기준으로 확인합니다. 다음은15 새PC뷰·16 VR뷰이며 실제 Quest 검증은 후속입니다.
 
 OPS-009: 기본브랜치와 최신판을 codex/museum-tycoon으로 통일. 개발/빌드/실행 sourceRoot는 PROJECT_STATE.json 하나가 기준이다. 예전 폴더/기준판은 은퇴·자료보관용이며 과거 본문보다 [단일 버전 운영](docs/VERSIONING.md)이 우선한다. 검증/통합은 [OPS-009 인계](docs/handoffs/OPS-009.json) 참조.
 

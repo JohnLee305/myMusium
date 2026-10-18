@@ -1,6 +1,6 @@
 # 가족 VR 박물관
 
-**현재 작업: PC·VR 꾸미기 편집기 재구축.** DECOR-01~06 통합 완료. [DECOR-07 저장 시험판](docs/decor-design/DECOR-07-IMPLEMENTATION.md)은 Player105·저장조정23검증 및 사용자 통합 승인을 받았습니다. [공통조작 설계](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)에 따라 공통 세션 위에 새 PC/VR 뷰를 작성합니다.07→13→14 순차통합 중이며 실제 Quest 검증은 후속입니다.
+**현재 작업: PC·VR 꾸미기 편집기 재구축.** DECOR-01~06 통합 완료. [DECOR-07 저장 시험판](docs/decor-design/DECOR-07-IMPLEMENTATION.md)은 Player105·저장조정23검증 및 사용자 통합 승인을 받았습니다. [공통조작 설계](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)에 따라 공통 세션 위에 새 PC/VR 뷰를 작성합니다.07 저장은 PR60,13 설계는 PR61로 통합했습니다.14 공통 구조는67검사·전체회귀를 통과했으며 각 PR의 실제 상태를 기준으로 확인합니다. 다음은15 새PC뷰·16 VR뷰이며 실제 Quest 검증은 후속입니다.
 
 **누가 작업 중인가:** [공유 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) · [담당 선점·중복 방지](docs/TASK_COORDINATION.md).
 
