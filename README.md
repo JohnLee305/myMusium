@@ -1,6 +1,6 @@
 # 가족 VR 박물관
 
-**현재 개발: DECOR-07 시험 배치 저장.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-07-IMPLEMENTATION.md). DECOR-01~06은 PR46/48/51/52/54/56으로 통합 완료했습니다. DECOR-07 적용·전체 취소·재실행 복원은 로컬 구현·Player105/순수23 및 전체회귀 PASS, 사용자 검토 대기입니다. 실제 박물관과 개인 자료 연결은 후속 단계입니다.
+**현재 작업: PC·VR 꾸미기 편집기 재구축.** DECOR-01~06 통합 완료. [DECOR-07 저장 시험판](docs/decor-design/DECOR-07-IMPLEMENTATION.md)은 Player105·저장조정23검증 및 사용자 통합 승인을 받았습니다. [공통조작 설계](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)에 따라 공통 세션 위에 새 PC/VR 뷰를 작성합니다.07→13→14 순차통합 중이며 실제 Quest 검증은 후속입니다.
 
 **누가 작업 중인가:** [공유 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) · [담당 선점·중복 방지](docs/TASK_COORDINATION.md).
 
@@ -63,3 +63,7 @@ Unity 프로젝트: apps/quest-viewer
 
 
 새 전시품 등록 시 설명 기반 감상 초안40개를 준비합니다. 관리자에서12개씩 검토·승인할 수 있습니다. 실제 외형을 관찰한 맞춤 반응은 별도 작성하며 [모델당1,000개 확장 방향](docs/REACTION_CONTENT_SCALE.md)은 후속 계획입니다.
+
+## PC·VR 꾸미기 지원 개정 · DECOR-13
+
+2026-10-18 사용자 결정: PC와 VR 모두 같은 편집 기능을 제공한다. 키보드는 단축 수단이며 필수 경로가 아니다. [공통 조작 계약](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)·[작업 지도](docs/decor-design/박물관-꾸미기-개발명세/04-작업지도.md)가 후속 정본이다.06 PR56 통합,07 PC시험판 로컬검증·사용자확인/미통합,13 문서 개정, VR구현은 미착수다. 07 통합→13 개정 검토/통합→14 공통입력→15 PC회귀→16 VR·공간UI→17 PC·Quest Link 실제검증→08 실제앱 연결 설계 순서다. 기존01~07 PC검증을 VR완료로 재해석하지 않는다.

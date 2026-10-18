@@ -5,7 +5,7 @@
   "baseSha": "5c502015cc9a9bd6deecbe2fab56cb6af99d1a3c",
   "status": "validated",
   "updatedDateKst": "2026-10-18",
-  "summary": "PC 시험판 적용·전체취소·저장·재실행복원 검증 완료, 사용자 통합 승인",
+  "summary": "PC시험 저장·적용/전체취소·재실행복원 검증 및 PR60 필수CI 통합 완료",
   "validation": [
     "사용자 계속진행 요청;06 PR56 필수CI 전체PASS·통합·활성소스FF 확인",
     "Issue57/전용브랜치/Git Gate PASS",
@@ -16,10 +16,12 @@
     "최종 작은창150%·저장 후 활성화 실패 안내·동시열기 안내·재실행 캡처 직접 확인. 실제관람씬/ProjectSettings 내용 불변",
     "문서정책10검사·diff --check PASS",
     "방명록6246039242 게시·재조회 일치; 별도07시험판 Launch. 재개 시 프로세스 재확인",
-    "2026-10-18 사용자 커밋·통합 명시 승인. 검증된07/13/14를 의존순서로 PR 통합"
+    "2026-10-18 사용자 커밋·통합 명시 승인. 검증된07/13/14를 의존순서로 PR 통합",
+    "통합직전 전체회귀 Node15+C#6 PASS: logs/decor-07-premerge-ci.log. PR60 담당/정책 및Linux PASS;Windows 진행중",
+    "PR60 필수CI4개 PASS·병합 c6c4bdeb9cfb570db3e17ff56901021683b8029b 확인"
   ],
-  "nextAction": "승인된07 PR 필수CI 확인·통합 후13설계 및14공통구조 순차통합",
-  "pullRequest": null,
+  "nextAction": "13설계·14공통구조 순차통합 후15새PC뷰 진행",
+  "pullRequest": "https://github.com/JohnLee305/myMusium/pull/60",
   "limitations": [
     "실제 Windows Player에 합성 Input System 장치로 조작. 사람 실제마우스 다섯 장면·사용감 검토는 사용자 확인 대기",
     "실제 관람씬/NPC/개인자료 이전·Quest·자유yaw·벽/천장 제외. 시험판 제품저장만 사용",
