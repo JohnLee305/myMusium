@@ -10,14 +10,18 @@ namespace FamilyMuseum.Decor
         public DecorPlacementPreview Preview { get; private set; }
         DecorPanel panel;
         bool eyedropper;
-        public void Eyedropper() { Cancel(); eyedropper = true; panel.SetStatus("스포이트 · 복사할 물건을 클릭하세요. 기존 물건과 소품은 복제되지 않습니다."); }
+        public void Eyedropper() { if(!panel.Session.CanEdit) return; Cancel(); eyedropper = true; panel.SetStatus("스포이트 · 복사할 물건을 클릭하세요. 기존 물건과 소품은 복제되지 않습니다."); }
         public void Initialize(DecorPanel value)
         {
             panel = value; Interaction = new DecorInteraction(panel.Document.catalog, panel.Document.world);
             Preview = gameObject.AddComponent<DecorPlacementPreview>();
             panel.CatalogSelected += New; panel.SelectionChanged += Selected;
         }
-        void New(ItemDefinition definition) { Interaction.BeginNew(definition); panel.ShowDefinition(definition); Message(); }
+        public void Reset(DecorWorld world)
+        { Preview.Clear(); eyedropper = false; Interaction = new DecorInteraction(panel.Document.catalog, world); panel.RefreshWorld(world, null); }
+        public void Accept(DecorWorld world)
+        { Preview.Clear(); eyedropper = false; Interaction = new DecorInteraction(panel.Document.catalog, world); panel.ClearSelection(); }
+        void New(ItemDefinition definition) { if (!panel.Session.CanEdit) return; Interaction.BeginNew(definition); panel.ShowDefinition(definition); Message(); }
         void Selected(ItemInstance item)
         {
             Interaction.Select(item?.id); Preview.Clear();
@@ -25,7 +29,7 @@ namespace FamilyMuseum.Decor
             panel.RefreshTools();
         }
         public void MoveSelected()
-        { if (Interaction.BeginMove(panel.SelectedInstanceId)) { Preview.Show(Interaction); Message(); } }
+        { if (panel.Session.CanEdit && Interaction.BeginMove(panel.SelectedInstanceId)) { Preview.Show(Interaction); Message(); } }
         public void UpdatePointer(Vector2 screen, bool free)
         {
             if (!Interaction.HasPreview) return;
@@ -88,18 +92,20 @@ namespace FamilyMuseum.Decor
         }
         public void Rotate(int direction)
         {
+            if (!panel.Session.CanEdit) return;
             var result = Interaction.RotateSelected(direction);
             if (Interaction.HasPreview) { Preview.Show(Interaction); Message(); }
             else Apply(result, "90도 회전했습니다.");
         }
-        public void Store() { Apply(Interaction.StoreSelected(), "소품을 포함해 선택 물건을 보관했습니다. · Ctrl+Z 되돌리기"); }
+        public void Store() { if(panel.Session.CanEdit) Apply(Interaction.StoreSelected(), "소품을 포함해 선택 물건을 보관했습니다. · Ctrl+Z 되돌리기"); }
         public void Color(string variant)
         {
+            if (!panel.Session.CanEdit) return;
             if (Interaction.HasPreview && !Interaction.IsCreatingPreview) { panel.SetStatus("이동이나 재설치를 확정하거나 취소한 뒤 색상을 바꾸세요."); return; }
             var result = Interaction.SetVariant(variant); if (Interaction.HasPreview) { Preview.Show(Interaction); Message(); } else Apply(result, "색상을 바꿨습니다.");
         }
-        public void Undo() { Apply(Interaction.Undo(), "되돌렸습니다."); }
-        public void Redo() { Apply(Interaction.Redo(), "다시 실행했습니다."); }
+        public void Undo() { if(panel.Session.CanEdit) Apply(Interaction.Undo(), "되돌렸습니다."); }
+        public void Redo() { if(panel.Session.CanEdit) Apply(Interaction.Redo(), "다시 실행했습니다."); }
         public void Cancel()
         {
             eyedropper = false;

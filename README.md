@@ -1,6 +1,6 @@
 # 가족 VR 박물관
 
-**현재 개발: DECOR-06 배치 조작.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-06-IMPLEMENTATION.md). DECOR-01~05 통합 완료(PR46/48/51/52/54). DECOR-06 놓기·이동·회전·보관·색상·Undo는 로컬 구현·Player92/순수31 및 전체회귀 PASS, 미커밋 검토 대기. 영구 저장은 후속 단계.
+**현재 개발: DECOR-07 시험 배치 저장.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-07-IMPLEMENTATION.md). DECOR-01~06은 PR46/48/51/52/54/56으로 통합 완료했습니다. DECOR-07 적용·전체 취소·재실행 복원은 로컬 구현·Player105/순수23 및 전체회귀 PASS, 사용자 검토 대기입니다. 실제 박물관과 개인 자료 연결은 후속 단계입니다.
 
 **누가 작업 중인가:** [공유 작업목록](https://github.com/JohnLee305/myMusium/issues?q=is%3Aissue+is%3Aopen) · [담당 선점·중복 방지](docs/TASK_COORDINATION.md).
 

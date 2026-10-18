@@ -22,9 +22,26 @@ if($Task -eq 'Verify'){
  New-Item -ItemType Directory -Path $output|Out-Null
  # A visual Player check must present its swapchain; a hidden initial window can produce a black capture.
  $process=Start-Process -FilePath $prototype -ArgumentList @('-screen-fullscreen','0','-decor-smoke',"`"$output`"",'-logFile',"`"$output\player.log`"") -WindowStyle Normal -PassThru
- if(-not $process.WaitForExit(120000)) { Stop-Process -Id $process.Id; throw "Prototype verification timed out. See $output" }
+ $deadline=(Get-Date).AddSeconds(120)
+ while(-not(Test-Path -LiteralPath "$output\ready-for-concurrent.txt") -and -not $process.HasExited -and (Get-Date) -lt $deadline){Start-Sleep -Milliseconds 200}
+ if(-not(Test-Path -LiteralPath "$output\ready-for-concurrent.txt")){if(-not $process.HasExited){Stop-Process -Id $process.Id};throw "Prototype verification did not reach restart phase. See $output"}
+ foreach($phase in @('concurrent','restart')){
+  $probe=Join-Path $output $phase
+  $child=Start-Process -FilePath $prototype -ArgumentList @('-screen-fullscreen','0','-decor-probe',"`"$output\store`"","`"$probe`"",'-logFile',"`"$output\$phase-player.log`"") -WindowStyle Normal -PassThru
+  if(-not $child.WaitForExit(45000)){Stop-Process -Id $child.Id;throw "Probe timed out: $phase"}
+  if($child.ExitCode -ne 0){throw "Probe failed: $phase"}
+  $expected=[IO.File]::ReadAllText("$output\expected-world.json")
+  if([IO.File]::ReadAllText("$probe\world.json") -cne $expected){throw "Reopened content mismatch: $phase"}
+  $state=[IO.File]::ReadAllText("$probe\state.txt")
+  if($phase -eq 'concurrent'){
+   if($state -ne 'readOnly' -or -not([IO.File]::ReadAllText("$probe\message.txt").Contains('읽기 전용'))){throw 'Concurrent UI must show read-only'}
+   [IO.File]::WriteAllText("$output\concurrent-done.txt",'done')
+   if(-not $process.WaitForExit(10000)){Stop-Process -Id $process.Id;throw 'Writer did not close'}
+  }elseif($state -ne 'ready'){throw 'Writer lock must release after process exits'}
+ }
  if($process.ExitCode -ne 0 -or -not(Test-Path -LiteralPath "$output\results.txt")){throw "Prototype verification failed. See $output"}
  Get-Content -LiteralPath "$output\results.txt" -Tail 1
+ Write-Output 'DECOR_RESTART_PASS: separate concurrent process read-only UI and fresh process exact saved world'
  Write-Output "Screenshots and evidence: $output"; return
 }
 # Launch is explicitly interactive and uses only the synthetic fixture, never museum-archive.
