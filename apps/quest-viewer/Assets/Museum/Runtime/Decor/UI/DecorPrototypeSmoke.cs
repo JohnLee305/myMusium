@@ -127,11 +127,49 @@ namespace FamilyMuseum.Decor
             panel.FrameRoom(); panel.CycleWalls(); panel.CycleWalls(); panel.ToggleGrid(); panel.ToggleGrid();
             Check(DecorJson.Write(panel.Document) == documentBefore, "viewing selections/filter/walls/grid/camera never mutate fixture world");
             yield return InteractionChecks();
+            yield return PersistenceChecks();
             panel.SelectInstance("plinth.001"); panel.FrameSelection(); yield return Pause();
             yield return Capture("selected-item");
             File.WriteAllLines(Path.Combine(output, "results.txt"), results.Concat(new[] { (failed ? "DECOR_UI_FAIL" : "DECOR_UI_PASS") + " checks=" + checks }));
+            File.WriteAllText(Path.Combine(output, "ready-for-concurrent.txt"), "ready");
+            float deadline = Time.realtimeSinceStartup + 45;
+            while (!File.Exists(Path.Combine(output, "concurrent-done.txt")) && Time.realtimeSinceStartup < deadline) yield return null;
             Debug.Log((failed ? "DECOR_UI_FAIL" : "DECOR_UI_PASS") + " checks=" + checks);
             InputSystem.RemoveDevice(keyboard); InputSystem.RemoveDevice(mouse); yield return new WaitForSecondsRealtime(.3f); Application.Quit(failed ? 1 : 0);
+        }
+        IEnumerator PersistenceChecks()
+        {
+            var session = panel.Session; var target = Path.Combine(session.StoreRoot, panel.Document.world.id, "world.json");
+            session.FailPrepareOnce = true; yield return Click(panel.Root.Q<Button>("apply"));
+            Check(!File.Exists(target) && session.Editing && panel.Root.Q<Label>("status").text.Contains("저장하지 않았"), "prepare failure never publishes snapshot and keeps editing");
+            Directory.CreateDirectory(target); yield return Click(panel.Root.Q<Button>("apply"));
+            Check(!File.Exists(target) && session.Editing && panel.Root.Q<Label>("status").text.Contains("저장하지 못"), "real disk failure preserves draft and shows unsaved message");
+            Directory.Delete(target);
+            yield return KeyState(Key.LeftCtrl, Key.S); yield return KeyState();
+            Check(File.Exists(target) && !session.Editing && !session.Modal && session.Persistence.State == "ready", "Ctrl S validates, prepares, saves and activates viewing mode");
+            var bytes = File.ReadAllBytes(target); string saved = DecorJson.WriteWorld(panel.Document.world); int revision = panel.Document.world.revision;
+            Check(saved == File.ReadAllText(target), "activated scene snapshot exactly matches durable content");
+            yield return Click(panel.Root.Q<Button>("edit-again"));
+            string chosen = panel.Document.world.instances.First(i => i.location.kind == "room" && i.variantId == "charcoal").id;
+            panel.SelectInstance(chosen); yield return KeyState(Key.E); yield return KeyState();
+            string draft = DecorJson.WriteWorld(panel.Editor.Interaction.Snapshot());
+            Check(draft != saved && File.ReadAllBytes(target).SequenceEqual(bytes), "editing changes stay in draft until Apply");
+            yield return Click(panel.Root.Q<Button>("cancel-edit"));
+            Check(session.Modal && panel.Root.Q("discard-confirm").resolvedStyle.display == DisplayStyle.Flex, "whole edit cancel asks before discarding changed draft");
+            yield return Click(panel.Root.Q<Button>("keep-editing"));
+            Check(!session.Modal && draft == DecorJson.WriteWorld(panel.Editor.Interaction.Snapshot()), "keep editing preserves all draft changes");
+            yield return Click(panel.Root.Q<Button>("cancel-edit")); yield return Click(panel.Root.Q<Button>("discard-confirm"));
+            Check(!session.Editing && saved == DecorJson.WriteWorld(panel.Document.world) && File.ReadAllBytes(target).SequenceEqual(bytes), "confirmed whole cancel restores original content and leaves disk byte-identical");
+            yield return Click(panel.Root.Q<Button>("edit-again")); panel.SelectInstance(chosen); yield return KeyState(Key.E); yield return KeyState();
+            session.FailActivateOnce = true; yield return Click(panel.Root.Q<Button>("apply"));
+            Check(session.Modal && session.Persistence.State == "saved-but-not-activated" && panel.Root.Q<Label>("session-message").text.Contains("저장됐지만"), "post-save activation failure explicitly reports saved-but-not-activated");
+            var loaded = DecorWorldStore.ReadOnly(session.StoreRoot, panel.Document.world.id, panel.Document.catalog);
+            Check(loaded.status == "loaded" && loaded.world.revision == revision + 1 && !session.CanEdit, "activation failure still has newer durable snapshot and blocks stale edits");
+            yield return Capture("saved-activation-problem");
+            yield return Click(panel.Root.Q<Button>("reload-saved"));
+            Check(!session.Modal && !session.Editing && panel.Document.world.revision == revision + 1 && DecorJson.WriteWorld(panel.Document.world) == File.ReadAllText(target), "reload activates actual saved snapshot without a second commit");
+            File.WriteAllText(Path.Combine(output, "expected-world.json"), DecorJson.WriteWorld(panel.Document.world));
+            yield return Capture("saved-world");
         }
         IEnumerator WorldClick(Vector3 position, bool shift = false, bool alt = false)
         {

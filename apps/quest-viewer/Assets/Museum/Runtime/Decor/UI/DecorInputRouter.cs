@@ -9,12 +9,18 @@ namespace FamilyMuseum.Decor
         DecorPanel panel; DecorCamera cameraRig; InputActionMap map;
         InputAction move, frame, grid, select, pan, orbit, zoom, pointer, delta;
         InputAction toolMove, left, right, store, undo, redo, cancel, free, repeat, control, eyedropper;
+        Keyboard diagnosticKeyboard;
         bool panning, orbiting;
         internal void UseDiagnosticDevices(Keyboard keyboard, Mouse mouse)
-        { map.devices = new InputDevice[] { keyboard, mouse }; }
+        { map.devices = new InputDevice[] { keyboard, mouse }; diagnosticKeyboard = keyboard; }
         public void Initialize(DecorPanel value, DecorCamera rig)
         {
             panel = value; cameraRig = rig; map = new InputActionMap("DecorPrototype");
+            panel.Root.RegisterCallback<UnityEngine.UIElements.NavigationMoveEvent>(e =>
+            {
+                var keys = diagnosticKeyboard ?? Keyboard.current;
+                if (keys != null && keys.added && keys.ctrlKey.isPressed) { e.PreventDefault(); e.StopImmediatePropagation(); }
+            }, UnityEngine.UIElements.TrickleDown.TrickleDown);
             move = map.AddAction("CameraMove", InputActionType.Value);
             move.AddCompositeBinding("2DVector").With("Up", "<Keyboard>/w").With("Down", "<Keyboard>/s").With("Left", "<Keyboard>/a").With("Right", "<Keyboard>/d");
             move.AddCompositeBinding("2DVector").With("Up", "<Keyboard>/upArrow").With("Down", "<Keyboard>/downArrow").With("Left", "<Keyboard>/leftArrow").With("Right", "<Keyboard>/rightArrow");
@@ -38,19 +44,22 @@ namespace FamilyMuseum.Decor
         void Update()
         {
             if (panel == null || cameraRig == null) return;
-            bool text = panel.TextEditing;
+            bool text = panel.TextEditing || panel.Session.Modal;
             if (DecorInputPolicy.KeyboardAllowed(text))
             {
-                cameraRig.Move(move.ReadValue<Vector2>(), Time.unscaledDeltaTime);
+                cameraRig.Move(control.IsPressed() ? Vector2.zero : move.ReadValue<Vector2>(), Time.unscaledDeltaTime);
                 if (frame.WasPressedThisFrame()) panel.FrameSelection();
                 if (grid.WasPressedThisFrame()) panel.ToggleGrid();
-                if (toolMove.WasPressedThisFrame()) panel.Editor.MoveSelected();
+                // Read the chord directly: the camera's 2D composite also owns S.
+                var keys = diagnosticKeyboard ?? Keyboard.current;
+                if (keys != null && keys.added && keys.ctrlKey.isPressed && keys.sKey.wasPressedThisFrame) panel.Session.Apply();
+                if (panel.Session.CanEdit && toolMove.WasPressedThisFrame()) panel.Editor.MoveSelected();
                 if (eyedropper.WasPressedThisFrame()) panel.Editor.Eyedropper();
                 if (left.WasPressedThisFrame()) panel.Editor.Rotate(-1);
                 if (right.WasPressedThisFrame()) panel.Editor.Rotate(1);
                 if (store.WasPressedThisFrame()) panel.Editor.Store();
-                if (control.IsPressed() && undo.WasPressedThisFrame()) panel.Editor.Undo();
-                if (control.IsPressed() && redo.WasPressedThisFrame()) panel.Editor.Redo();
+                if (panel.Session.CanEdit && control.IsPressed() && undo.WasPressedThisFrame()) panel.Editor.Undo();
+                if (panel.Session.CanEdit && control.IsPressed() && redo.WasPressedThisFrame()) panel.Editor.Redo();
                 if (cancel.WasPressedThisFrame()) panel.Editor.Cancel();
             }
             Vector2 point = pointer.ReadValue<Vector2>();
@@ -64,8 +73,8 @@ namespace FamilyMuseum.Decor
             if (allowed)
             {
                 cameraRig.Zoom(zoom.ReadValue<float>() / 120f, point);
-                panel.Editor.UpdatePointer(point, free.IsPressed());
-                if (select.WasPressedThisFrame()) panel.Editor.Click(point, repeat.IsPressed());
+                if (panel.Session.CanEdit) panel.Editor.UpdatePointer(point, free.IsPressed());
+                if (select.WasPressedThisFrame()) { if(panel.Session.CanEdit) panel.Editor.Click(point, repeat.IsPressed()); else panel.SelectAt(point); }
             }
         }
         void OnDisable() { map?.Disable(); panning = orbiting = false; }

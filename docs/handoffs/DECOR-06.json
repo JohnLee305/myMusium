@@ -5,7 +5,7 @@
   "baseSha": "0b8ca43ac737f36d0c9ab91ff0c0f55359040fcc",
   "status": "validated",
   "updatedDateKst": "2026-10-18",
-  "summary": "놓기·상판소품·회수·색상·Undo UI 로컬 구현, 순수31/실제Player92 및 전체회귀 PASS·미커밋 검토 대기",
+  "summary": "놓기·상판소품·회수·색상·Undo 구현 및 검증 후 PR56 필수CI 통과·통합 완료",
   "validation": [
     "사용자 계속진행 요청; 선행02/04/05 통합 확인",
     "Issue55 담당선점 및 최신원격 Git Gate PASS",
@@ -17,12 +17,12 @@
     "전체회귀 PASS: Node15묶음+계약204+명령132+저장62+충돌127+상호작용31; logs/decor-06-full-ci.log",
     "개인55파일 SHA256/수량 불변, 활성통합소스0b8ca43 clean. 기존씬/설정/실행판/개인자료 수정 없음",
     "방명록6245377437 게시 및 재조회 일치",
-    "사용자가06 결과 제시 후 계속진행 요청. 후속07을 위한06 커밋·PR·통합 진행. 기능코드 변경없이 최신원격일치 확인."
+    "사용자가06 결과 제시 후 계속진행 요청. 후속07을 위한06 커밋·PR·통합 진행. 기능코드 변경없이 최신원격일치 확인.",
+    "PR56 필수CI 전체PASS·병합5c502015cc9a9bd6deecbe2fab56cb6af99d1a3c·활성소스FF 확인"
   ],
-  "nextAction": "06 커밋/PR필수CI/통합 후07 저장·적용취소 연결.",
-  "pullRequest": null,
+  "nextAction": "DECOR-07에서 시험 저장·적용/취소 및 재실행 복원 연결",
+  "pullRequest": "https://github.com/JohnLee305/myMusium/pull/56",
   "limitations": [
-    "06 미커밋·미통합, 원격CI는 아직 실행 전.01~05만 통합 완료",
     "실제Windows Player에 가상Input System장치 이벤트를 넣어 검사; 사람이 실제마우스로 수행한 체감검토는 사용자 확인 대기",
     "영구저장·전체변경폐기·관람복귀·관람객동선·Quest·자유yaw·벽/천장 제외. 창종료 시 초기fixture로 복귀",
     "첫 시험판은 첫 상판 하나만 사용; 기존물건 이동/재설치 프리뷰의 색변경은 확정/취소 후 안내",
