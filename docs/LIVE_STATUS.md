@@ -30,7 +30,7 @@
 | DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
 | DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/56) |
 | DECOR-07 | Codex | validated | codex/decor-07-persistence-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/60) |
-| DECOR-13 | Codex | validated | codex/decor-13-dual-input-design-20261018 | 미게시 |
+| DECOR-13 | Codex | validated | codex/decor-13-dual-input-design-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/61) |
 | DECOR-14 | Codex | validated | codex/decor-14-editor-rebuild-20261018 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
@@ -164,17 +164,17 @@ PC시험 저장·적용/전체취소·재실행복원 검증 및 PR60 필수CI �
 PC·VR 공통조작·Meta원칙·VR적합성검토 및 새뷰 재구축 계획 검증, 통합 승인
 
 - 근거: Issue58 담당선점 및 Git Gate PASS; 설치 manifest의 OpenXR1.18/XRI3.6/InputSystem1.20 및 기존 VRExhibitInteraction 입력을 읽어 경계 확인. 새 API실행/바인딩 검증은16 예정; 기존 P01 PC우선·작업지도 VR제외 조항 수정,08~12 양쪽지원 Gate 반영. 런타임/DTO/개인자료 변경 없음; 07 PC사용자확인은 기록하되07미커밋 구현과 인계파일 수정 없이 보존; 변경29파일의 로컬 Markdown링크167개 확인, 누락/일본어혼입0: logs/decor-13-doc-review.json; handoff생성·CI정책 PASS 및 정책10검사 PASS. git diff --check PASS; Issue35 방명록6246117069 게시·재조회 일치; Meta공식 Key considerations/Hands UI best practices/Panels 재조회. 손추적/MR 적용범위 구분. M01~M08을우리적용/인수/담당과연결; 기존25mm단독기준을거리/시야각기준으로수정.16최소패널실기기Gate→메뉴확장·17P0검증을명시. VR/SDK구현 없음; 보강후변경30파일 로컬링크179개 오류0: logs/decor-13-doc-review.json; 방명록6246117069에Meta원칙검토회고추가·재조회일치; 07 현재 구현 정적 검토 R1~R7 기록: PC카메라/입력, 바닥 가림, UI·세션 수명, 오류복구UI, 키보드 전용기능, 성능 실측 경계. 14~17 카드에 연결. 런타임/실기기검사 없음; 사용자 재구축 시작 승인: 기존PC패널 보강에서 새PC/VR뷰 작성으로06/14~16계획 보강.14별도폴더 첫공통구조67검사·전체CI 결과는14인계가정본이며실기기미검증; 2026-10-18 사용자 커밋·통합 명시 승인.07통합 후13설계/14구조 순차통합
-- 다음: 07통합판 공유문서 병합·현황재생성 후13 PR 필수CI·통합,이후14통합
-- 제한: 문서 개정만 완료. VR입력/공간UI/모드전환 구현 및Quest실기기검증 미착수; 07미커밋 구현을 별도 작업폴더에 보존.13 역시 미커밋·미통합; 07통합 후13통합 시 README/PROJECT_STATUS/TASKS/LIVE_STATUS 등 공유문서를 최신07인계와 병합·재생성해야 함; UI 기술/XR 바인딩/선택보조 수치는 설계 기본안.16기술검사와17실기기측정으로 확인
+- 다음: PR61 필수CI완료 후통합;후속14공통구조 검증·통합
+- 제한: 문서 개정만 완료. VR입력/공간UI/모드전환 구현 및Quest실기기검증 미착수; UI 기술/XR 바인딩/선택보조 수치는 설계 기본안.16기술검사와17실기기측정으로 확인
 - 원본: [작업 인계](handoffs/DECOR-13.json), 시작 5c50201 / 갱신 2026-10-18
 
 ### DECOR-14
 
 PC·VR 공통 세션·입력중재·월드질의·Presenter 구현,67검사·전체CI 통과,통합승인
 
-- 근거: Issue59 담당선점 및 clean Git preflight PASS; 새 production C# 공통입력67검사 PASS: logs/decor-14-input-final.log; 07 저장 코어·meta·23검사·실행스크립트4파일 SHA256 일치; 기존 Domain/UI/Editor/Scene/ProjectSettings 차이 없음. 기존시험판 비교용 보존; 전체 CI: Node15묶음 + 계약204/명령132/저장62/충돌127/상호작용31/저장조정23/공통입력67 PASS: logs/decor-14-full-ci.log; 방명록6247937147 게시 및 재조회 확인; 13설계에새PC/VR뷰재구축결정반영,문서링크184개오류0.14 handoff생성/diff --check PASS; 2026-10-18 사용자07/13/14커밋·통합 명시승인.선행통합후동일저장코어재대조예정
+- 근거: Issue59 담당선점 및 clean Git preflight PASS; 새 production C# 공통입력67검사 PASS: logs/decor-14-input-final.log; 07 저장 코어·meta·23검사·실행스크립트4파일 SHA256 일치; 기존 Domain/UI/Editor/Scene/ProjectSettings 차이 없음. 기존시험판 비교용 보존; 전체 CI: Node15묶음 + 계약204/명령132/저장62/충돌127/상호작용31/저장조정23/공통입력67 PASS: logs/decor-14-full-ci.log; 방명록6247937147 게시 및 재조회 확인; 13설계에새PC/VR뷰재구축결정반영,문서링크184개오류0.14 handoff생성/diff --check PASS; 2026-10-18 사용자07/13/14커밋·통합 명시승인.선행통합후동일저장코어재대조예정; 07저장·13설계 브랜치병합 후 전체회귀 Node15+C#7 PASS: logs/decor-14-premerge-ci.log.저장코어 중복파일 충돌없음
 - 다음: 07/13통합 후14병합·전체CI·PR통합.다음15새최소PC뷰/16공통세션VR패널
-- 제한: 07/13 미커밋 작업은 원본 폴더 보존. 사용자 새 구조 시작 지시로 별도14 선행 개발; 통합은07/13 이후; 07의 Unity독립 저장 조정기 두 파일을 동일 바이트로 의존성 반입;07 통합 시 동일성 확인; 새 PC/VR 화면 및 Quest 실기기 미검증
+- 제한: 사용자시작승인으로07/13통합전선행개발.통합은07→13→14순서; 새PC/VR뷰·Physics어댑터·UnityPlayer·Quest착용검증은후속15~17이며이번공통코어검사로대체하지않음
 - 원본: [작업 인계](handoffs/DECOR-14.json), 시작 5c50201 / 갱신 2026-10-18
 
 ### OPS-002
