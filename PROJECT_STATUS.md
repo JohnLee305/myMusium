@@ -1,6 +1,6 @@
 # VR 박물관 · 전체 진행상황과 개발 계획
 
-**현재 개발: DECOR-06 배치 조작.** [설계·위임 명세](docs/decor-design/README.md) → [현재 구현 인계](docs/decor-design/DECOR-06-IMPLEMENTATION.md). DECOR-01~05 통합 완료(PR46/48/51/52/54). DECOR-06 놓기·이동·회전·보관·색상·Undo는 로컬 구현·Player92/순수31 및 전체회귀 PASS, 미커밋 검토 대기. 영구 저장은 후속 단계.
+**현재 작업: PC·VR 꾸미기 편집기 재구축.** DECOR-01~06 통합 완료. [DECOR-07 저장 시험판](docs/decor-design/DECOR-07-IMPLEMENTATION.md)은 Player105·저장조정23검증 및 사용자 통합 승인을 받았습니다. [공통조작 설계](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)에 따라 공통 세션 위에 새 PC/VR 뷰를 작성합니다.07→13→14 순차통합 중이며 실제 Quest 검증은 후속입니다.
 
 OPS-009: 기본브랜치와 최신판을 codex/museum-tycoon으로 통일. 개발/빌드/실행 sourceRoot는 PROJECT_STATE.json 하나가 기준이다. 예전 폴더/기준판은 은퇴·자료보관용이며 과거 본문보다 [단일 버전 운영](docs/VERSIONING.md)이 우선한다. 검증/통합은 [OPS-009 인계](docs/handoffs/OPS-009.json) 참조.
 
@@ -346,3 +346,7 @@ GitHub에는 소스·설정·문서·전시 모델/설명을 저장합니다. Un
 - 검증: 계약79·등록9 통과. Unity 빌드·플레이어 회귀 진행 후 커밋·push 예정. Quest 미검증 유지.
 ## 2026-10-17 / CROWD-001 A/B/C 시험판
 전시물 선착순 대기·자리 비움 후 해제·혼잡 양보 이동과 수동 전체0~12명 계약을 구현·PC 검증했습니다. 2026-10-17 사용자 승인 후 PR20 통합·실행판 반영 완료입니다. 실제 검증 근거/한계는 docs/handoffs/CROWD-001.json, 다음 자동 수용량·방 연동 목표와 성능 작업은 docs/CROWD_PLAN.md를 따릅니다.
+
+## PC·VR 꾸미기 지원 개정 · DECOR-13
+
+2026-10-18 사용자 결정: PC와 VR 모두 같은 편집 기능을 제공한다. 키보드는 단축 수단이며 필수 경로가 아니다. [공통 조작 계약](docs/decor-design/박물관-꾸미기-개발명세/06-PC-VR-공통조작.md)·[작업 지도](docs/decor-design/박물관-꾸미기-개발명세/04-작업지도.md)가 후속 정본이다.06 PR56 통합,07 PC시험판 로컬검증·사용자확인/미통합,13 문서 개정, VR구현은 미착수다. 07 통합→13 개정 검토/통합→14 공통입력→15 PC회귀→16 VR·공간UI→17 PC·Quest Link 실제검증→08 실제앱 연결 설계 순서다. 기존01~07 PC검증을 VR완료로 재해석하지 않는다.

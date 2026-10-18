@@ -28,7 +28,9 @@
 | DECOR-03 | Codex | validated | codex/decor-03-store-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/51) |
 | DECOR-04 | Codex | validated | codex/decor-04-placement-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/52) |
 | DECOR-05 | Codex | validated | codex/decor-05-prototype-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/54) |
-| DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | 미게시 |
+| DECOR-06 | Codex | validated | codex/decor-06-interaction-20261018 | [PR](https://github.com/JohnLee305/myMusium/pull/56) |
+| DECOR-07 | Codex | validated | codex/decor-07-persistence-20261018 | 미게시 |
+| DECOR-13 | Codex | validated | codex/decor-13-dual-input-design-20261018 | 미게시 |
 | DECOR-14 | Codex | validated | codex/decor-14-editor-rebuild-20261018 | 미게시 |
 | OPS-002 | Codex | validated | codex/ops-002-git-preflight-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/11) |
 | OPS-003 | Codex | validated | codex/ops-003-ci-handoff-20261017 | [PR](https://github.com/JohnLee305/myMusium/pull/12) |
@@ -141,12 +143,30 @@ OS잠금·원자적 월드저장·백업·복구
 
 ### DECOR-06
 
-놓기·상판소품·회수·색상·Undo UI 로컬 구현, 순수31/실제Player92 및 전체회귀 PASS·미커밋 검토 대기
+놓기·상판소품·회수·색상·Undo 구현 및 검증 후 PR56 필수CI 통과·통합 완료
 
-- 근거: 사용자 계속진행 요청; 선행02/04/05 통합 확인; Issue55 담당선점 및 최신원격 Git Gate PASS; production C# 입력독립 프리뷰 조정기31검사 PASS: logs/decor-06-full-ci.log; 프리뷰취소/오류 시 Undo/Redo·수량 보존, 연속새ID, 부모자손·색상 및 저장묶음 복원 검증; Unity PC build exit0: logs/decor-06-build-final.log; 기존관람씬·빌드목록 보존; 실제 표시된 Windows Player92검사 PASS: logs/decor-ui-20261018-125122/results.txt; 6해상도/UI배율조합·UI포커스·카메라 회귀 + 새배치/색상/꽃병개별레이선택/정확5cm이동/Undo/부모이동회전/회수동일ID복원/Shift/Alt/Esc/스포이트/50회프리뷰객체재질유지 검증; 최종 작은창150%·배치결과 및 충돌/조립체프리뷰 캡처 직접 확인; 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+충돌127+상호작용31; logs/decor-06-full-ci.log; 개인55파일 SHA256/수량 불변, 활성통합소스0b8ca43 clean. 기존씬/설정/실행판/개인자료 수정 없음; 방명록6245377437 게시 및 재조회 일치; 사용자가06 결과 제시 후 계속진행 요청. 후속07을 위한06 커밋·PR·통합 진행. 기능코드 변경없이 최신원격일치 확인.
-- 다음: 06 커밋/PR필수CI/통합 후07 저장·적용취소 연결.
-- 제한: 06 미커밋·미통합, 원격CI는 아직 실행 전.01~05만 통합 완료; 실제Windows Player에 가상Input System장치 이벤트를 넣어 검사; 사람이 실제마우스로 수행한 체감검토는 사용자 확인 대기; 영구저장·전체변경폐기·관람복귀·관람객동선·Quest·자유yaw·벽/천장 제외. 창종료 시 초기fixture로 복귀; 첫 시험판은 첫 상판 하나만 사용; 기존물건 이동/재설치 프리뷰의 색변경은 확정/취소 후 안내; Windows OS배율/모니터 이동 미검증; 125/150%는 UI Toolkit 논리배율 검사
+- 근거: 사용자 계속진행 요청; 선행02/04/05 통합 확인; Issue55 담당선점 및 최신원격 Git Gate PASS; production C# 입력독립 프리뷰 조정기31검사 PASS: logs/decor-06-full-ci.log; 프리뷰취소/오류 시 Undo/Redo·수량 보존, 연속새ID, 부모자손·색상 및 저장묶음 복원 검증; Unity PC build exit0: logs/decor-06-build-final.log; 기존관람씬·빌드목록 보존; 실제 표시된 Windows Player92검사 PASS: logs/decor-ui-20261018-125122/results.txt; 6해상도/UI배율조합·UI포커스·카메라 회귀 + 새배치/색상/꽃병개별레이선택/정확5cm이동/Undo/부모이동회전/회수동일ID복원/Shift/Alt/Esc/스포이트/50회프리뷰객체재질유지 검증; 최종 작은창150%·배치결과 및 충돌/조립체프리뷰 캡처 직접 확인; 전체회귀 PASS: Node15묶음+계약204+명령132+저장62+충돌127+상호작용31; logs/decor-06-full-ci.log; 개인55파일 SHA256/수량 불변, 활성통합소스0b8ca43 clean. 기존씬/설정/실행판/개인자료 수정 없음; 방명록6245377437 게시 및 재조회 일치; 사용자가06 결과 제시 후 계속진행 요청. 후속07을 위한06 커밋·PR·통합 진행. 기능코드 변경없이 최신원격일치 확인.; PR56 필수CI 전체PASS·병합5c502015cc9a9bd6deecbe2fab56cb6af99d1a3c·활성소스FF 확인
+- 다음: DECOR-07에서 시험 저장·적용/취소 및 재실행 복원 연결
+- 제한: 실제Windows Player에 가상Input System장치 이벤트를 넣어 검사; 사람이 실제마우스로 수행한 체감검토는 사용자 확인 대기; 영구저장·전체변경폐기·관람복귀·관람객동선·Quest·자유yaw·벽/천장 제외. 창종료 시 초기fixture로 복귀; 첫 시험판은 첫 상판 하나만 사용; 기존물건 이동/재설치 프리뷰의 색변경은 확정/취소 후 안내; Windows OS배율/모니터 이동 미검증; 125/150%는 UI Toolkit 논리배율 검사
 - 원본: [작업 인계](handoffs/DECOR-06.json), 시작 0b8ca43 / 갱신 2026-10-18
+
+### DECOR-07
+
+PC 시험판 적용·전체취소·저장·재실행복원 검증 완료, 사용자 통합 승인
+
+- 근거: 사용자 계속진행 요청;06 PR56 필수CI 전체PASS·통합·활성소스FF 확인; Issue57/전용브랜치/Git Gate PASS; production C#23 및 전체회귀 Node15+계약204+명령132+저장62+충돌127+상호작용31 PASS: logs/decor-07-full-ci.log; 실제Player105 및 별도프로세스 동시열기/재실행 PASS: logs/decor-ui-20261018-141727. 진단장치 해제·버튼상태 보강 후 최종 재검증 진행; 개인55파일 SHA256/수량·기존바로가기2개 불변; 최종 Unity build exit0: logs/decor-07-build-final.log. 최종 Player105 및 동시실행/readOnly·종료후ready·저장전체일치 PASS: logs/decor-ui-20261018-141841; 최종 작은창150%·저장 후 활성화 실패 안내·동시열기 안내·재실행 캡처 직접 확인. 실제관람씬/ProjectSettings 내용 불변; 문서정책10검사·diff --check PASS; 방명록6246039242 게시·재조회 일치; 별도07시험판 Launch. 재개 시 프로세스 재확인; 2026-10-18 사용자 커밋·통합 명시 승인. 검증된07/13/14를 의존순서로 PR 통합
+- 다음: 승인된07 PR 필수CI 확인·통합 후13설계 및14공통구조 순차통합
+- 제한: 실제 Windows Player에 합성 Input System 장치로 조작. 사람 실제마우스 다섯 장면·사용감 검토는 사용자 확인 대기; 실제 관람씬/NPC/개인자료 이전·Quest·자유yaw·벽/천장 제외. 시험판 제품저장만 사용; Ctrl+S UI포커스 차단은 Unity6에서 obsolete 경고가 있는 PreventDefault API 사용. 현재 설치 버전에서 실제검증; UI Toolkit 업그레이드 때 IgnoreEvent 대체 검토
+- 원본: [작업 인계](handoffs/DECOR-07.json), 시작 5c50201 / 갱신 2026-10-18
+
+### DECOR-13
+
+PC·VR 공통조작·Meta원칙·VR적합성검토 및 새뷰 재구축 계획 검증, 통합 승인
+
+- 근거: Issue58 담당선점 및 Git Gate PASS; 설치 manifest의 OpenXR1.18/XRI3.6/InputSystem1.20 및 기존 VRExhibitInteraction 입력을 읽어 경계 확인. 새 API실행/바인딩 검증은16 예정; 기존 P01 PC우선·작업지도 VR제외 조항 수정,08~12 양쪽지원 Gate 반영. 런타임/DTO/개인자료 변경 없음; 07 PC사용자확인은 기록하되07미커밋 구현과 인계파일 수정 없이 보존; 변경29파일의 로컬 Markdown링크167개 확인, 누락/일본어혼입0: logs/decor-13-doc-review.json; handoff생성·CI정책 PASS 및 정책10검사 PASS. git diff --check PASS; Issue35 방명록6246117069 게시·재조회 일치; Meta공식 Key considerations/Hands UI best practices/Panels 재조회. 손추적/MR 적용범위 구분. M01~M08을우리적용/인수/담당과연결; 기존25mm단독기준을거리/시야각기준으로수정.16최소패널실기기Gate→메뉴확장·17P0검증을명시. VR/SDK구현 없음; 보강후변경30파일 로컬링크179개 오류0: logs/decor-13-doc-review.json; 방명록6246117069에Meta원칙검토회고추가·재조회일치; 07 현재 구현 정적 검토 R1~R7 기록: PC카메라/입력, 바닥 가림, UI·세션 수명, 오류복구UI, 키보드 전용기능, 성능 실측 경계. 14~17 카드에 연결. 런타임/실기기검사 없음; 사용자 재구축 시작 승인: 기존PC패널 보강에서 새PC/VR뷰 작성으로06/14~16계획 보강.14별도폴더 첫공통구조67검사·전체CI 결과는14인계가정본이며실기기미검증; 2026-10-18 사용자 커밋·통합 명시 승인.07통합 후13설계/14구조 순차통합
+- 다음: 07통합판 공유문서 병합·현황재생성 후13 PR 필수CI·통합,이후14통합
+- 제한: 문서 개정만 완료. VR입력/공간UI/모드전환 구현 및Quest실기기검증 미착수; 07미커밋 구현을 별도 작업폴더에 보존.13 역시 미커밋·미통합; 07통합 후13통합 시 README/PROJECT_STATUS/TASKS/LIVE_STATUS 등 공유문서를 최신07인계와 병합·재생성해야 함; UI 기술/XR 바인딩/선택보조 수치는 설계 기본안.16기술검사와17실기기측정으로 확인
+- 원본: [작업 인계](handoffs/DECOR-13.json), 시작 5c50201 / 갱신 2026-10-18
 
 ### DECOR-14
 
