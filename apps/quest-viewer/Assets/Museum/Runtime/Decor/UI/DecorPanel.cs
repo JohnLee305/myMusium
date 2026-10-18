@@ -25,6 +25,7 @@ namespace FamilyMuseum.Decor
         public VisualElement Root { get; private set; }
         public bool Ready { get; private set; }
         public DecorEditorController Editor { get; private set; }
+        public DecorPrototypeSession Session { get; private set; }
         public event Action<ItemInstance> SelectionChanged;
         public event Action<ItemDefinition> CatalogSelected;
         readonly Dictionary<string, GameObject> objects = new Dictionary<string, GameObject>();
@@ -33,7 +34,7 @@ namespace FamilyMuseum.Decor
         readonly Dictionary<string, Material> sharedMaterials = new Dictionary<string, Material>();
         readonly List<GameObject> outlines = new List<GameObject>();
         readonly Dictionary<Color, Material> outlineMaterials = new Dictionary<Color, Material>();
-        GameObject worldRoot, gridRoot; FontAsset fontAsset;
+        GameObject worldRoot, gridRoot, itemRoot; FontAsset fontAsset;
         TextField search; ScrollView cards;
         bool inventory, compact, detailsOpen, gridVisible = true; int wallMode = 1; string filter = "";
         public bool TextEditing
@@ -52,6 +53,7 @@ namespace FamilyMuseum.Decor
             var placement = DecorPlacementValidator.Validate(document.catalog, document.world);
             if (!placement.ok) throw new InvalidOperationException("Prototype fixture placement invalid: " + string.Join(",", placement.issues.Select(i => i.code)));
             Document = document;
+            Session = gameObject.AddComponent<DecorPrototypeSession>(); Session.Open(this);
             var documentRoot = GetComponent<UIDocument>().rootVisualElement;
             documentRoot.pickingMode = PickingMode.Ignore; documentRoot.styleSheets.Add(styleSheet);
             Root = documentRoot.Q("decor-root");
@@ -81,7 +83,7 @@ namespace FamilyMuseum.Decor
             Bind("parent", () => { var item = Document.world.instances.FirstOrDefault(i => i.id == SelectedInstanceId); if (item?.location.kind == "parent") SelectInstance(item.location.parentId); });
             foreach (var id in new[] { "collection-tab", "space-tab" })
             { var b = Root.Q<Button>(id); b.SetEnabled(false); b.tooltip = "실제 소장품 연결과 공간·마감 편집은 후속 단계입니다."; }
-            Root.Q<Label>("list-hint").text = "카드 선택 후클릭 · 저장은 후속 단계";
+            Root.Q<Label>("list-hint").text = "카드 선택 후 클릭 · 적용하면 시험 배치를 저장합니다";
             Root.RegisterCallback<GeometryChangedEvent>(_ => Layout());
             if (FindFirstObjectByType<EventSystem>() == null)
             { var events = new GameObject("Decor UI Events"); events.transform.SetParent(transform); events.AddComponent<EventSystem>(); events.AddComponent<InputSystemUIInputModule>(); }
@@ -91,9 +93,12 @@ namespace FamilyMuseum.Decor
             Bind("store-item", Editor.Store); Bind("undo", Editor.Undo); Bind("redo", Editor.Redo); Bind("cancel-preview", Editor.Cancel);
             gameObject.AddComponent<DecorInputRouter>().Initialize(this, cameraRig);
             RefreshCards(); RefreshTools(); SetStatus("꾸미기 시험실 · 카탈로그에서 물건을 골라 놓아 보세요. 이번 실행의 변경은 저장되지 않습니다.");
+            Session.BindUI();
             yield return null; Layout(); Ready = true;
             string[] args = Environment.GetCommandLineArgs(); int smoke = Array.IndexOf(args, "-decor-smoke");
             if (smoke >= 0 && smoke + 1 < args.Length) gameObject.AddComponent<DecorPrototypeSmoke>().Begin(this, args[smoke + 1]);
+            int probe = Array.IndexOf(args, "-decor-probe");
+            if (probe >= 0 && probe + 2 < args.Length) gameObject.AddComponent<DecorRestartProbe>().Begin(this, args[probe + 2]);
         }
         void Bind(string id, Action action) { Root.Q<Button>(id).clicked += action; }
         public void SetStatus(string message) { Root.Q<Label>("status").text = message; }
@@ -214,11 +219,12 @@ namespace FamilyMuseum.Decor
             var gridMat = Material(new Color(.36f, .43f, .36f, .55f), "Sprites/Default");
             for (int x = -10; x <= 10; x++) Line(new Vector3(x, .006f, -8), new Vector3(x, .006f, 8), gridMat, .012f, gridRoot.transform);
             for (int z = -8; z <= 8; z++) Line(new Vector3(-10, .006f, z), new Vector3(10, .006f, z), gridMat, .012f, gridRoot.transform);
-            foreach (var item in Document.world.instances.Where(i => i.location.kind == "room")) CreateItem(item, worldRoot.transform);
+            itemRoot = new GameObject("Active decor items"); itemRoot.transform.SetParent(worldRoot.transform, false);
+            foreach (var item in Document.world.instances.Where(i => i.location.kind == "room")) CreateItem(item, itemRoot.transform);
             foreach (var item in Document.world.instances.Where(i => i.location.kind == "parent"))
                 if (objects.TryGetValue(item.location.parentId, out var parent)) CreateItem(item, parent.transform);
         }
-        void CreateItem(ItemInstance item, Transform parent)
+        void CreateItem(ItemInstance item, Transform parent, IDictionary<string, GameObject> target = null)
         {
             var definition = Definition(item); var root = new GameObject(definition.name); root.transform.SetParent(parent, false);
             root.transform.localPosition = V(item.location.kind == "parent" ? item.location.localPositionM : item.location.positionM);
@@ -231,7 +237,7 @@ namespace FamilyMuseum.Decor
                 vase.transform.localPosition = V(definition.collision.centerM); var size = V(definition.dimensionsM); vase.transform.localScale = new Vector3(size.x, size.y * .5f, size.z); vase.GetComponent<Renderer>().sharedMaterial = Material(color);
             }
             else Box(definition.name, V(definition.collision.centerM), V(definition.dimensionsM), color, root.transform);
-            objects.Add(item.id, root);
+            (target ?? objects).Add(item.id, root);
         }
         GameObject Line(Vector3 a, Vector3 b, Material material, float width, Transform parent)
         {
@@ -251,9 +257,9 @@ namespace FamilyMuseum.Decor
         public void RefreshWorld(DecorWorld world, string selected)
         {
             Document.world = world; ClearOutline();
-            foreach (var go in objects.Values.Where(g => g != null && g.transform.parent == worldRoot.transform).ToArray()) { go.SetActive(false); Destroy(go); }
+            foreach (var go in objects.Values.Where(g => g != null && g.transform.parent == itemRoot.transform).ToArray()) { go.SetActive(false); Destroy(go); }
             objects.Clear();
-            foreach (var item in world.instances.Where(i => i.location.kind == "room")) CreateItem(item, worldRoot.transform);
+            foreach (var item in world.instances.Where(i => i.location.kind == "room")) CreateItem(item, itemRoot.transform);
             foreach (var item in world.instances.Where(i => i.location.kind == "parent")) if (objects.TryGetValue(item.location.parentId, out var parent)) CreateItem(item, parent.transform);
             RefreshCards(); ClearSelection(); if (selected != null) SelectInstance(selected, false);
         }
@@ -267,6 +273,32 @@ namespace FamilyMuseum.Decor
             Root.Q<Button>("rotate-right").SetEnabled(edit.HasPreview || item != null && item.location.kind != "storage");
             Root.Q<Button>("undo").SetEnabled(edit.UndoCount > 0); Root.Q<Button>("redo").SetEnabled(edit.RedoCount > 0);
             Root.Q<Button>("cancel-preview").SetEnabled(edit.HasPreview);
+            if (Session != null && !Session.CanEdit) foreach (var id in new[] { "move-item", "store-item", "rotate-left", "rotate-right", "undo", "redo", "cancel-preview" }) Root.Q<Button>(id).SetEnabled(false);
+            foreach (var chip in Root.Q("swatches").Children().OfType<Button>()) chip.SetEnabled(Session == null || Session.CanEdit);
+        }
+        public void ShowWorld(bool visible) { worldRoot.SetActive(visible); }
+        public IDecorPreparedView PrepareWorld(DecorWorld world) { return new PreparedItems(this, world); }
+        sealed class PreparedItems : IDecorPreparedView
+        {
+            readonly DecorPanel panel; readonly Dictionary<string, GameObject> next = new Dictionary<string, GameObject>();
+            GameObject root; bool activated;
+            internal PreparedItems(DecorPanel panel, DecorWorld world)
+            {
+                this.panel = panel; root = new GameObject("Prepared decor items"); root.SetActive(false); root.transform.SetParent(panel.worldRoot.transform, false);
+                try
+                {
+                    foreach (var item in world.instances.Where(i => i.location.kind == "room")) panel.CreateItem(item, root.transform, next);
+                    foreach (var item in world.instances.Where(i => i.location.kind == "parent")) if (next.TryGetValue(item.location.parentId, out var parent)) panel.CreateItem(item, parent.transform, next);
+                }
+                catch { UnityEngine.Object.Destroy(root); root = null; throw; }
+            }
+            public void Activate(DecorWorld world)
+            {
+                panel.ClearOutline(); panel.itemRoot.SetActive(false); UnityEngine.Object.Destroy(panel.itemRoot);
+                panel.itemRoot = root; panel.objects.Clear(); foreach (var pair in next) panel.objects.Add(pair.Key, pair.Value);
+                panel.Document.world = world; root.SetActive(true); activated = true; panel.ShowWorld(true); panel.RefreshCards(); panel.ClearSelection();
+            }
+            public void Dispose() { if (!activated && root != null) UnityEngine.Object.Destroy(root); }
         }
         void OnDestroy() { foreach (var m in materials) Destroy(m); if (fontAsset != null) Destroy(fontAsset); }
     }

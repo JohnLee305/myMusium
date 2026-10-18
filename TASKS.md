@@ -219,8 +219,8 @@ SEC-001 초기 파일 목록/GLB 해시·동봉 라이선스 점검 수행. [결
 - [x] DECOR-03 단일 작성자 WorldStore·저장·복구 62검사 및 필수CI PASS, PR51 통합 완료.
 - [x] DECOR-04 직각 배치·상판 지지·충돌 검사 로컬 구현·127검사 및 전체 회귀 PASS. PR52 필수CI PASS·통합 및 활성소스 반영 완료. [구현 인계](docs/decor-design/DECOR-04-IMPLEMENTATION.md).
 - [x] DECOR-05 시험 씬·편집 카메라·화면 골격 로컬 구현. 실제 Windows Player63검사 및 캡처 직접확인 PASS. PR54 필수CI·통합·활성소스FF 및 통합판Player63검사 완료. [구현 인계](docs/decor-design/DECOR-05-IMPLEMENTATION.md).
-- [x] DECOR-06 놓기·상판 소품·회수·색상·Undo UI 로컬 구현, Player92/순수C#31 및 전체회귀 PASS. 미커밋·미통합 사용자 검토 대기. [구현 인계](docs/decor-design/DECOR-06-IMPLEMENTATION.md).
-- [ ] DECOR-07 가상 한 방 시험판·저장 재실행·사용자 체감.
+- [x] DECOR-06 배치 조작: Player92/순수31 및 전체회귀·필수CI PASS, PR56 통합 완료.
+- [ ] DECOR-07 시험 저장·적용/전체취소·재실행복원 로컬 구현·Player105/순수23 및 전체회귀 PASS. 미커밋·미통합 사용자 체감검토 대기. [구현 인계](docs/decor-design/DECOR-07-IMPLEMENTATION.md).
 - [ ] DECOR-08 실제 자료·관람객·실행 앱 연결 설계 Gate.
 - [ ] DECOR-09 콘텐츠 버전·고유 소장품 확장 계약 Gate.
 - [ ] DECOR-10 조명·벽·천장·마감 확장 계약 Gate.
