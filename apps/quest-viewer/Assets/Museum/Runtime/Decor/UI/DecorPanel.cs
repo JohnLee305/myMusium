@@ -24,11 +24,13 @@ namespace FamilyMuseum.Decor
         public string SelectedInstanceId { get; private set; }
         public VisualElement Root { get; private set; }
         public bool Ready { get; private set; }
+        public DecorEditorController Editor { get; private set; }
         public event Action<ItemInstance> SelectionChanged;
         public event Action<ItemDefinition> CatalogSelected;
         readonly Dictionary<string, GameObject> objects = new Dictionary<string, GameObject>();
         readonly List<GameObject> walls = new List<GameObject>();
         readonly List<Material> materials = new List<Material>();
+        readonly Dictionary<string, Material> sharedMaterials = new Dictionary<string, Material>();
         readonly List<GameObject> outlines = new List<GameObject>();
         readonly Dictionary<Color, Material> outlineMaterials = new Dictionary<Color, Material>();
         GameObject worldRoot, gridRoot; FontAsset fontAsset;
@@ -79,13 +81,16 @@ namespace FamilyMuseum.Decor
             Bind("parent", () => { var item = Document.world.instances.FirstOrDefault(i => i.id == SelectedInstanceId); if (item?.location.kind == "parent") SelectInstance(item.location.parentId); });
             foreach (var id in new[] { "collection-tab", "space-tab" })
             { var b = Root.Q<Button>(id); b.SetEnabled(false); b.tooltip = "실제 소장품 연결과 공간·마감 편집은 후속 단계입니다."; }
-            Root.Q<Label>("list-hint").text = "정보 보기 · 소장품·공간 편집은 후속 단계";
+            Root.Q<Label>("list-hint").text = "카드 선택 후클릭 · 저장은 후속 단계";
             Root.RegisterCallback<GeometryChangedEvent>(_ => Layout());
             if (FindFirstObjectByType<EventSystem>() == null)
             { var events = new GameObject("Decor UI Events"); events.transform.SetParent(transform); events.AddComponent<EventSystem>(); events.AddComponent<InputSystemUIInputModule>(); }
             BuildWorld(); cameraRig.Initialize(cameraRig.GetComponent<Camera>(), Settings);
+            Editor = gameObject.AddComponent<DecorEditorController>(); Editor.Initialize(this);
+            Bind("move-item", Editor.MoveSelected); Bind("rotate-left", () => Editor.Rotate(-1)); Bind("rotate-right", () => Editor.Rotate(1));
+            Bind("store-item", Editor.Store); Bind("undo", Editor.Undo); Bind("redo", Editor.Redo); Bind("cancel-preview", Editor.Cancel);
             gameObject.AddComponent<DecorInputRouter>().Initialize(this, cameraRig);
-            RefreshCards(); SetStatus("시험 공간 · 목록과 물건의 정보를 살펴보세요. 놓기·저장은 아직 연결되지 않았습니다.");
+            RefreshCards(); RefreshTools(); SetStatus("꾸미기 시험실 · 카탈로그에서 물건을 골라 놓아 보세요. 이번 실행의 변경은 저장되지 않습니다.");
             yield return null; Layout(); Ready = true;
             string[] args = Environment.GetCommandLineArgs(); int smoke = Array.IndexOf(args, "-decor-smoke");
             if (smoke >= 0 && smoke + 1 < args.Length) gameObject.AddComponent<DecorPrototypeSmoke>().Begin(this, args[smoke + 1]);
@@ -114,6 +119,7 @@ namespace FamilyMuseum.Decor
             { card.style.height = shortWindow ? 84 : Settings.cardHeight; card.style.paddingTop = card.style.paddingBottom = shortWindow ? 5 : 10; }
             foreach (var name in Root.Query(className: "card-name").ToList()) name.style.height = shortWindow ? 40 : 44;
             foreach (var thumbnail in Root.Query(className: "card-thumbnail").ToList()) thumbnail.style.display = shortWindow ? DisplayStyle.None : DisplayStyle.Flex;
+            Root.Q("list-hint").style.display = compact ? DisplayStyle.None : DisplayStyle.Flex;
             Root.Q("details").style.display = !compact || detailsOpen ? DisplayStyle.Flex : DisplayStyle.None;
             Root.Q("details-toggle").style.display = compact ? DisplayStyle.Flex : DisplayStyle.None;
             var rect = Root.Q("viewport").worldBound; float w = Root.worldBound.width, h = Root.worldBound.height;
@@ -141,25 +147,25 @@ namespace FamilyMuseum.Decor
             Root.Q<Label>("selection-body").text = "방 안의 전시대와 꽃병을 각각 클릭해 보세요."; Root.Q("swatches").Clear(); Root.Q("parent").style.display = DisplayStyle.None;
             SelectionChanged?.Invoke(null);
         }
-        public void SelectInstance(string id)
+        public void SelectInstance(string id, bool notify = true)
         {
             var item = Document.world.instances.FirstOrDefault(i => i.id == id); if (item == null) return;
             SelectedInstanceId = id; ShowDefinition(Definition(item), item); ClearOutline();
             if (objects.TryGetValue(id, out var go)) Outline(go.GetComponentInChildren<Renderer>().bounds, ColorOf(Settings.gold));
             foreach (var child in Document.world.instances.Where(i => i.location.kind == "parent" && i.location.parentId == id))
                 if (objects.TryGetValue(child.id, out var childObject)) Outline(childObject.GetComponentInChildren<Renderer>().bounds, ColorOf(Settings.accent));
-            SelectionChanged?.Invoke(item);
+            if (notify) SelectionChanged?.Invoke(item); RefreshTools();
         }
         public void ShowDefinition(ItemDefinition definition, ItemInstance item = null)
         {
             Root.Q<Label>("selection-title").text = definition.name;
             string dimensions = string.Join(" × ", definition.dimensionsM.Select(n => (n * 100).ToString("0.#", CultureInfo.InvariantCulture))) + " cm";
             Root.Q<Label>("selection-body").text = (definition.kind == "floorFurniture" ? "바닥 가구" : "상판 소품") + "\n" + dimensions + "\n" +
-                (item == null ? "카탈로그 정보 · 아직 놓을 수 없습니다." : item.location.kind == "storage" ? "보관 중 · 다시 놓기는 다음 단계입니다." : item.location.kind == "parent" ? "받침대 위에 전시 중" : "방에 전시 중") +
+                (item == null ? "방 안을 가리킨 뒤 클릭해서 놓으세요." : item.location.kind == "storage" ? "보관 중 · 방 안을 클릭해 다시 놓으세요." : item.location.kind == "parent" ? "받침대 위에 전시 중" : "방에 전시 중") +
                 (item == null ? "" : "\n색상: " + definition.variants.First(v => v.id == item.variantId).label);
             var swatches = Root.Q("swatches"); swatches.Clear();
             foreach (var variant in definition.variants)
-            { var chip = new VisualElement { tooltip = variant.label + " · 색상 정보" }; chip.AddToClassList("swatch"); chip.style.backgroundColor = ColorOf(variant.colorHex); swatches.Add(chip); }
+            { var chip = new Button(() => Editor.Color(variant.id)) { tooltip = variant.label + " · 색상 적용" }; chip.AddToClassList("swatch"); chip.style.minWidth = chip.style.minHeight = 26; chip.style.paddingLeft = chip.style.paddingRight = 0; chip.style.backgroundColor = ColorOf(variant.colorHex); swatches.Add(chip); }
             Root.Q("parent").style.display = item?.location.kind == "parent" ? DisplayStyle.Flex : DisplayStyle.None;
             if (compact) { detailsOpen = true; Layout(); }
         }
@@ -178,7 +184,7 @@ namespace FamilyMuseum.Decor
             };
             if (inventory)
             {
-                foreach (var group in DecorInventoryQuery.Read(Document.catalog, Document.world).storedGroups)
+                foreach (var group in (Editor == null ? DecorInventoryQuery.Read(Document.catalog, Document.world) : Editor.Interaction.Inventory()).storedGroups)
                 { var item = Document.world.instances.First(i => i.id == group.rootIds[0]); add(Definition(item), item, group.rootCount + "개" + (group.hasChildren ? " · 소품 포함" : " · 보관 중")); }
             }
             else foreach (var definition in Document.catalog.items) add(definition, null, definition.kind == "floorFurniture" ? "바닥 가구" : "상판 소품");
@@ -191,7 +197,7 @@ namespace FamilyMuseum.Decor
         static Vector3 V(double[] v) { return new Vector3((float)v[0], (float)v[1], (float)v[2]); }
         static Color ColorOf(string value) { ColorUtility.TryParseHtmlString(value, out var c); return c; }
         Material Material(Color color, string shader = "Standard")
-        { var m = new Material(Shader.Find(shader)); m.color = color; materials.Add(m); return m; }
+        { string key = shader + ColorUtility.ToHtmlStringRGBA(color); if (sharedMaterials.TryGetValue(key, out var cached)) return cached; var m = new Material(Shader.Find(shader)); m.color = color; materials.Add(m); sharedMaterials.Add(key, m); return m; }
         GameObject Box(string name, Vector3 center, Vector3 size, Color color, Transform parent)
         { var go = GameObject.CreatePrimitive(PrimitiveType.Cube); go.name = name; go.transform.SetParent(parent, false); go.transform.localPosition = center; go.transform.localScale = size; go.GetComponent<Renderer>().sharedMaterial = Material(color); return go; }
         void BuildWorld()
@@ -240,6 +246,28 @@ namespace FamilyMuseum.Decor
             for (int i = 0; i < 8; i++) for (int bit = 1; bit <= 4; bit *= 2) if ((i & bit) == 0) outlines.Add(Line(points[i], points[i | bit], mat, .012f, worldRoot.transform));
         }
         void ClearOutline() { foreach (var go in outlines) Destroy(go); outlines.Clear(); }
+        public void ClearSelection()
+        { SelectedInstanceId = null; ClearOutline(); Root.Q<Label>("selection-title").text = "물건을 선택해 보세요"; Root.Q<Label>("selection-body").text = "물건을 고르거나 카탈로그에서 새로 놓으세요."; Root.Q("swatches").Clear(); Root.Q("parent").style.display = DisplayStyle.None; RefreshTools(); }
+        public void RefreshWorld(DecorWorld world, string selected)
+        {
+            Document.world = world; ClearOutline();
+            foreach (var go in objects.Values.Where(g => g != null && g.transform.parent == worldRoot.transform).ToArray()) { go.SetActive(false); Destroy(go); }
+            objects.Clear();
+            foreach (var item in world.instances.Where(i => i.location.kind == "room")) CreateItem(item, worldRoot.transform);
+            foreach (var item in world.instances.Where(i => i.location.kind == "parent")) if (objects.TryGetValue(item.location.parentId, out var parent)) CreateItem(item, parent.transform);
+            RefreshCards(); ClearSelection(); if (selected != null) SelectInstance(selected, false);
+        }
+        public GameObject ObjectFor(string id) { objects.TryGetValue(id, out var value); return value; }
+        public void RefreshTools()
+        {
+            if (Editor == null) return; var edit = Editor.Interaction; var item = Document.world.instances.FirstOrDefault(i => i.id == SelectedInstanceId);
+            Root.Q<Button>("move-item").SetEnabled(item != null && item.location.kind != "storage" && !edit.HasPreview);
+            Root.Q<Button>("store-item").SetEnabled(item != null && item.location.kind != "storage" && !edit.HasPreview);
+            Root.Q<Button>("rotate-left").SetEnabled(edit.HasPreview || item != null && item.location.kind != "storage");
+            Root.Q<Button>("rotate-right").SetEnabled(edit.HasPreview || item != null && item.location.kind != "storage");
+            Root.Q<Button>("undo").SetEnabled(edit.UndoCount > 0); Root.Q<Button>("redo").SetEnabled(edit.RedoCount > 0);
+            Root.Q<Button>("cancel-preview").SetEnabled(edit.HasPreview);
+        }
         void OnDestroy() { foreach (var m in materials) Destroy(m); if (fontAsset != null) Destroy(fontAsset); }
     }
 }

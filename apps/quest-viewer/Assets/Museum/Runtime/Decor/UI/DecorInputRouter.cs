@@ -8,6 +8,7 @@ namespace FamilyMuseum.Decor
     {
         DecorPanel panel; DecorCamera cameraRig; InputActionMap map;
         InputAction move, frame, grid, select, pan, orbit, zoom, pointer, delta;
+        InputAction toolMove, left, right, store, undo, redo, cancel, free, repeat, control, eyedropper;
         bool panning, orbiting;
         internal void UseDiagnosticDevices(Keyboard keyboard, Mouse mouse)
         { map.devices = new InputDevice[] { keyboard, mouse }; }
@@ -24,7 +25,15 @@ namespace FamilyMuseum.Decor
             orbit = map.AddAction("Orbit", InputActionType.Button, "<Mouse>/rightButton");
             zoom = map.AddAction("Zoom", InputActionType.Value, "<Mouse>/scroll/y");
             pointer = map.AddAction("Pointer", InputActionType.Value, "<Mouse>/position");
-            delta = map.AddAction("PointerDelta", InputActionType.Value, "<Mouse>/delta"); map.Enable();
+            delta = map.AddAction("PointerDelta", InputActionType.Value, "<Mouse>/delta");
+            toolMove = map.AddAction("MoveItem", InputActionType.Button, "<Keyboard>/m");
+            eyedropper = map.AddAction("Eyedropper", InputActionType.Button, "<Keyboard>/i");
+            left = map.AddAction("RotateLeft", InputActionType.Button, "<Keyboard>/q"); right = map.AddAction("RotateRight", InputActionType.Button, "<Keyboard>/e");
+            store = map.AddAction("Store", InputActionType.Button, "<Keyboard>/delete");
+            undo = map.AddAction("Undo", InputActionType.Button, "<Keyboard>/z"); redo = map.AddAction("Redo", InputActionType.Button, "<Keyboard>/y");
+            cancel = map.AddAction("CancelPreview", InputActionType.Button, "<Keyboard>/escape");
+            free = map.AddAction("FreePosition", InputActionType.Button, "<Keyboard>/alt"); repeat = map.AddAction("RepeatPlace", InputActionType.Button, "<Keyboard>/shift");
+            control = map.AddAction("Control", InputActionType.Button, "<Keyboard>/ctrl"); map.Enable();
         }
         void Update()
         {
@@ -35,6 +44,14 @@ namespace FamilyMuseum.Decor
                 cameraRig.Move(move.ReadValue<Vector2>(), Time.unscaledDeltaTime);
                 if (frame.WasPressedThisFrame()) panel.FrameSelection();
                 if (grid.WasPressedThisFrame()) panel.ToggleGrid();
+                if (toolMove.WasPressedThisFrame()) panel.Editor.MoveSelected();
+                if (eyedropper.WasPressedThisFrame()) panel.Editor.Eyedropper();
+                if (left.WasPressedThisFrame()) panel.Editor.Rotate(-1);
+                if (right.WasPressedThisFrame()) panel.Editor.Rotate(1);
+                if (store.WasPressedThisFrame()) panel.Editor.Store();
+                if (control.IsPressed() && undo.WasPressedThisFrame()) panel.Editor.Undo();
+                if (control.IsPressed() && redo.WasPressedThisFrame()) panel.Editor.Redo();
+                if (cancel.WasPressedThisFrame()) panel.Editor.Cancel();
             }
             Vector2 point = pointer.ReadValue<Vector2>();
             bool allowed = DecorInputPolicy.PointerAllowed(panel.IsOverUI(point), text);
@@ -47,7 +64,8 @@ namespace FamilyMuseum.Decor
             if (allowed)
             {
                 cameraRig.Zoom(zoom.ReadValue<float>() / 120f, point);
-                if (select.WasPressedThisFrame()) panel.SelectAt(point);
+                panel.Editor.UpdatePointer(point, free.IsPressed());
+                if (select.WasPressedThisFrame()) panel.Editor.Click(point, repeat.IsPressed());
             }
         }
         void OnDisable() { map?.Disable(); panning = orbiting = false; }
